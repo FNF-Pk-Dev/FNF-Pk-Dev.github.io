@@ -1,0 +1,1023 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://pkwiki.top/%E5%87%BD%E6%95%B0/Psych/ObjectFunctions/">
+      
+      
+        <link rel="prev" href="../HScript%26Haxe/">
+      
+      
+        <link rel="next" href="../ShaderFunctions/">
+      
+      
+      <link rel="icon" href="../../../icons/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.46">
+    
+    
+      
+        <title>图像函数 - Pkwiki</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.6f8fc17f.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="cyan" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#_1" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="Pkwiki" class="md-header__button md-logo" aria-label="Pkwiki" data-md-component="logo">
+      
+  <img src="../../../icons/favicon.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Pkwiki
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              图像函数
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="cyan" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="cyan" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/FNF-Pk-Dev/FNF_Parker-Engine-new" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.7.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8M97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    Ajwwk/FNF-Parker-Engine
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="Pkwiki" class="md-nav__button md-logo" aria-label="Pkwiki" data-md-component="logo">
+      
+  <img src="../../../icons/favicon.png" alt="logo">
+
+    </a>
+    Pkwiki
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/FNF-Pk-Dev/FNF_Parker-Engine-new" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.7.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8M97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    Ajwwk/FNF-Parker-Engine
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../LuaCodingDocs/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Lua编码文档:编码基础
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    函数
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            函数
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_1" id="__nav_3_1_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Parker
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_1">
+            <span class="md-nav__icon md-icon"></span>
+            Parker
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Parker/ModchatFunctions/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    箭头特效ModChat函数
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Psych
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            Psych
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../CallbackTemplates/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Lua与HScript函数
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../CustomSprites%26TextsFunctions/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    创建角色与字体函数
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../DepracatedLuaFunctions/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    未使用函数
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../GameControlFunctions/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    按键/键盘按下函数
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../GeneralFunctions/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    角色函数
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../HScript%26Haxe/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    HScript&Haxe
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    图像函数
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    图像函数
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#makegraphictagstring-widthint-256-heightint-256-colorstring-ffffff" class="md-nav__link">
+    <span class="md-ellipsis">
+      makeGraphic(tag:String, width:Int = 256, height:Int = 256, color:String = 'FFFFFF')
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#loadgraphicvariablestring-imagestring-gridxint-0-gridyint-0" class="md-nav__link">
+    <span class="md-ellipsis">
+      loadGraphic(variable:String, image:String, ?gridX:Int = 0, ?gridY:Int = 0)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#setblendmodeobjstring-blendstring" class="md-nav__link">
+    <span class="md-ellipsis">
+      setBlendMode(obj:String, blend:String = '')
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ShaderFunctions/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Shader函数
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Tweens%26TimersFunctions/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Tween补间与Timer计时函数
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#makegraphictagstring-widthint-256-heightint-256-colorstring-ffffff" class="md-nav__link">
+    <span class="md-ellipsis">
+      makeGraphic(tag:String, width:Int = 256, height:Int = 256, color:String = 'FFFFFF')
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#loadgraphicvariablestring-imagestring-gridxint-0-gridyint-0" class="md-nav__link">
+    <span class="md-ellipsis">
+      loadGraphic(variable:String, image:String, ?gridX:Int = 0, ?gridY:Int = 0)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#setblendmodeobjstring-blendstring" class="md-nav__link">
+    <span class="md-ellipsis">
+      setBlendMode(obj:String, blend:String = '')
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+<h1 id="_1">图像函数</h1>
+<h3 id="makegraphictagstring-widthint-256-heightint-256-colorstring-ffffff">makeGraphic(tag:String, width:Int = 256, height:Int = 256, color:String = 'FFFFFF')</h3>
+<p>初始化<ins>创建一个彩色填充纹理</ins>；必须在 <code>makeLuaSprite()</code> 函数之后声明。</p>
+<ul>
+<li><code>tag</code> - 要使用的精灵对象的标签名称。</li>
+<li><code>width</code> - 对象的宽度值，以像素为单位；默认值：<code>256</code>。</li>
+<li><code>height</code> - 对象的高度值，以像素为单位；默认值：<code>256</code>。</li>
+<li><code>color</code> - 对象的颜色值；默认值：<code>FFFFFF</code>。</li>
+</ul>
+<h3 id="loadgraphicvariablestring-imagestring-gridxint-0-gridyint-0">loadGraphic(variable:String, image:String, ?gridX:Int = 0, ?gridY:Int = 0)</h3>
+<p>用新的<ins>精灵纹理</ins>替换现有的精灵纹理。可以选择<ins>设置精灵对象的裁剪大小</ins>。</p>
+<ul>
+<li><code>variable</code> - 要使用的精灵对象的标签名称。</li>
+<li><code>image</code> - 精灵对象要使用的新图像精灵。</li>
+<li><code>gridX</code> - 可选参数，精灵纹理的裁剪宽度；默认值：<code>0</code>。</li>
+<li><code>gridY</code> - 可选参数，精灵纹理的裁剪高度；默认值：<code>0</code>。</li>
+</ul>
+<h3 id="setblendmodeobjstring-blendstring">setBlendMode(obj:String, blend:String = '')</h3>
+<p>更改对象的<ins>混合模式</ins>。如果您想查看更多混合模式，<a href="https://api.haxe.org/flash/display/BlendMode.html">请点击这里</a>。<em>（工作原理类似于 Photoshop）</em></p>
+<ul>
+<li><code>obj</code> - 要使用的精灵对象的标签名称。</li>
+<li><code>blend</code> - 要使用的混合模式；例如：<code>add</code>、<code>darken</code>、<code>invert</code> 等；默认值：<code>''</code>。</li>
+</ul>
+<hr />
+<h1 id="_2">动画函数</h1>
+<h3 id="playanimobjstring-namestring-forcedbool-false-reversebool-false-startframeint-0">playAnim(obj:String, name:String, forced:Bool = false, ?reverse:Bool = false, ?startFrame:Int = 0)</h3>
+<p>播放精灵对象的现有动画；它可以<ins>覆盖动画</ins>。如果 <code>name</code> 参数中存在两个或多个相似的名称；<ins>此规则将应用于所有 <code>name</code> 参数</ins>。</p>
+<ul>
+<li><code>obj</code> - 要使用的精灵对象的标签名称。</li>
+<li><code>name</code> - 要使用的动画的指定名称。</li>
+<li><code>forced</code> - 如果动画名称与当前播放的动画名称相同，动画是否会重新开始；默认值：<code>false</code>。</li>
+<li><code>reverse</code> - 可选参数，动画是否会反向播放；默认值 <code>false</code>。</li>
+<li><code>startFrame</code> - 可选参数，动画开始的帧；默认值：<code>0</code>。</li>
+</ul>
+<h3 id="addanimationobjstring-namestring-framesarrayint-framerateint-24-loopbool-true">addAnimation(obj:String, name:String, frames:Array\&lt;Int&gt;, framerate:Int = 24, loop:Bool = true)</h3>
+<p>为精灵对象添加一个<ins>新动画</ins>。</p>
+<ul>
+<li><code>obj</code> - 要使用的精灵对象的标签名称。</li>
+<li><code>name</code> - 要使用的动画的指定名称。</li>
+<li><code>frames</code> - 指示要按什么顺序播放哪些动画帧的索引；例如：<code>{1, 2, 3}</code>。</li>
+<li><code>framerate</code> - 动画每秒播放的帧数；默认值：<code>24</code>。</li>
+<li><code>loop</code> - 动画是否循环；默认值 <code>true</code>。</li>
+</ul>
+<h3 id="addanimationbyprefixobjstring-namestring-prefixstring-framerateint-24-loopbool-true">addAnimationByPrefix(obj:String, name:String, prefix:String, framerate:Int = 24, loop:Bool = true)</h3>
+<p>从<ins>xml 文件</ins>中添加一个<ins>新动画</ins>，供精灵对象使用。</p>
+<ul>
+<li><code>obj</code> - 要使用的精灵对象的标签名称。</li>
+<li><code>name</code> - 要使用的动画的指定名称。</li>
+<li><code>prefix</code> - 要播放的 xml 文件中的前缀名称。</li>
+<li><code>framerate</code> - 动画每秒播放的帧数；默认值：<code>24</code>。</li>
+<li><code>loop</code> - 动画是否循环；默认值 <code>true</code>。</li>
+</ul>
+<h3 id="addanimationbyindicesobjstring-namestring-prefixstring-indicesstring-framerateint-24-loopbool-false">addAnimationByIndices(obj:String, name:String, prefix:String, indices:String, framerate:Int = 24, loop:Bool = false)</h3>
+<blockquote>
+<p><strong>注意</strong>：<em>在 0.7 之前的版本中，如果您想循环播放动画，必须使用 <code>addAnimationByIndicesLoop</code>，因为这里不存在第六个参数；<ins>除循环参数外，所有参数都相同</ins>。</em></p>
+</blockquote>
+<p>添加一个<ins>新动画</ins>，其中包含要为动画帧播放的指定索引，供精灵对象使用。</p>
+<ul>
+<li><code>obj</code> - 要使用的精灵对象的标签名称。</li>
+<li><code>name</code> - 要使用的动画的指定名称。</li>
+<li><code>prefix</code> - 要播放的 xml 文件中的前缀名称。</li>
+<li><code>frames</code> - 指示要按什么顺序播放哪些动画帧的索引；例如：<code>1, 2, 3</code>。</li>
+<li><code>framerate</code> - 动画每秒播放的帧数；默认值：<code>24</code>。</li>
+<li><code>loop</code> - 动画是否循环；默认值：<code>false</code>。</li>
+</ul>
+<h3 id="addoffsetobjstring-animstring-xfloat-yfloat">addOffset(obj:String, anim:String, x:Float, y:Float)</h3>
+<p>在每个动画上添加一个新的偏移值。</p>
+<ul>
+<li><code>obj</code> - 要使用的精灵对象的标签名称。</li>
+<li><code>anim</code> - 要使用的动画的指定名称。</li>
+<li><code>x</code> - 动画的新 x 偏移值。</li>
+<li><code>y</code> - 动画的新 y 偏移值。</li>
+</ul>
+<h3 id="loadframesvariablestring-imagestring-spritetypestring-sparrow">loadFrames(variable:String, image:String, spriteType:String = "sparrow")</h3>
+<p>加载 Lua 精灵的<ins>动画帧</ins>。</p>
+<ul>
+<li><code>variable</code> 要使用的精灵对象的标签名称。</li>
+<li><code>image</code> - 精灵要使用的图像精灵。</li>
+<li><code>spriteType</code> - 可选参数，Lua 精灵的指定精灵类型可以是 <code>sparrow</code> 的精灵表或 <code>tex</code> 的纹理图集；默认值：<code>sparrow</code>。</li>
+</ul>
+<hr />
+<h1 id="_3">预缓存函数</h1>
+<p>!&gt; <em>强烈建议您在 <code>onCreate()</code> 回调中使用此功能。这些函数主要用于避免在首次使用资源时出现游戏卡顿。</em></p>
+<h3 id="addcharactertolistnamestring-typestring">addCharacterToList(name:String, type:String)</h3>
+<p>预缓存<ins>精灵角色</ins>，如果您要切换角色，请使用此函数。</p>
+<ul>
+<li><code>name</code> - 角色的 <code>json</code> 名称。</li>
+<li><code>type</code> - 要使用的角色类型；可以是：<code>boyfriend</code>、<code>dad</code> 或 <code>gf</code>。</li>
+</ul>
+<h3 id="precacheimagenamestring-allowgpubool-true">precacheImage(name:String, ?allowGPU:Bool = true)</h3>
+<p>预缓存<ins>图像精灵</ins>；必须相对于 <code>mods/images</code>、<code>assets/images</code> 或 <code>assets/shared/images</code> 文件夹。</p>
+<ul>
+<li><code>name</code> - 精灵要使用的图像精灵。</li>
+<li><code>allowGPU</code> - 可选参数，如果启用了 GPU 缓存，是否允许在 GPU 上缓存；默认值：<code>true</code>。</li>
+</ul>
+<h3 id="precachesoundnamestring">precacheSound(name:String)</h3>
+<p>预缓存<ins>声音</ins>；必须相对于 <code>mods/sounds</code> 或 <code>assets/sounds</code> 文件夹。</p>
+<ul>
+<li><code>name</code> - 要播放的 <code>ogg</code> 声音文件。</li>
+</ul>
+<h3 id="precachemusicnamestring">precacheMusic(name:String)</h3>
+<p>预缓存<ins>音乐</ins>；必须相对于 <code>mods/music</code> 或 <code>assets/music</code> 文件夹。</p>
+<ul>
+<li><code>name</code> - 要播放的 <code>ogg</code> 音乐文件。</li>
+</ul>
+<hr />
+<h1 id="_4">对象顺序函数</h1>
+<h3 id="setobjectorderobjstring-positionint">setObjectOrder(obj:String, position:Int)</h3>
+<p><ins>使用新值</ins>设置对象的当前图层位置。</p>
+<ul>
+<li><code>obj</code> - 要使用的对象的标签名称。</li>
+<li><code>position</code> - 要设置的新图层位置。</li>
+</ul>
+<h3 id="getobjectorderobjstring">getObjectOrder(obj:String)</h3>
+<p>获取对象的当前图层位置<ins>当前值</ins>；返回一个 <code>int</code> 数字。</p>
+<ul>
+<li><code>obj</code> - 要使用的对象的标签名称。</li>
+</ul>
+<h3 id="objectsoverlapobj1string-obj2string">objectsOverlap(obj1:String, obj2:String)</h3>
+<p>检查两个对象是否<ins>相互重叠</ins>；返回一个 <code>boolean</code>。</p>
+<ul>
+<li><code>obj1</code> - 要使用的第一个对象的标签名称。</li>
+<li><code>obj2</code> - 要使用的第二个对象的标签名称。</li>
+</ul>
+<hr />
+<h1 id="_5">缩放函数</h1>
+<h3 id="setgraphicsizeobjstring-xint-yint-0-updatehitboxbool-true">setGraphicSize(obj:String, x:Int, y:Int = 0, updateHitbox:Bool = true)</h3>
+<p><ins>按像素</ins>设置对象图形大小；不要与 <code>scaleObject()</code> 混淆。</p>
+<ul>
+<li><code>obj</code> - 要使用的对象的标签名称。</li>
+<li><code>x</code> - 要设置的对象的宽度值。</li>
+<li><code>y</code> - 要设置的对象的高度值；默认值：<code>0</code>。</li>
+<li><code>updateHitbox</code> - 是否更新对象的尺寸或碰撞盒；默认值：<code>true</code>。</li>
+</ul>
+<h3 id="scaleobjectobjstring-xfloat-yfloat-updatehitboxbool-true">scaleObject(obj:String, x:Float, y:Float, updateHitbox:Bool = true)</h3>
+<p>通过缩放属性设置对象<ins>大小</ins>。</p>
+<ul>
+<li><code>obj</code> - 要使用的对象的标签名称。</li>
+<li><code>x</code> - 要设置的对象的 <code>scale.x</code> 值。</li>
+<li><code>y</code> - 要设置的对象的 <code>scale.y</code> 值。</li>
+<li><code>updateHitbox</code> - 是否更新对象的尺寸或碰撞盒；默认值：<code>true</code>。</li>
+</ul>
+<h3 id="updatehitboxobjstring">updateHitbox(obj:String)</h3>
+<p>更新对象的<ins>尺寸或碰撞盒</ins>。如果您要更改对象的缩放比例，请使用此选项。 </p>
+<ul>
+<li><code>obj</code> - 要使用的对象的标签名称。</li>
+</ul>
+<hr />
+<h1 id="_6">中点/位置函数</h1>
+<h3 id="getgraphicmidpointxvariablestring">getGraphicMidpointX(variable:String)</h3>
+<p>获取对象的<ins>图形中点的 x 值</ins>；不要与 <code>getMidpointX()</code> 函数混淆；返回一个 <code>float</code> 数字。</p>
+<ul>
+<li><code>variable</code> - 要使用的对象的标签名称。</li>
+</ul>
+<h3 id="getgraphicmidpointyvariablestring">getGraphicMidpointY(variable:String)</h3>
+<p>获取对象的<ins>图形中点的 y 值</ins>；不要与 <code>getMidpointY()</code> 函数混淆；返回一个 <code>float</code> 数字。</p>
+<ul>
+<li><code>variable</code> - 要使用的对象的标签名称。</li>
+</ul>
+<h3 id="getmidpointxvariablestring">getMidpointX(variable:String)</h3>
+<p>获取对象的<ins>中点 x 值</ins>；返回一个 <code>float</code> 数字。</p>
+<ul>
+<li><code>variable</code> - 要使用的对象的标签名称。</li>
+</ul>
+<h3 id="getmidpointyvariablestring">getMidpointY(variable:String)</h3>
+<p>获取对象的<ins>中点 y 值</ins>；返回一个 <code>float</code> 数字。</p>
+<ul>
+<li><code>variable</code> - 要使用的对象的标签名称。</li>
+</ul>
+<hr />
+<h3 id="getscreenpositionxvariablestring-camerastring">getScreenPositionX(variable:String, ?camera:String)</h3>
+<p>获取对象在特定摄像机上的<ins>屏幕 x 位置</ins>；返回一个 <code>float</code> 数字。</p>
+<ul>
+<li><code>variable</code> - 要使用的对象的标签名称。</li>
+<li><code>camera</code> - 可选参数，要检查其位置的摄像机。</li>
+</ul>
+<h3 id="getscreenpositionyvariablestring-camerastring">getScreenPositionY(variable:String, ?camera:String)</h3>
+<p>获取对象在特定摄像机上的<ins>屏幕 y 位置</ins>；返回一个 <code>float</code> 数字。</p>
+<ul>
+<li><code>variable</code> - 要使用的对象的标签名称。</li>
+<li><code>camera</code> - 可选参数，要检查其位置的摄像机。</li>
+</ul>
+<h3 id="screencenterobjstring-posstring-xy">screenCenter(obj:String, pos:String = 'xy')</h3>
+<p>将对象居中到 <code>X</code> 或 <code>Y</code> 位置；也可以同时居中。</p>
+<ul>
+<li><code>obj</code> - 要使用的对象的标签名称。</li>
+<li><code>pos</code> - 要设置的位置；可以是：<code>X</code>、<code>Y</code>、<code>XY</code>；默认值：<code>XY</code>。</li>
+</ul>
+<hr />
+<h1 id="_7">其他函数</h1>
+<h3 id="setscrollfactorobjstring-scrollxfloat-scrollyfloat">setScrollFactor(obj:String, scrollX:Float, scrollY:Float)</h3>
+<p>更改摄像机移动时对象<ins>滚动的程度</ins>。</p>
+<ul>
+<li><code>obj</code> - 要使用的对象的标签名称。</li>
+<li><code>scrollX</code> - 要设置的滚动的 x 值。</li>
+<li><code>scrollY</code> - 要设置的滚动的 y 值。</li>
+</ul>
+<h3 id="setobjectcameraobjstring-camerastring">setObjectCamera(obj:String, camera:String = '')</h3>
+<p>更改对象的<ins>摄像机状态</ins>。</p>
+<ul>
+<li><code>obj</code> - 要使用的对象的标签名称。</li>
+<li><code>camera</code> - 要设置的摄像机状态；可以是：<code>camGame</code>、<code>camHUD</code> 或 <code>camOther</code>；默认值：<code>''</code>。</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../../..", "features": [], "search": "../../../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.83f73b43.min.js"></script>
+      
+    
+  </body>
+</html>
