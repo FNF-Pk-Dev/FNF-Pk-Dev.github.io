@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#e91e63">
+<meta name="description" content="ES 方言里的箭头特效（ModChat）函数，用于在脚本中直接驱动音符动画效果。">
+<title>ES ModChart 特效 - Parker Engine 中文文档</title>
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="stylesheet" href="/assets/mdui/css/mdui.min.css">
+<link rel="stylesheet" href="/assets/site.css">
+</head>
+<body class="mdui-theme-primary-pink mdui-theme-accent-cyan mdui-theme-layout-dark mdui-appbar-with-toolbar">
+<header class="mdui-appbar mdui-appbar-fixed mdui-color-theme">
+	<div class="mdui-toolbar">
+		<button type="button" class="mdui-btn mdui-btn-icon mdui-ripple pk-drawer-toggle" aria-label="打开导航"><svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" aria-hidden="true"><path d="M3 6h18v2H3zM3 11h18v2H3zM3 16h18v2H3z"/></svg></button>
+		<a class="mdui-typo-title pk-brand" href="/">Parker Engine</a>
+		<span class="pk-brand-sub">中文文档</span>
+		<div class="mdui-toolbar-spacer"></div>
+		<a class="mdui-btn mdui-btn-icon mdui-ripple" href="/docs/" aria-label="文档门户" mdui-tooltip="{content:'文档门户'}"><svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" aria-hidden="true"><path d="M6 2h11a3 3 0 0 1 3 3v14a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3V5a3 3 0 0 1 3-3zm0 2a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h1V4H6zm3 0v16h8a1 1 0 0 0 1-1V5a1 1 0 0 0-1-1H9z"/></svg></a>
+		<a class="mdui-btn mdui-btn-icon mdui-ripple" href="https://github.com/FNF-Pk-Dev/FNF_Parker-Engine-new" target="_blank" rel="noopener" aria-label="GitHub 仓库" mdui-tooltip="{content:'GitHub 仓库'}"><svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" aria-hidden="true"><path d="M12 .5A11.5 11.5 0 0 0 .5 12a11.5 11.5 0 0 0 7.86 10.92c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.53-1.34-1.29-1.7-1.29-1.7-1.05-.72.08-.71.08-.71 1.16.08 1.77 1.2 1.77 1.2 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.7 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.47.11-3.06 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.79 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.77.12 3.06.74.81 1.19 1.84 1.19 3.1 0 4.43-2.7 5.4-5.26 5.69.41.36.78 1.06.78 2.14v3.17c0 .31.2.67.8.56A11.5 11.5 0 0 0 23.5 12A11.5 11.5 0 0 0 12 .5z"/></svg></a>
+	</div>
+</header>
+<aside class="mdui-drawer pk-drawer" id="pk-drawer">
+	<div class="pk-drawer-scroll">
+		<a class="pk-drawer-hero mdui-ripple" href="/">
+			<span class="pk-drawer-hero-title">Parker Engine</span>
+			<span class="pk-drawer-hero-sub">v0.2.8 · 中文文档</span>
+		</a>
+		<div class="mdui-subheader pk-nav-group">快速开始</div>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="/docs/">
+			<div class="mdui-list-item-content"><span class="pk-nav-icon"><svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" aria-hidden="true"><path d="M12 3 2 12h3v9h6v-6h2v6h6v-9h3z"/></svg></span>文档总览</div>
+			<span class="pk-badge">总览</span>
+		</a>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="/docs/lua-tutorial/">
+			<div class="mdui-list-item-content">Lua 编码基础</div>
+			<span class="pk-badge">Lua</span>
+		</a>
+		<div class="mdui-subheader pk-nav-group">Lua 脚本</div>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="/docs/callbacks/">
+			<div class="mdui-list-item-content">回调模板</div>
+			<span class="pk-badge">回调</span>
+		</a>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="/docs/lua-psych/">
+			<div class="mdui-list-item-content">Psych 原版函数全解</div>
+			<span class="pk-badge">Lua</span>
+		</a>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="/docs/lua-es-extensions/">
+			<div class="mdui-list-item-content">ES 扩展（Parker 独有）</div>
+			<span class="pk-badge">ES</span>
+		</a>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="/docs/lua-this-proxy/">
+			<div class="mdui-list-item-content">this 代理</div>
+			<span class="pk-badge">Lua</span>
+		</a>
+		<a class="mdui-list-item mdui-ripple pk-nav-item mdui-list-item-active" href="/docs/modchart-functions/">
+			<div class="mdui-list-item-content">ES ModChart 特效</div>
+			<span class="pk-badge">特效</span>
+		</a>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="/docs/hscript-haxe/">
+			<div class="mdui-list-item-content">Lua 调用 Haxe</div>
+			<span class="pk-badge">Haxe</span>
+		</a>
+		<div class="mdui-subheader pk-nav-group">HScript</div>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="/docs/hscript/">
+			<div class="mdui-list-item-content">HScript 完整文档</div>
+			<span class="pk-badge">HScript</span>
+		</a>
+		<div class="mdui-subheader pk-nav-group">Python</div>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="/docs/python/">
+			<div class="mdui-list-item-content">Python 脚本</div>
+			<span class="pk-badge">Python</span>
+		</a>
+		<div class="mdui-subheader pk-nav-group">LScript</div>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="/docs/lscript/">
+			<div class="mdui-list-item-content">LScript (Luau)</div>
+			<span class="pk-badge">Luau</span>
+		</a>
+		<div class="mdui-subheader pk-nav-group">Modchart</div>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="/docs/modchart/">
+			<div class="mdui-list-item-content">Modchart 修饰器系统</div>
+			<span class="pk-badge">Modchart</span>
+		</a>
+		<div class="mdui-divider pk-nav-divider"></div>
+		<div class="mdui-subheader pk-nav-group">相关链接</div>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="https://github.com/FNF-Pk-Dev/FNF_Parker-Engine-new/releases" target="_blank" rel="noopener"><div class="mdui-list-item-content">下载 / Releases</div></a>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="https://github.com/FNF-Pk-Dev/FNF_Parker-Engine-new" target="_blank" rel="noopener"><div class="mdui-list-item-content">GitHub 仓库</div></a>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="/"><div class="mdui-list-item-content">返回首页</div></a>
+	</div>
+</aside>
+<main class="pk-main">
+<div class="mdui-container pk-container">
+<nav class="pk-breadcrumb" aria-label="面包屑">
+	<a href="/">首页</a><span class="pk-breadcrumb-sep">/</span><a href="/docs/">文档</a><span class="pk-breadcrumb-sep">/</span><span>Lua 脚本</span><span class="pk-breadcrumb-sep">/</span><span class="pk-breadcrumb-current">ES ModChart 特效</span>
+</nav>
+<article class="mdui-typo mdui-card mdui-shadow-2 pk-doc"><h1 id="箭头特效modchat函数">箭头特效ModChat函数</h1>
+<hr>
+<h2 id="modifiers简介">Modifiers简介</h2>
+<p>Modifiers是一种由模型图表使用的“效果”，每个模型都运行代码，每次绘制到屏幕上时都会修改箭头/弹奏的位置和数据,它们可以简单到可以抵消X/Y/Z，也可以复杂到可以单独编辑每个箭头的信息。Modifiers可以堆叠，并设置为仅适用于特定的车道、操场或播放器</p>
+<p>每个Modifiers都有自己的值，用来改变它的效果，Modifiers也可以有子值来编辑某些东西，比如效果的速度。Modifiers也有一个基值，当值-基值时，它总是不做任何事情，作为禁用它的一种方式，对于大多数Modifiers来说,这个值为'0'。</p>
+<hr>
+<h2 id="创建modifiers">创建Modifiers</h2>
+<p><strong>在编辑器中：</strong></p>
+<p>你可以在编辑器内的“Modifiers”选项卡中创建它们。</p>
+<p>创建Modifiers需要以下几样东西：</p>
+<ul>
+<li><strong>Name</strong>（必须唯一）</li>
+<li><strong>Class</strong></li>
+<li><strong>Type</strong>（可选）</li>
+<li><strong>Playfield</strong>（可选）</li>
+<li><strong>Lane</strong>（可选）</li>
+</ul>
+<p><strong>Name：</strong> 一个字符串，用于输入“Modifiers名称”输入框，它们必须是唯一的，如果重复将会覆盖之前的Modifiers。</p>
+<p><strong>Class：</strong> 一个字符串，用于表示Modifiers使用的Class，你可以从下拉菜单中选择内置的Class，或者在“ModifiersClass”输入框中输入自定义Modifiers的名称，Class决定了Modifiers的实际功能（例如，选择 XModifier 作为Class意味着它只会改变箭头的 x 值）。</p>
+<p><strong>Type：</strong> 一个字符串，用于表示Type，Type是可选的，默认为“全部”，有 4 种Type可以选择，分别是“全部”、“玩家”、“对手”和“Lane”，其中大部分是不言自明的，“Lane”还需要设置一个单独的值来改变它影响的Lane。</p>
+<p><strong>Playfield：</strong> 一个值，用于影响Modifiers将影响的Playfield，如果设置为 -1，它将作用于所有Playfield。</p>
+<p><strong>Lane：</strong> 一个与“Lane”Type一起使用的值，用于改变它影响的Lane。</p>
+<hr>
+<h2 id="在脚本中">在脚本中：</h2>
+<p><code>startMod(name:String, class:String, type:String, playfield:Int)</code></p>
+<ul>
+<li>开始一个Modifiers</li>
+</ul>
+<p><code>setModTargetLane(name:String, lane:Int)</code></p>
+<ul>
+<li>为Modifiers设置目标Lane</li>
+</ul>
+<p><strong>示例：</strong></p>
+<p><code>startMod('reverse', 'ReverseModifier', 'Lane', -1)</code></p>
+<ul>
+<li>开始一个名为“reverse”的Modifiers，使用“ReverseModifier”类，类型为“Lane”，作用于所有游戏区域（-1）。</li>
+</ul>
+<p><code>setModTargetLane('reverse', 0)</code></p>
+<ul>
+<li>将名为“reverse”的Modifiers的目标Lane设置为 0。</li>
+</ul>
+<p>这段代码定义了一系列 Lua 回调函数，用于在游戏中操控Modifiers。</p>
+<ul>
+<li><code>setMod(name:String, value:Float)</code>：设置名为 <code>name</code> 的Modifiers的值为 <code>value</code>。</li>
+</ul>
+<h3 id="setsubmodnamestring-subvalnamestring-valuefloat设置名为-name-的modifiers的子值-subvalname-为-value">setSubMod(name:String, subValName:String, value:Float)：设置名为 <code>name</code> 的Modifiers的子值 <code>subValName</code> 为 <code>value</code>。</h3>
+<h3 id="setmodtargetlanenamestring-valueint设置名为-name-的modifiers的目标音轨为-value">setModTargetLane(name:String, value:Int)：设置名为 <code>name</code> 的Modifiers的目标音轨为 <code>value</code>。</h3>
+<h3 id="setmodplayfieldnamestring-valueint设置名为-name-的modifiers作用的游戏区域为-value">setModPlayfield(name:String, value:Int)：设置名为 <code>name</code> 的Modifiers作用的游戏区域为 <code>value</code>。</h3>
+<h3 id="addplayfieldxfloat-0-yfloat-0-zfloat-0添加一个新的游戏区域坐标为-x-y-z">addPlayfield(?x:Float = 0, ?y:Float = 0, ?z:Float = 0)：添加一个新的游戏区域，坐标为 (x, y, z)。</h3>
+<h3 id="removeplayfieldidxint移除索引为-idx-的游戏区域">removePlayfield(idx:Int)：移除索引为 <code>idx</code> 的游戏区域。</h3>
+<h3 id="tweenmodifiermodifierstring-valfloat-timefloat-easestring在-time-时间内使用-ease-过渡方式将名为-modifier-的modifiers的值过渡到-val">tweenModifier(modifier:String, val:Float, time:Float, ease:String)：在 <code>time</code> 时间内，使用 <code>ease</code> 过渡方式，将名为 <code>modifier</code> 的Modifiers的值过渡到 <code>val</code>。</h3>
+<h3 id="tweenmodifiersubvaluemodifierstring-subvaluestring-valfloat-timefloat-easestring在-time-时间内使用-ease-过渡方式将名为-modifier-的modifiers的子值-subvalue-过渡到-val">tweenModifierSubValue(modifier:String, subValue:String, val:Float, time:Float, ease:String)：在 <code>time</code> 时间内，使用 <code>ease</code> 过渡方式，将名为 <code>modifier</code> 的Modifiers的子值 <code>subValue</code> 过渡到 <code>val</code>。</h3>
+<h3 id="setmodeasefuncnamestring-easestring设置名为-name-的modifiers的过渡方式为-ease">setModEaseFunc(name:String, ease:String)：设置名为 <code>name</code> 的Modifiers的过渡方式为 <code>ease</code>。</h3>
+<h3 id="setbeatfloat-argsasstringstring在一个指定的-beat-上设置modifiers具体的参数通过字符串-argsasstring-传递">set(beat:Float, argsAsString:String)：在一个指定的 <code>beat</code> 上设置Modifiers，具体的参数通过字符串 <code>argsAsString</code> 传递。</h3>
+<h3 id="easebeatfloat-timefloat-easestrstring-argsasstringstring-在一个指定的-beat-开始使用-easestr-过渡方式在-time-时间内过渡modifiers具体的参数通过字符串-argsasstring-传递">ease(beat:Float, time:Float, easeStr:String, argsAsString:String) : 在一个指定的 <code>beat</code> 开始，使用 <code>easeStr</code> 过渡方式，在 <code>time</code> 时间内过渡Modifiers，具体的参数通过字符串 <code>argsAsString</code> 传递。</h3>
+<h2 id="内置modifiers列表">内置Modifiers列表</h2>
+<ul>
+<li><strong>DrunkXModifier, DrunkYModifier, DrunkZModifier</strong> - 琴弦和箭头摇摆/波动，箭头以不同的速度移动，因此它们在到达琴弦线时会“摆动”，主值影响波浪的大小，也有子值“speed”（速度）。</li>
+<li><strong>TipsyXModifier, TipsyYModifier, TipsyZModifier</strong> - 琴弦和箭头以交替的模式摇摆/波动，主值影响波浪的大小，也有子值“speed”（速度）。</li>
+<li><strong>ReverseModifier</strong> - 翻转滚动方向（向上变为向下，向下变为向上）。</li>
+<li><strong>IncomingAngleModifier</strong> - 改变箭头的来源角度，主Modifiers值无效，具有子值“x”和“y”。</li>
+<li><strong>RotateModifier</strong> - 围绕屏幕旋转箭头/琴弦（基于其默认位置），主Modifiers值无效，具有子值“x”和“y”。</li>
+<li><strong>StrumLineRotateModifier</strong> - 围绕屏幕旋转琴弦线（基于其默认位置），主Modifiers值无效，具有子值“x”和“y”。</li>
+<li><strong>XModifier, YModifier, ZModifier</strong> - 改变 x/y/z 位置。</li>
+<li><strong>ConfusionModifier</strong> - 改变箭头角度。</li>
+<li><strong>ScaleModifier, ScaleXModifier, ScaleYModifier</strong> - 改变箭头/琴弦的缩放比例，基值为 1！而不是 0。</li>
+<li><strong>SpeedModifier</strong> - 速度倍增器，基值为 1！而不是 0。</li>
+<li><strong>StealthModifier, NoteStealthModifier</strong> - 改变琴弦/箭头的透明度（0 = 可见，1 = 不可见，别搞混了）。</li>
+<li><strong>InvertModifier</strong> - 交换箭头轨道/列，未反转：0,1,2,3 反转：1,0,3,2。</li>
+<li><strong>FlipModifier</strong> - 翻转轨道/列，未翻转：0,1,2,3 翻转：3,2,1,0。</li>
+<li><strong>MiniModifier</strong> - 缩小整个琴弦线，基值为 1！而不是 0。</li>
+<li><strong>BeatXModifier, BeatYModifier, BeatZModifier</strong> - 箭头/琴弦将随着歌曲的节拍移动。</li>
+<li><strong>BounceXModifier, BounceYModifier, BounceZModifier</strong> - 箭头在向琴弦线移动时弹跳。</li>
+<li><strong>BoostModifier</strong> - 箭头在向琴弦线移动时加速。</li>
+<li><strong>BrakeModifier</strong> - 箭头在向琴弦线移动时减速。</li>
+</ul>
+<h2 id="自定义modifiers">自定义Modifiers</h2>
+<p>你可以使用 .hx 文件中的 hscript 创建自定义Modifiers，这些文件必须放在歌曲数据文件夹（包含图表 .json 文件的文件夹）内名为“customMods”的文件夹中。</p>
+<p><strong>模板：</strong></p>
+<pre><code class="language-hscript"> initMod(mod)
+{
+    mod.noteMath = (noteData, lane, curPos, pf)
+    {
+        // 在这里添加修改音符位置的代码
+    };
+    mod.strumMath = (noteData, lane, pf)
+    {
+        // 在这里添加修改琴弦位置的代码
+    };
+    mod.incomingAngleMath = (lane, curPos, pf)
+    {
+        // 返回一个包含 x 和 y 角度的数组
+        return [0, 0];
+    };
+    mod.curPosMath = (lane, curPos, pf)
+    {
+        // 返回修改后的 curPos 值
+        return curPos;
+    };
+    mod.noteDistMath = (noteDist, lane, curPos, pf)
+    {
+        // 返回修改后的音符距离值
+        return noteDist;
+    };
+}
+</code></pre></article>
+<nav class="pk-pager" aria-label="翻页">
+	<a class="mdui-btn mdui-btn-raised mdui-ripple pk-pager-btn pk-pager-prev" href="/docs/lua-this-proxy/"><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M14.7 5.3 8 12l6.7 6.7 1.4-1.4L10.8 12l5.3-5.3z"/></svg><span class="pk-pager-text"><span class="pk-pager-label">上一页</span><span class="pk-pager-title">this 代理</span></span></a>
+	<a class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme pk-pager-btn pk-pager-next" href="/docs/hscript-haxe/"><span class="pk-pager-text"><span class="pk-pager-label">下一页</span><span class="pk-pager-title">Lua 调用 Haxe</span></span><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M9.3 5.3 7.9 6.7 13.2 12l-5.3 5.3 1.4 1.4L16 12z"/></svg></a>
+</nav>
+</div>
+</main>
+<footer class="pk-footer">
+	<div class="mdui-container">
+		<div class="pk-footer-inner">
+			<span>Parker Engine v0.2.8 · 中文文档</span>
+			<span class="pk-footer-links">
+				<a href="https://github.com/FNF-Pk-Dev/FNF_Parker-Engine-new" target="_blank" rel="noopener">GitHub 仓库</a>
+				<a href="https://github.com/FNF-Pk-Dev/FNF_Parker-Engine-new/releases" target="_blank" rel="noopener">下载</a>
+				<a href="/docs/">文档门户</a>
+			</span>
+		</div>
+		<div class="pk-footer-note">
+			基于 <a href="https://github.com/ShadowMario/FNF-PsychEngine" target="_blank" rel="noopener">Psych Engine</a> 分支开发 · 本站静态托管于 GitHub Pages
+		</div>
+	</div>
+</footer>
+<script src="/assets/mdui/js/mdui.min.js"></script>
+<script src="/assets/site.js"></script>
+</body>
+</html>

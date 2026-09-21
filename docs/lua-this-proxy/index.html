@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#e91e63">
+<meta name="description" content="Lua 的 this 代理（LuaProxy）：让 this.camGame.zoom = 1.2 这类写法真正作用于游戏状态。">
+<title>this 代理 - Parker Engine 中文文档</title>
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="stylesheet" href="/assets/mdui/css/mdui.min.css">
+<link rel="stylesheet" href="/assets/site.css">
+</head>
+<body class="mdui-theme-primary-pink mdui-theme-accent-cyan mdui-theme-layout-dark mdui-appbar-with-toolbar">
+<header class="mdui-appbar mdui-appbar-fixed mdui-color-theme">
+	<div class="mdui-toolbar">
+		<button type="button" class="mdui-btn mdui-btn-icon mdui-ripple pk-drawer-toggle" aria-label="打开导航"><svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" aria-hidden="true"><path d="M3 6h18v2H3zM3 11h18v2H3zM3 16h18v2H3z"/></svg></button>
+		<a class="mdui-typo-title pk-brand" href="/">Parker Engine</a>
+		<span class="pk-brand-sub">中文文档</span>
+		<div class="mdui-toolbar-spacer"></div>
+		<a class="mdui-btn mdui-btn-icon mdui-ripple" href="/docs/" aria-label="文档门户" mdui-tooltip="{content:'文档门户'}"><svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" aria-hidden="true"><path d="M6 2h11a3 3 0 0 1 3 3v14a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3V5a3 3 0 0 1 3-3zm0 2a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h1V4H6zm3 0v16h8a1 1 0 0 0 1-1V5a1 1 0 0 0-1-1H9z"/></svg></a>
+		<a class="mdui-btn mdui-btn-icon mdui-ripple" href="https://github.com/FNF-Pk-Dev/FNF_Parker-Engine-new" target="_blank" rel="noopener" aria-label="GitHub 仓库" mdui-tooltip="{content:'GitHub 仓库'}"><svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" aria-hidden="true"><path d="M12 .5A11.5 11.5 0 0 0 .5 12a11.5 11.5 0 0 0 7.86 10.92c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.53-1.34-1.29-1.7-1.29-1.7-1.05-.72.08-.71.08-.71 1.16.08 1.77 1.2 1.77 1.2 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.7 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.47.11-3.06 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.79 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.77.12 3.06.74.81 1.19 1.84 1.19 3.1 0 4.43-2.7 5.4-5.26 5.69.41.36.78 1.06.78 2.14v3.17c0 .31.2.67.8.56A11.5 11.5 0 0 0 23.5 12A11.5 11.5 0 0 0 12 .5z"/></svg></a>
+	</div>
+</header>
+<aside class="mdui-drawer pk-drawer" id="pk-drawer">
+	<div class="pk-drawer-scroll">
+		<a class="pk-drawer-hero mdui-ripple" href="/">
+			<span class="pk-drawer-hero-title">Parker Engine</span>
+			<span class="pk-drawer-hero-sub">v0.2.8 · 中文文档</span>
+		</a>
+		<div class="mdui-subheader pk-nav-group">快速开始</div>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="/docs/">
+			<div class="mdui-list-item-content"><span class="pk-nav-icon"><svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" aria-hidden="true"><path d="M12 3 2 12h3v9h6v-6h2v6h6v-9h3z"/></svg></span>文档总览</div>
+			<span class="pk-badge">总览</span>
+		</a>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="/docs/lua-tutorial/">
+			<div class="mdui-list-item-content">Lua 编码基础</div>
+			<span class="pk-badge">Lua</span>
+		</a>
+		<div class="mdui-subheader pk-nav-group">Lua 脚本</div>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="/docs/callbacks/">
+			<div class="mdui-list-item-content">回调模板</div>
+			<span class="pk-badge">回调</span>
+		</a>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="/docs/lua-psych/">
+			<div class="mdui-list-item-content">Psych 原版函数全解</div>
+			<span class="pk-badge">Lua</span>
+		</a>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="/docs/lua-es-extensions/">
+			<div class="mdui-list-item-content">ES 扩展（Parker 独有）</div>
+			<span class="pk-badge">ES</span>
+		</a>
+		<a class="mdui-list-item mdui-ripple pk-nav-item mdui-list-item-active" href="/docs/lua-this-proxy/">
+			<div class="mdui-list-item-content">this 代理</div>
+			<span class="pk-badge">Lua</span>
+		</a>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="/docs/modchart-functions/">
+			<div class="mdui-list-item-content">ES ModChart 特效</div>
+			<span class="pk-badge">特效</span>
+		</a>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="/docs/hscript-haxe/">
+			<div class="mdui-list-item-content">Lua 调用 Haxe</div>
+			<span class="pk-badge">Haxe</span>
+		</a>
+		<div class="mdui-subheader pk-nav-group">HScript</div>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="/docs/hscript/">
+			<div class="mdui-list-item-content">HScript 完整文档</div>
+			<span class="pk-badge">HScript</span>
+		</a>
+		<div class="mdui-subheader pk-nav-group">Python</div>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="/docs/python/">
+			<div class="mdui-list-item-content">Python 脚本</div>
+			<span class="pk-badge">Python</span>
+		</a>
+		<div class="mdui-subheader pk-nav-group">LScript</div>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="/docs/lscript/">
+			<div class="mdui-list-item-content">LScript (Luau)</div>
+			<span class="pk-badge">Luau</span>
+		</a>
+		<div class="mdui-subheader pk-nav-group">Modchart</div>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="/docs/modchart/">
+			<div class="mdui-list-item-content">Modchart 修饰器系统</div>
+			<span class="pk-badge">Modchart</span>
+		</a>
+		<div class="mdui-divider pk-nav-divider"></div>
+		<div class="mdui-subheader pk-nav-group">相关链接</div>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="https://github.com/FNF-Pk-Dev/FNF_Parker-Engine-new/releases" target="_blank" rel="noopener"><div class="mdui-list-item-content">下载 / Releases</div></a>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="https://github.com/FNF-Pk-Dev/FNF_Parker-Engine-new" target="_blank" rel="noopener"><div class="mdui-list-item-content">GitHub 仓库</div></a>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="/"><div class="mdui-list-item-content">返回首页</div></a>
+	</div>
+</aside>
+<main class="pk-main">
+<div class="mdui-container pk-container">
+<nav class="pk-breadcrumb" aria-label="面包屑">
+	<a href="/">首页</a><span class="pk-breadcrumb-sep">/</span><a href="/docs/">文档</a><span class="pk-breadcrumb-sep">/</span><span>Lua 脚本</span><span class="pk-breadcrumb-sep">/</span><span class="pk-breadcrumb-current">this 代理</span>
+</nav>
+<article class="mdui-typo mdui-card mdui-shadow-2 pk-doc"><h1 id="lua-的-this-代理luaproxy">Lua 的 <code>this</code> 代理（LuaProxy）</h1>
+<h2 id="this-是什么"><code>this</code> 是什么</h2>
+<p>每个 Lua 脚本在创建时都会拿到一个全局 <code>this</code>：</p>
+<pre><code class="language-haxe">// FunkinLua 构造函数（source/psych/script/FunkinLua.hx:220）
+setProxy('this', getScriptState());
+</code></pre>
+<p><code>getScriptState()</code> 返回的是：</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>场景</th>
+<th><code>this</code> 指向</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>歌曲内运行的脚本</td>
+<td><code>PlayState.instance</code></td>
+</tr>
+<tr>
+<td>由 <code>LuaSState</code> 启动的菜单脚本</td>
+<td>当前菜单状态（<code>FunkinLua.currentMenuState</code>，回退到 <code>menuOwner</code> / <code>FlxG.state</code>）</td>
+</tr>
+</tbody>
+</table></div>
+<p>这是 Psych 0.7 遗留下来的 <code>this</code>，Parker Engine 把它从「属性快照」改成了<strong>实时代理</strong>。</p>
+<h2 id="为什么要用代理">为什么要用代理</h2>
+<p>引擎把 Haxe 值交给 Lua 走的是 <code>llua.Convert.toLua()</code>。它的行为是「把实例的字段转成一张一次性的表」，而且<strong>只递归一层</strong>——表里再遇到对象字段就变成 <code>nil</code>。所以老实现里：</p>
+<pre><code class="language-lua">-- 旧行为（现在是错的写法带来的观感）
+this.camGame:flash(0xffffffff, 1)   -- camGame 是 nil，直接报错
+</code></pre>
+<p><code>LuaProxy</code> 换了个思路：表里<strong>只放一个数字 id</strong>（字段名 <code>__pklua_ref</code>），真正的读写都通过元表回到 Haxe 侧的活对象上。于是</p>
+<pre><code class="language-lua">this.camGame:flash(0xffffffff, 1)        -- 真的闪白 camGame
+this.camGame.zoom = 1.2                  -- 真的改了相机缩放
+this.boyfriend:playAnim('idle')          -- 真的播放 BF 的 idle
+this.boyfriend.animation.curAnim.name    -- 真的读得到当前动画名
+local hp = this.health                   -- 读任意 PlayState 字段
+</code></pre>
+<p>都能落到真正的引擎对象上。</p>
+<div class="pk-callout pk-callout-note"><div class="pk-callout-title">注意</div><div class="pk-callout-body"><p><code>this.boyfriend:playAnim('idle')</code> 用的是 <code>Character.playAnim(anim, forced, reverse, startFrame)</code>，而不是 <code>spr.animation.play</code>——所以角色偏移、sing 时长等逻辑都会正常生效。</p>
+</div></div>
+<h2 id="语法限制thiscamgameflash-是语法错误">语法限制：<code>this:camGame:flash(...)</code> 是语法错误</h2>
+<p><strong>这是 Lua / Luau 语言本身的限制，引擎无法兼容。</strong></p>
+<p><code>a:b(...)</code> 这种冒号语法<strong>必须是方法调用</strong>，<code>a</code> 只能是「对象」，<code>b</code> 只能是方法名。而下面这种写法：</p>
+<pre><code class="language-lua">this:camGame:flash(0xffffffff, 1)   -- ✗ 解析错误（parse error）
+</code></pre>
+<p>在解析阶段就会被拒绝：解析器读到 <code>this:camGame</code> 后会期待一个函数调用，紧接着又出现 <code>:flash(...)</code>，语法不通。这和 <code>this</code> 是不是代理表无关——换成任何普通表也一样报错。</p>
+<p>正确写法只有两种：</p>
+<pre><code class="language-lua">this.camGame:flash(0xffffffff, 1)   -- ✓ 点号取字段，冒号调方法
+this.camGame.flash(this.camGame, 0xffffffff, 1)  -- ✓ 等价显式写法（一般不需要）
+</code></pre>
+<h2 id="代理的读写规则">代理的读写规则</h2>
+<ul>
+<li><strong>读字段</strong>：<code>__index</code> → <code>LuaProxy.luaIndex()</code> → <code>Reflect.getProperty()</code>。</li>
+<li><code>nil</code> / 数字 / 字符串 / 布尔 → 原样返回值。</li>
+<li>函数 → 交回一个<strong>闭包</strong>，调用时走 <code>__pklua_invoke()</code>。</li>
+<li>其他对象 / 数组 / Map / Class → 再包一层代理表。</li>
+<li>读失败（Haxe 抛异常）会在屏幕上红字报告 <code>LuaProxy: could not read "xxx" ...</code>，然后把 <code>nil</code> 返回给脚本。</li>
+<li><strong>写字段</strong>：<code>__newindex</code> → <code>LuaProxy.luaSetProp()</code>。</li>
+<li>Map 走 <code>set()</code>，数组按数字下标赋值（<code>t[1]</code> 对应 Haxe 的 <code>[0]</code>，越界会 <code>push</code>）。</li>
+<li>其他对象走 <code>Reflect.setProperty()</code>。</li>
+<li><strong>引擎对象上没有这个字段时写操作返回 <code>false</code>，于是 Lua 侧的 <code>__newindex</code> 会 <code>rawset</code> 把它留在代理表里</strong>。好处是脚本自己的记账字段（<code>spr.myFlag = true</code>）不会报错；代价是<strong>拼错字段名也不会报错</strong>，值只是留在 Lua 那张表里，永远到不了引擎。写失败被刻意静默（源码注释：「this is not a failure worth a screen full of red text on every <code>spr.customFlag = true</code>」）。</li>
+<li><strong>调用方法</strong>：<code>obj.method(args)</code> 与 <code>obj:method(args)</code> <strong>都可用</strong>。Haxe 的成员函数（<code>HX_DEFINE_DYNAMIC_FUNC*</code>）本身已经绑定了对象，所以引擎侧不传 <code>this</code>；Lua 侧的闭包还会检测「第一个参数是不是指向同一个 id 的代理表」，是就先丢掉——这就是冒号写法能工作的原因。</li>
+<li><strong><code>Class:new(...)</code> / <code>Class.new(...)</code></strong>：如果代理指向的是一个<strong>类</strong>（不是实例），读 <code>new</code> 会得到一个构造用的函数，调用它会 <code>Type.createInstance()</code> 并返回新实例的代理。读类上的其他字段时，引擎<strong>只查静态字段</strong>（<code>Type.getClassFields()</code>），因为 hxcpp 下随意读类字段会白白 new 一个实例出来。</li>
+<li><strong>数组</strong>：只有 <code>index &gt; 0</code> 才会被当作数组下标（<code>t[1]</code> → Haxe <code>arr[0]</code>）；<code>#t</code>（<code>__len</code>）只对数组有意义，其他对象返回 <code>0</code>；<code>tostring(t)</code>（<code>__tostring</code>）返回 <code>Std.string(实际值)</code>。</li>
+<li><strong>同一个 Haxe 对象总是同一张代理表</strong>：<code>refIds</code> 按对象身份缓存，<code>__pklua_wrapped</code> 又用弱表缓存，所以同一个 Lua 状态里 <code>this.boyfriend == this.boyfriend</code> 为真。<strong>但 <code>this.boyfriend</code> 和其它来源的同一个对象不保证相等</strong>（不同脚本的 Lua 状态、或另一条注入路径），比较对象请比较名字/标签而不是表本身。</li>
+<li><strong>代理可以作为参数传回引擎</strong>：<code>LuaProxy.unwrap()</code> 会把带 <code>__pklua_ref</code> 的表还原成真正的 Haxe 对象（数组会逐项还原）。所以 <code>setProperty('x.y', this.boyfriend)</code> 这类写法是可行的。</li>
+</ul>
+<h2 id="生命周期与范围">生命周期与范围</h2>
+<ul>
+<li><strong>只有 <code>this</code> 是代理。</strong> 引擎里 <code>FunkinLua.set()</code> 绑定的其它全局（<code>curStep</code>、<code>curBeat</code>、<code>bpm</code>、<code>score</code>、<code>health</code>、<code>defaultPlayerStrumX0</code> 等等）都是<strong>基本类型快照</strong>，不是代理。更重要的是：在本分支里 <code>camGame</code> / <code>camHUD</code> / <code>boyfriend</code> / <code>dad</code> / <code>gf</code> / <code>notes</code> / <code>strums</code> 这些对象<strong>只通过 <code>setOnHScripts()</code>（HScript）和 <code>setOnScripts()</code>（LScript + Python）注入</strong>（<code>PlayState.setOnScripts()</code> 的实现里只列了这两个），<strong>Lua 脚本并没有这些全局名</strong>。所以在 Lua 里：</li>
+</ul>
+<p><code>lua
+  camGame.zoom = 1.2        -- ✗ camGame 是 nil
+  this.camGame.zoom = 1.2   -- ✓ 走代理
+  setProperty('camGame.zoom', 1.2)  -- ✓ 走名字查找</code></p>
+<p>也就是说，Lua 侧访问活对象有两条路：<strong><code>this.&lt;字段&gt;</code> 代理</strong>，或者<strong>名字查找</strong>——<code>getProperty</code> / <code>setProperty</code> / <code>playAnim</code> / <code>getObjectOrder</code> / <code>screenCenter</code> 这类函数接受的对象路径，最终都会回落到 <code>Reflect.getProperty(PlayState.instance, 名字)</code>，所以直接传 <code>'camGame'</code>、<code>'boyfriend'</code>、<code>'dad'</code>、<code>'gf'</code> 是有效的。
+- <strong>id 只在脚本存活期间有意义</strong>：<code>FunkinLua.stop()</code>（脚本被停止、场景销毁、或 <code>close()</code> 后回调返回）会调用 <code>proxy.dispose()</code>，清空 <code>refs</code> / <code>refIds</code>。此后再用一张留着没放的代理表，读会得到 <code>nil</code>、写只会 <code>rawset</code> 到那张表上。
+- <strong>桥装不上时不会让脚本崩</strong>：<code>install()</code> 里解析或执行 Lua 预置代码失败时，会在屏幕上红字报 <code>LuaProxy: could not ...</code>，代理表保持惰性（读写都失败），脚本其余功能照常。
+- <strong>占用了一批全局名</strong>：桥会向脚本的全局表写入 <code>__pklua_proxy</code>、<code>__pklua_wrap</code>、<code>__pklua_decode</code>、<code>__pklua_wrapped</code>、<code>__pklua_index</code>、<code>__pklua_invoke</code>、<code>__pklua_setprop</code>、<code>__pklua_len</code>、<code>__pklua_tostring</code>。<strong>自己的脚本不要用这些名字</strong>，否则桥会被破坏。
+- <strong>同样的机制也用在 <code>.lscript</code></strong>：<code>script/FunkinLScript.hx</code> 用它推送值，所以 <code>.lscript</code> 的 <code>this</code> 本来就是「真状态」。这次改动只是让 <code>.lua</code> 和 <code>.lscript</code> 行为一致。</p>
+<h2 id="常见写法对照">常见写法对照</h2>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>目的</th>
+<th>写法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>闪白主相机</td>
+<td><code>this.camGame:flash(0xffffffff, 1)</code></td>
+</tr>
+<tr>
+<td>改相机缩放</td>
+<td><code>this.camGame.zoom = 1.2</code></td>
+</tr>
+<tr>
+<td>让 BF 播放 idle</td>
+<td><code>this.boyfriend:playAnim('idle')</code></td>
+</tr>
+<tr>
+<td>读当前动画名</td>
+<td><code>debugPrint(tostring(this.boyfriend.animation.curAnim.name))</code></td>
+</tr>
+<tr>
+<td>读血量</td>
+<td><code>local hp = this.health</code></td>
+</tr>
+<tr>
+<td>改血量</td>
+<td><code>this.health = 1.5</code></td>
+</tr>
+<tr>
+<td>让对手跳舞</td>
+<td><code>this.dad:dance()</code></td>
+</tr>
+<tr>
+<td>读第 3 个 strum 的 x</td>
+<td><code>local x = this.strumLineNotes.members[3].x</code></td>
+</tr>
+<tr>
+<td>调 PlayState 的方法</td>
+<td><code>this:startCountdown()</code> 或 <code>this.startCountdown(this)</code></td>
+</tr>
+<tr>
+<td>访问菜单态的成员</td>
+<td><code>this.members</code>（菜单脚本里 <code>this</code> 是那个状态本身）</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>反例（不要写）</strong>：</p>
+<pre><code class="language-lua">this:camGame:flash(0xffffffff, 1)   -- ✗ 语法错误
+boyfriend:playAnim('idle')          -- ✗ Lua 里没有 boyfriend 这个全局
+camGame.zoom = 1.2                  -- ✗ Lua 里没有 camGame 这个全局
+this.boyfreind.x = 0                -- ✗ 拼错字段名不会报错，值只会留在 Lua 表里
+</code></pre></article>
+<nav class="pk-pager" aria-label="翻页">
+	<a class="mdui-btn mdui-btn-raised mdui-ripple pk-pager-btn pk-pager-prev" href="/docs/lua-es-extensions/"><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M14.7 5.3 8 12l6.7 6.7 1.4-1.4L10.8 12l5.3-5.3z"/></svg><span class="pk-pager-text"><span class="pk-pager-label">上一页</span><span class="pk-pager-title">ES 扩展（Parker 独有）</span></span></a>
+	<a class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme pk-pager-btn pk-pager-next" href="/docs/modchart-functions/"><span class="pk-pager-text"><span class="pk-pager-label">下一页</span><span class="pk-pager-title">ES ModChart 特效</span></span><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M9.3 5.3 7.9 6.7 13.2 12l-5.3 5.3 1.4 1.4L16 12z"/></svg></a>
+</nav>
+</div>
+</main>
+<footer class="pk-footer">
+	<div class="mdui-container">
+		<div class="pk-footer-inner">
+			<span>Parker Engine v0.2.8 · 中文文档</span>
+			<span class="pk-footer-links">
+				<a href="https://github.com/FNF-Pk-Dev/FNF_Parker-Engine-new" target="_blank" rel="noopener">GitHub 仓库</a>
+				<a href="https://github.com/FNF-Pk-Dev/FNF_Parker-Engine-new/releases" target="_blank" rel="noopener">下载</a>
+				<a href="/docs/">文档门户</a>
+			</span>
+		</div>
+		<div class="pk-footer-note">
+			基于 <a href="https://github.com/ShadowMario/FNF-PsychEngine" target="_blank" rel="noopener">Psych Engine</a> 分支开发 · 本站静态托管于 GitHub Pages
+		</div>
+	</div>
+</footer>
+<script src="/assets/mdui/js/mdui.min.js"></script>
+<script src="/assets/site.js"></script>
+</body>
+</html>

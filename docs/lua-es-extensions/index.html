@@ -1,0 +1,1140 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#e91e63">
+<meta name="description" content="「Engine Custom ES」方言：Parker 在 Psych API 之上额外提供的扩展函数与全局变量。">
+<title>ES 扩展（Parker 独有） - Parker Engine 中文文档</title>
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="stylesheet" href="/assets/mdui/css/mdui.min.css">
+<link rel="stylesheet" href="/assets/site.css">
+</head>
+<body class="mdui-theme-primary-pink mdui-theme-accent-cyan mdui-theme-layout-dark mdui-appbar-with-toolbar">
+<header class="mdui-appbar mdui-appbar-fixed mdui-color-theme">
+	<div class="mdui-toolbar">
+		<button type="button" class="mdui-btn mdui-btn-icon mdui-ripple pk-drawer-toggle" aria-label="打开导航"><svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" aria-hidden="true"><path d="M3 6h18v2H3zM3 11h18v2H3zM3 16h18v2H3z"/></svg></button>
+		<a class="mdui-typo-title pk-brand" href="/">Parker Engine</a>
+		<span class="pk-brand-sub">中文文档</span>
+		<div class="mdui-toolbar-spacer"></div>
+		<a class="mdui-btn mdui-btn-icon mdui-ripple" href="/docs/" aria-label="文档门户" mdui-tooltip="{content:'文档门户'}"><svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" aria-hidden="true"><path d="M6 2h11a3 3 0 0 1 3 3v14a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3V5a3 3 0 0 1 3-3zm0 2a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h1V4H6zm3 0v16h8a1 1 0 0 0 1-1V5a1 1 0 0 0-1-1H9z"/></svg></a>
+		<a class="mdui-btn mdui-btn-icon mdui-ripple" href="https://github.com/FNF-Pk-Dev/FNF_Parker-Engine-new" target="_blank" rel="noopener" aria-label="GitHub 仓库" mdui-tooltip="{content:'GitHub 仓库'}"><svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" aria-hidden="true"><path d="M12 .5A11.5 11.5 0 0 0 .5 12a11.5 11.5 0 0 0 7.86 10.92c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.53-1.34-1.29-1.7-1.29-1.7-1.05-.72.08-.71.08-.71 1.16.08 1.77 1.2 1.77 1.2 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.7 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.47.11-3.06 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.79 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.77.12 3.06.74.81 1.19 1.84 1.19 3.1 0 4.43-2.7 5.4-5.26 5.69.41.36.78 1.06.78 2.14v3.17c0 .31.2.67.8.56A11.5 11.5 0 0 0 23.5 12A11.5 11.5 0 0 0 12 .5z"/></svg></a>
+	</div>
+</header>
+<aside class="mdui-drawer pk-drawer" id="pk-drawer">
+	<div class="pk-drawer-scroll">
+		<a class="pk-drawer-hero mdui-ripple" href="/">
+			<span class="pk-drawer-hero-title">Parker Engine</span>
+			<span class="pk-drawer-hero-sub">v0.2.8 · 中文文档</span>
+		</a>
+		<div class="mdui-subheader pk-nav-group">快速开始</div>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="/docs/">
+			<div class="mdui-list-item-content"><span class="pk-nav-icon"><svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" aria-hidden="true"><path d="M12 3 2 12h3v9h6v-6h2v6h6v-9h3z"/></svg></span>文档总览</div>
+			<span class="pk-badge">总览</span>
+		</a>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="/docs/lua-tutorial/">
+			<div class="mdui-list-item-content">Lua 编码基础</div>
+			<span class="pk-badge">Lua</span>
+		</a>
+		<div class="mdui-subheader pk-nav-group">Lua 脚本</div>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="/docs/callbacks/">
+			<div class="mdui-list-item-content">回调模板</div>
+			<span class="pk-badge">回调</span>
+		</a>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="/docs/lua-psych/">
+			<div class="mdui-list-item-content">Psych 原版函数全解</div>
+			<span class="pk-badge">Lua</span>
+		</a>
+		<a class="mdui-list-item mdui-ripple pk-nav-item mdui-list-item-active" href="/docs/lua-es-extensions/">
+			<div class="mdui-list-item-content">ES 扩展（Parker 独有）</div>
+			<span class="pk-badge">ES</span>
+		</a>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="/docs/lua-this-proxy/">
+			<div class="mdui-list-item-content">this 代理</div>
+			<span class="pk-badge">Lua</span>
+		</a>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="/docs/modchart-functions/">
+			<div class="mdui-list-item-content">ES ModChart 特效</div>
+			<span class="pk-badge">特效</span>
+		</a>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="/docs/hscript-haxe/">
+			<div class="mdui-list-item-content">Lua 调用 Haxe</div>
+			<span class="pk-badge">Haxe</span>
+		</a>
+		<div class="mdui-subheader pk-nav-group">HScript</div>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="/docs/hscript/">
+			<div class="mdui-list-item-content">HScript 完整文档</div>
+			<span class="pk-badge">HScript</span>
+		</a>
+		<div class="mdui-subheader pk-nav-group">Python</div>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="/docs/python/">
+			<div class="mdui-list-item-content">Python 脚本</div>
+			<span class="pk-badge">Python</span>
+		</a>
+		<div class="mdui-subheader pk-nav-group">LScript</div>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="/docs/lscript/">
+			<div class="mdui-list-item-content">LScript (Luau)</div>
+			<span class="pk-badge">Luau</span>
+		</a>
+		<div class="mdui-subheader pk-nav-group">Modchart</div>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="/docs/modchart/">
+			<div class="mdui-list-item-content">Modchart 修饰器系统</div>
+			<span class="pk-badge">Modchart</span>
+		</a>
+		<div class="mdui-divider pk-nav-divider"></div>
+		<div class="mdui-subheader pk-nav-group">相关链接</div>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="https://github.com/FNF-Pk-Dev/FNF_Parker-Engine-new/releases" target="_blank" rel="noopener"><div class="mdui-list-item-content">下载 / Releases</div></a>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="https://github.com/FNF-Pk-Dev/FNF_Parker-Engine-new" target="_blank" rel="noopener"><div class="mdui-list-item-content">GitHub 仓库</div></a>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="/"><div class="mdui-list-item-content">返回首页</div></a>
+	</div>
+</aside>
+<main class="pk-main">
+<div class="mdui-container pk-container">
+<nav class="pk-breadcrumb" aria-label="面包屑">
+	<a href="/">首页</a><span class="pk-breadcrumb-sep">/</span><a href="/docs/">文档</a><span class="pk-breadcrumb-sep">/</span><span>Lua 脚本</span><span class="pk-breadcrumb-sep">/</span><span class="pk-breadcrumb-current">ES 扩展（Parker 独有）</span>
+</nav>
+<article class="mdui-typo mdui-card mdui-shadow-2 pk-doc"><h1 id="parker-扩展engine-custom-es-lua-方言">Parker 扩展：Engine Custom ES Lua 方言</h1>
+<p>「Engine Custom ES」是 Parker Engine 在 Psych 原版 Lua API 之上额外提供的一层方言兼容，实现在 <code>source/psych/script/ESCompat.hx</code>。本页收录它注册的<strong>全部 67 个函数</strong>与配套全局变量，每个都标注为 <strong>Parker 扩展</strong>。</p>
+<h2 id="这一层是怎么接进引擎的">这一层是怎么接进引擎的</h2>
+<ul>
+<li><strong>注册时机</strong>：<code>ESCompat.register(this)</code> 在 <code>FunkinLua</code> 构造函数<strong>末尾</strong>调用，此时 Psych 原版的那 232 个函数已经全部注册完毕（只有菜单专用的 <code>camFollowPos</code> / <code>camFollow</code> 排在它之后注册）。</li>
+<li><strong>不覆盖 Psych 回调</strong>：ES 只做<strong>新增</strong>。源码注释写明「it only adds callbacks, so scripts written for Psych keep behaving exactly as before」——凡是 Psych 已有的能力（<code>setProperty</code>、<code>doTween*</code> 等），ES 不会重新注册，只是给一个更短的别名去复用原函数。少数「会改到 Psych 函数行为」的地方都在下文《与 Psych 函数重叠的地方要留意》里单独列出：<code>setHealthBarColors</code> 的三参数重载、<code>setTextBorder</code> 的参数顺序自动交换、<code>makeLuaSprite</code> 的图集自动识别，以及菜单态把 <code>setObjectCamera</code> 置 <code>nil</code>。</li>
+<li><strong>全局常量</strong>：桌面上会额外写入两个只读全局 <code>monitorWidth</code>、<code>monitorHeight</code>（显示器分辨率）；另外注册了 31 个缓动名各两种大小写共 <strong>62 个全局变量</strong>（<code>quadOut</code> 与 <code>QuadOut</code> 都等于字符串 <code>'quadOut'</code>），这样 ES 脚本可以写 <code>doTweenY('t', 'obj', 0, 1, QuadOut)</code> 而不用加引号——不注册的话这个标识符是 <code>nil</code>，补间会静默退化成 <code>linear</code>。已注册的名字是：<code>linear</code>、<code>quadIn/Out/InOut</code>、<code>quartIn/Out/InOut</code>、<code>quintIn/Out/InOut</code>、<code>sineIn/Out/InOut</code>、<code>expoIn/Out/InOut</code>、<code>circIn/Out/InOut</code>、<code>cubeIn/Out/InOut</code>、<code>backIn/Out/InOut</code>、<code>elasticIn/Out/InOut</code>、<code>bounceIn/Out/InOut</code>。</li>
+<li><strong><code>lerp(a, b, t)</code></strong>：每个 Lua 脚本各有独立的 Lua 状态与 <code>this</code>，另一个脚本里定义的全局 <code>lerp()</code> 在这里是 <code>nil</code>，所以引擎自己提供了一个。</li>
+<li><strong>警告而不是崩溃</strong>：ES 函数在参数缺失或找不到对象时走 <code>warn()</code>，即调用 <code>luaTrace(..., FlxColor.RED)</code>，是否显示取决于该脚本的 <code>luaDebugMode</code>。</li>
+</ul>
+<h2 id="菜单态luasstate下的行为差异">菜单态（LuaSState）下的行为差异</h2>
+<p>当脚本由 <code>states/&lt;名字&gt;.lua</code> 这类<strong>自定义菜单状态</strong>（<code>LuaSState</code>）启动时（<code>FunkinLua.menuMode == true</code>），没有 <code>PlayState.instance</code> 可以挂对象，于是脚本改用自己的一套注册表：</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>注册表</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>menuSprites</code> / <code>menuTexts</code></td>
+<td>该脚本的 Lua 精灵与文本</td>
+</tr>
+<tr>
+<td><code>menuTweens</code> / <code>menuTimers</code></td>
+<td>该脚本的补间与计时器</td>
+</tr>
+<tr>
+<td><code>menuSounds</code></td>
+<td>该脚本的音效</td>
+</tr>
+<tr>
+<td><code>menuVariables</code>（静态）</td>
+<td>菜单脚本共用的变量表，最后一个菜单脚本停掉时清空</td>
+</tr>
+</tbody>
+</table></div>
+<p>具体影响：</p>
+<ul>
+<li><code>add()</code> / <code>addLuaSprite()</code> 在菜单态是<strong>直接 append</strong>，不认 <code>front</code> 参数——创建顺序就是绘制顺序；<code>menuBackIndex</code> 用来记录「往后插」的位置。</li>
+<li><code>setOrder()</code> 则按 <code>FlxState.members</code> 的下标插入，可以精确控制层级。</li>
+<li>菜单态<strong>相机布局</strong>由 <code>LuaSState.create()</code> 决定：<code>camGame</code> 被滚动半屏（<code>scroll</code> 设为 <code>-width/2, -height/2</code>），所以 Lua 坐标是<strong>屏幕中心为原点</strong>；同时新建一台不滚动的 <code>camHUD</code> 供 <code>setCam('camHUD')</code> 使用。<code>camFollowPos()</code> / <code>camFollow()</code> 就是用来在这个滚动坐标系里「跟随」某个内容点的。</li>
+<li>菜单态<strong>没有</strong> <code>setObjectCamera</code>：源码在 <code>menuMode</code> 下显式把它设为 <code>nil</code>（<code>Lua.gpushnil</code>），因为 ES 脚本会用 <code>if setObjectCamera then</code> 探测它。<strong><code>setCam()</code> 才是菜单态的相机设置入口。</strong></li>
+<li>角色、视频、轨迹、血条、strum 相关函数都要求有 <code>PlayState</code>，菜单态会红字警告并直接返回。</li>
+<li>菜单脚本的 <code>onCreate()</code> 由 <code>LuaSState.create()</code> 统一调用，只调一次，且在相机布局就位之后；游戏脚本则由 <code>FunkinLua</code> 构造函数末尾调用。</li>
+</ul>
+<h2 id="两个特殊回调">两个特殊回调</h2>
+<ul>
+<li><strong><code>onPlayAnim(tag, anim)</code></strong>（Parker 扩展）：ES 的「角色切换动画」回调。它不是引擎原生派发的，而是 <code>ESCompat.tick()</code> 在<strong>每次派发本脚本的 <code>onUpdate</code> 之前</strong>检查 <code>boyfriend</code>、<code>dad</code>、<code>gf</code> 以及所有 <code>makeChar()</code> 创建的角色，一旦发现 <code>animation.curAnim.name</code> 与上一次不同就派发一次。<code>tag</code> 是角色标识（内置三个角色用 <code>'boyfriend'</code> / <code>'dad'</code> / <code>'gf'</code>，<code>makeChar</code> 的用其 tag）。</li>
+<li><strong><code>onTyping(tag)</code></strong>（Parker 扩展）：打字机文本（<code>setTextSpeed()</code> + <code>setText()</code>）每显示出一个字符时派发，<code>tag</code> 是该文本的 tag。</li>
+</ul>
+<h2 id="api-参考">API 参考</h2>
+<h3 id="别名与通用操作">别名与通用操作</h3>
+<p><strong>Parker 扩展</strong>，共 16 个。</p>
+<h3 id="setvariablestring-valuedynamic">set(variable:String, value:Dynamic)</h3>
+<p><strong>Parker 扩展。</strong> <code>setProperty</code> 的短别名，写属性时可容忍失败。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>variable</code></td>
+<td><code>String</code></td>
+<td>属性路径，支持 <code>'spr.x'</code>；写不进去时会退化成脚本变量</td>
+</tr>
+<tr>
+<td><code>value</code></td>
+<td><code>Dynamic</code></td>
+<td>值</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：<code>Bool</code>，恒为 <code>true</code>（缺参数时 <code>false</code> 并警告）。</p>
+<h3 id="getvariablestringdynamic">get(variable:String):Dynamic</h3>
+<p><strong>Parker 扩展。</strong> <code>getProperty</code> 的短别名。</p>
+<p>返回：属性值；路径不存在返回 <code>null</code>。</p>
+<h3 id="addtagstring-frontbool-false">add(tag:String, ?front:Bool = false)</h3>
+<p><strong>Parker 扩展。</strong> 把精灵/文本/其它 <code>FlxBasic</code> 加进场景，等价于 <code>addLuaSprite</code> + <code>addLuaText</code> 的统一入口，也接受用变量存放的对象。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tag</code></td>
+<td><code>String</code></td>
+<td>对象 tag</td>
+</tr>
+<tr>
+<td><code>front</code></td>
+<td><code>Bool</code></td>
+<td>加到最前；菜单态忽略此项</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：无返回。</p>
+<h3 id="removetagstring">remove(tag:String)</h3>
+<p><strong>Parker 扩展。</strong> 从场景移除并销毁对象，同时清理它在该脚本的精灵/文本/变量/轨迹/视频/血条注册表里的条目。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tag</code></td>
+<td><code>String</code></td>
+<td>对象 tag</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：无返回。</p>
+<h3 id="scaletagstring-xfloat-yfloat-updatehitboxbool-true">scale(tag:String, x:Float, y:Float, ?updateHitbox:Bool = true)</h3>
+<p><strong>Parker 扩展。</strong> 设置缩放。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tag</code></td>
+<td><code>String</code></td>
+<td>精灵 tag</td>
+</tr>
+<tr>
+<td><code>x</code> / <code>y</code></td>
+<td><code>Float</code></td>
+<td>缩放倍率</td>
+</tr>
+<tr>
+<td><code>updateHitbox</code></td>
+<td><code>Bool</code></td>
+<td>是否刷新碰撞箱，默认 <code>true</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：无返回。</p>
+<h3 id="addanimtagstring-namestring-prefixstring-framerateint-24-loopbool-true">addAnim(tag:String, name:String, prefix:String, ?framerate:Int = 24, ?loop:Bool = true)</h3>
+<p><strong>Parker 扩展。</strong> 按前缀加动画；对象当前没有动画时会立刻播放这个新动画。</p>
+<p>返回：无返回。</p>
+<h3 id="setcamtagstring-camerastring">setCam(tag:String, camera:String = '')</h3>
+<p><strong>Parker 扩展。</strong> 设置对象由哪台相机渲染。<strong>菜单态下这是唯一可用的相机设置入口</strong>（菜单里 <code>setObjectCamera</code> 是 <code>nil</code>）。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tag</code></td>
+<td><code>String</code></td>
+<td>精灵 tag</td>
+</tr>
+<tr>
+<td><code>camera</code></td>
+<td><code>String</code></td>
+<td><code>'camHUD'</code> / <code>'hud'</code>（菜单的原始相机或 <code>PlayState.camHUD</code>）、<code>'camOther'</code> / <code>'other'</code>、<code>'camVideo'</code> / <code>'video'</code>，其他值（含默认空串）为 <code>camGame</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：<code>Bool</code>，找到精灵 <code>true</code>。</p>
+<h3 id="setordertagstring-positionint">setOrder(tag:String, position:Int)</h3>
+<p><strong>Parker 扩展。</strong> 按 <code>FlxState.members</code> 下标重排对象层级（会 clamp 到合法范围）。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tag</code></td>
+<td><code>String</code></td>
+<td>对象 tag</td>
+</tr>
+<tr>
+<td><code>position</code></td>
+<td><code>Int</code></td>
+<td>目标下标</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：无返回。</p>
+<h3 id="getordertagstringint">getOrder(tag:String):Int</h3>
+<p><strong>Parker 扩展。</strong> 读取对象在场景成员里的下标。</p>
+<p>返回：<code>Int</code>；未找到返回 <code>-1</code>。</p>
+<h3 id="setvelocitytagstring-xfloat-yfloat">setVelocity(tag:String, x:Float, y:Float)</h3>
+<p><strong>Parker 扩展。</strong> 直接设置精灵速度。</p>
+<p>返回：无返回。</p>
+<h3 id="dotweenscaletagstring-objstring-xfloat-yfloat-durationfloat-easestring">doTweenScale(tag:String, obj:String, x:Float, y:Float, duration:Float, ?ease:String)</h3>
+<p><strong>Parker 扩展。</strong> 缩放补间，且在补间过程中<strong>保持视觉中心不变</strong>（每次更新按宽高变化量补回 <code>x</code>/<code>y</code>，这是 Psych 的 <code>scaleObject</code> 做不到的）。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tag</code></td>
+<td><code>String</code></td>
+<td>补间 tag，同名会先取消</td>
+</tr>
+<tr>
+<td><code>obj</code></td>
+<td><code>String</code></td>
+<td>目标对象路径</td>
+</tr>
+<tr>
+<td><code>x</code> / <code>y</code></td>
+<td><code>Float</code></td>
+<td>目标缩放</td>
+</tr>
+<tr>
+<td><code>duration</code></td>
+<td><code>Float</code></td>
+<td>时长（秒）</td>
+</tr>
+<tr>
+<td><code>ease</code></td>
+<td><code>String</code></td>
+<td>缓动名，默认 <code>linear</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：无返回。完成时触发 <code>onTweenCompleted(tag)</code>。</p>
+<h3 id="setarraypropertiesdynamic-valuesdynamic">setArray(properties:Dynamic, values:Dynamic)</h3>
+<p><strong>Parker 扩展。</strong> 批量设置属性。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>properties</code></td>
+<td><code>Table</code></td>
+<td>属性名数组</td>
+</tr>
+<tr>
+<td><code>values</code></td>
+<td><code>Table</code></td>
+<td>值数组；<strong>长度与 <code>properties</code> 不同时</strong>，所有属性都写第一个值（广播模式）</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：无返回。</p>
+<h3 id="addarraytagsdynamic-frontbool-false">addArray(tags:Dynamic, ?front:Bool = false)</h3>
+<p><strong>Parker 扩展。</strong> 批量 <code>add()</code>。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tags</code></td>
+<td><code>Table</code></td>
+<td>tag 数组</td>
+</tr>
+<tr>
+<td><code>front</code></td>
+<td><code>Bool</code></td>
+<td>是否加到最前</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：无返回。</p>
+<h3 id="getanimnametagstringstring">getAnimName(tag:String):String</h3>
+<p><strong>Parker 扩展。</strong> 读取精灵当前动画名。</p>
+<p>返回：<code>String</code>；精灵不存在或没有当前动画时返回 <code>''</code>。</p>
+<h3 id="scrolltagstring-scrollxfloat-scrollyfloat">scroll(tag:String, scrollX:Float, scrollY:Float)</h3>
+<p><strong>Parker 扩展。</strong> <code>setScrollFactor</code> 的短别名。返回：无返回。</p>
+<h3 id="lerpafloat-bfloat-tfloatfloat">lerp(a:Float, b:Float, t:Float):Float</h3>
+<p><strong>Parker 扩展。</strong> 线性插值工具（因为每个脚本是独立 Lua 状态，别的脚本定义的 <code>lerp</code> 在这里取不到）。</p>
+<p>返回：<code>Float</code>，<code>a</code> 到 <code>b</code> 按 <code>t</code> 插值的结果。</p>
+<h3 id="对象创建">对象创建</h3>
+<p><strong>Parker 扩展</strong>，共 16 个。这一组创建的多数是<strong>非精灵对象</strong>（角色、背景、视频、轨迹、血条），它们存在变量表里而不是精灵注册表里，因此 <code>addLuaSprite</code> 不管它们，要用 <code>add()</code> / <code>setOrder()</code> 排层级。</p>
+<h3 id="colorboxtagstring-colorstring-xfloat-0-yfloat-0-widthfloat-0-heightfloat-0">ColorBox(tag:String, color:String, x:Float = 0, y:Float = 0, width:Float = 0, height:Float = 0)</h3>
+<p><strong>Parker 扩展。</strong> 创建一个纯色矩形（<code>makeColorBox</code> 的同体别名，但参数顺序按 <code>color</code> 在前）。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tag</code></td>
+<td><code>String</code></td>
+<td>tag</td>
+</tr>
+<tr>
+<td><code>color</code></td>
+<td><code>String</code></td>
+<td>颜色，可带 <code>#</code> 或 <code>0x</code></td>
+</tr>
+<tr>
+<td><code>x</code> / <code>y</code></td>
+<td><code>Float</code></td>
+<td>位置</td>
+</tr>
+<tr>
+<td><code>width</code> / <code>height</code></td>
+<td><code>Float</code></td>
+<td>尺寸；<strong><code>&lt;= 1</code> 时按整屏处理</strong>（<code>FlxG.width</code> / <code>FlxG.height</code>），这是 ES 脚本用 <code>0</code> 或 <code>1</code> 表示「铺满」的约定</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：无返回。菜单态且尺寸用了占位值时会把 <code>scrollFactor</code> 设为 <code>(0, 0)</code>，避免半屏滚动的菜单相机露出边缘。</p>
+<h3 id="makecolorboxtagstring-xfloat-0-yfloat-0-widthfloat-0-heightfloat-0-colorstring-000000">makeColorBox(tag:String, x:Float = 0, y:Float = 0, width:Float = 0, height:Float = 0, color:String = '000000')</h3>
+<p><strong>Parker 扩展。</strong> 同上，但参数顺序是 ES 的 <code>(tag, x, y, width, height, color)</code>。</p>
+<p>返回：无返回。</p>
+<h3 id="bgspritetagstring-imagestring-xfloat-0-yfloat-0-scrollxfloat-1-scrollyfloat-1">BGSprite(tag:String, image:String, x:Float = 0, y:Float = 0, ?scrollX:Float = 1, ?scrollY:Float = 1)</h3>
+<p><strong>Parker 扩展。</strong> 创建引擎的 <code>BGSprite</code>（带 idle 动画能力的背景精灵）。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>image</code></td>
+<td><code>String</code></td>
+<td>图片名（走 <code>Paths.image</code>）</td>
+</tr>
+<tr>
+<td><code>scrollX</code> / <code>scrollY</code></td>
+<td><code>Float</code></td>
+<td>视差系数，默认 <code>1</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：无返回。菜单态会强制 <code>scrollFactor = (0, 0)</code>，让它当屏幕空间装饰而不是被半屏滚动推走。</p>
+<h3 id="flxbackdroptagstring-imagestring-xfloat-0-yfloat-0-axisstring-x">FlxBackdrop(tag:String, image:String, x:Float = 0, y:Float = 0, ?axis:String = 'X')</h3>
+<p><strong>Parker 扩展。</strong> 创建无限平铺背景。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>axis</code></td>
+<td><code>String</code></td>
+<td><code>'X'</code>（默认）、<code>'Y'</code>，其他值为 <code>XY</code> 双向平铺</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：无返回。菜单态同样会清零 <code>scrollFactor</code>。</p>
+<h3 id="makechartagstring-characterstring-xfloat-0-yfloat-0-isplayerbool-false">makeChar(tag:String, character:String, x:Float = 0, y:Float = 0, ?isPlayer:Bool = false)</h3>
+<p><strong>Parker 扩展。</strong> 在歌曲里创建一个额外的角色（<code>Character</code>），并登记到 ES 的角色表，因此它的动画切换会产生 <code>onPlayAnim(tag, anim)</code> 回调。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tag</code></td>
+<td><code>String</code></td>
+<td>角色 tag</td>
+</tr>
+<tr>
+<td><code>character</code></td>
+<td><code>String</code></td>
+<td>角色名（<code>characters/&lt;名字&gt;.json</code>）</td>
+</tr>
+<tr>
+<td><code>x</code> / <code>y</code></td>
+<td><code>Float</code></td>
+<td>位置</td>
+</tr>
+<tr>
+<td><code>isPlayer</code></td>
+<td><code>Bool</code></td>
+<td>是否按玩家侧角色处理（朝向等）</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：无返回。<strong>仅歌曲中可用</strong>，菜单态会警告。</p>
+<h3 id="setlongsingcharactersstring-valuebool-true">setLongSing(characters:String, value:Bool = true)</h3>
+<p><strong>Parker 扩展。</strong> 让角色的 sing 动画「永不结束」（<code>singDuration</code> 设为 9999），用于做长音。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>characters</code></td>
+<td><code>String</code></td>
+<td>角色名，<strong>逗号分隔</strong>可以一次传多个；支持 <code>dad</code> / <code>opponent</code>、<code>boyfriend</code> / <code>bf</code> / <code>player</code>、<code>gf</code> / <code>girlfriend</code>，也可以是 <code>makeChar</code> 的 tag</td>
+</tr>
+<tr>
+<td><code>value</code></td>
+<td><code>Bool</code></td>
+<td><code>true</code> 开启长音；<code>false</code> 恢复原始 <code>singDuration</code>（第一次调用时会记录原值，取不到时回退为 <code>4</code>）</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：无返回。</p>
+<h3 id="movecamonanimcharidxint-animstring-xfloat-0-yfloat-0">MoveCamOnAnim(charIdx:Int, anim:String, x:Float = 0, y:Float = 0)</h3>
+<p><strong>Parker 扩展。</strong> 登记「角色 X 播某动画时相机偏移多少」，并在动画正在播放时立即应用。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>charIdx</code></td>
+<td><code>Int</code></td>
+<td><strong>ES 的角色序号：<code>0</code> = 对手（dad）、<code>1</code> = 玩家（boyfriend）、<code>2</code> = 女友（gf）</strong></td>
+</tr>
+<tr>
+<td><code>anim</code></td>
+<td><code>String</code></td>
+<td>动画名</td>
+</tr>
+<tr>
+<td><code>x</code> / <code>y</code></td>
+<td><code>Float</code></td>
+<td>相机目标点偏移</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：无返回。规则保存在 <code>ESState.camRules</code> 里，每帧由 <code>ESCompat.tick()</code> 按角色当前动画重新应用；若引擎自己重新定位了 <code>camFollow</code>，引擎会检测到并把旧偏移清零（<code>applyCamOffset()</code>）。</p>
+<h3 id="makehealthbartagstring-xfloat-0-yfloat-0">makeHealthBar(tag:String, x:Float = 0, y:Float = 0)</h3>
+<p><strong>Parker 扩展。</strong> 创建一条额外的血条。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tag</code></td>
+<td><code>String</code></td>
+<td>血条 tag；<strong>名字里含 <code>dad</code> 或 <code>opponent</code> 时渲染成从右往左</strong>，否则从左往右</td>
+</tr>
+<tr>
+<td><code>x</code> / <code>y</code></td>
+<td><code>Float</code></td>
+<td>相对引擎自带血条的偏移（宽高也照抄引擎血条，取不到时回退 <code>600x20</code>）</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：无返回。<strong>仅歌曲中可用。</strong> 颜色用 <code>setHealthBarColors(barTag, leftHex, rightHex)</code> 改（见下文说明）。</p>
+<h3 id="makevideospritetagstring-pathstring-xfloat-0-yfloat-0-widthfloat-0-heightfloat-0-optionsstring-null">makeVideoSprite(tag:String, path:String, x:Float = 0, y:Float = 0, ?width:Float = 0, ?height:Float = 0, ?options:String = null)</h3>
+<p><strong>Parker 扩展。</strong> 创建一个可通过 tag 控制的视频精灵（比 Psych 的 <code>makeLuaVideoSprite</code> 多了尺寸与选项）。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tag</code></td>
+<td><code>String</code></td>
+<td>视频 tag</td>
+</tr>
+<tr>
+<td><code>path</code></td>
+<td><code>String</code></td>
+<td>视频名（<code>videos/</code> 下的 mp4）</td>
+</tr>
+<tr>
+<td><code>x</code> / <code>y</code></td>
+<td><code>Float</code></td>
+<td>位置</td>
+</tr>
+<tr>
+<td><code>width</code> / <code>height</code></td>
+<td><code>Float</code></td>
+<td>尺寸；<strong>两者都大于 0</strong> 时才在 <code>onFormat</code> 回调里缩放</td>
+</tr>
+<tr>
+<td><code>options</code></td>
+<td><code>String</code></td>
+<td>传 <code>'looping'</code>（大小写不敏感）会自动换成引擎的循环常量</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：无返回。加载失败会警告并销毁。<strong>仅歌曲中可用</strong>，且需要 <code>VIDEOS_ALLOWED</code>。</p>
+<h3 id="videoplaytagstring">videoPlay(tag:String)</h3>
+<p><strong>Parker 扩展。</strong> 播放 <code>makeVideoSprite</code> 创建的视频。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tag</code></td>
+<td><code>String</code></td>
+<td>视频 tag</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：无返回（找不到 tag 会警告）。</p>
+<h3 id="maketrailspirittagstring-targetstring-colorstring-ffffff">makeTrailSpirit(tag:String, target:String, ?color:String = 'FFFFFF')</h3>
+<p><strong>Parker 扩展。</strong> 给某个精灵加拖尾（内部是 <code>FlxTrail</code>，初始参数为 10 帧长度 / 3 帧分隔 / 0.2 透明度 / 0.05 渐变）。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tag</code></td>
+<td><code>String</code></td>
+<td>拖尾 tag，之后用 <code>trailXxx</code> 系列调节</td>
+</tr>
+<tr>
+<td><code>target</code></td>
+<td><code>String</code></td>
+<td>被跟随的精灵 tag</td>
+</tr>
+<tr>
+<td><code>color</code></td>
+<td><code>String</code></td>
+<td>颜色参数，<strong>当前实现未使用</strong>（保留以兼容 ES 调用）</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：无返回。<strong>仅歌曲中可用</strong>；被跟随的精灵必须已存在。</p>
+<h3 id="traildirectiontagstring-directionstring">trailDirection(tag:String, direction:String)</h3>
+<p><strong>Parker 扩展。</strong> 设置拖尾方向。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tag</code></td>
+<td><code>String</code></td>
+<td>拖尾 tag</td>
+</tr>
+<tr>
+<td><code>direction</code></td>
+<td><code>String</code></td>
+<td><code>'x'</code> 只横向、<code>'y'</code> 只纵向、<code>'none'</code> / <code>'static'</code> 静止、其他值（含 <code>'follow'</code>）双轴跟随</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：无返回。</p>
+<h3 id="trailspeedtagstring-speedfloat">trailSpeed(tag:String, speed:Float)</h3>
+<p><strong>Parker 扩展。</strong> 调整拖尾的采样疏密（源码直接改 <code>FlxTrail._difference</code>，取值 <code>speed / 1000</code>，下限 <code>0.001</code>）。数值越小拖尾越「厚」。</p>
+<p>返回：无返回。</p>
+<h3 id="traildelaytagstring-delayfloat">trailDelay(tag:String, delay:Float)</h3>
+<p><strong>Parker 扩展。</strong> 设置帧间隔（秒），内部换算成帧数（<code>delay * 60</code>，最少 1 帧）。</p>
+<p>返回：无返回。</p>
+<h3 id="trailalphatagstring-alphafloat">trailAlpha(tag:String, alpha:Float)</h3>
+<p><strong>Parker 扩展。</strong> 设置拖尾起始透明度（<code>FlxTrail._transp</code>）。</p>
+<p>返回：无返回。</p>
+<h3 id="traillifetagstring-lifefloat">trailLife(tag:String, life:Float)</h3>
+<p><strong>Parker 扩展。</strong> 设置拖尾存活时长（秒），按当前帧间隔换算成需要多少节拖尾并调整长度。</p>
+<p>返回：无返回。</p>
+<h3 id="shader-与变量数组">Shader 与变量数组</h3>
+<p><strong>Parker 扩展</strong>，共 4 个。<strong>注意这里和 Psych 的差异</strong>：Psych 的 <code>setSpriteShader</code>/<code>setShaderFloat</code> 系列是按<strong>挂着色器的对象</strong>操作的；ES 的 <code>makeShader()</code> 先给着色器一个<strong>自己的 tag</strong>，再 <code>setCameraShader()</code> 把它挂到相机上，<code>setShaderFloat(tag, ...)</code> 也能直接按这个 tag 找到着色器（<code>FunkinLua.getShader()</code> 找不到对象时会回落到 <code>ESCompat.getShader()</code>）。</p>
+<h3 id="makeshadertagstring-namestringbool">makeShader(tag:String, name:String):Bool</h3>
+<p><strong>Parker 扩展。</strong> 加载 <code>shaders/&lt;name&gt;.frag</code> + <code>.vert</code>，并以 <code>tag</code> 登记。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tag</code></td>
+<td><code>String</code></td>
+<td>着色器 tag</td>
+</tr>
+<tr>
+<td><code>name</code></td>
+<td><code>String</code></td>
+<td>着色器文件名（不带扩展名）</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：<code>Bool</code>，成功 <code>true</code>。<code>ClientPrefs.shaders</code> 关闭时返回 <code>false</code>；文件缺失时警告并返回 <code>false</code>。加载成功后同一份源码也会写进 <code>PlayState.runtimeShaders</code>，于是 Psych 的 <code>setSpriteShader(obj, name)</code> 也能直接用它。</p>
+<h3 id="setcamerashadercamerastring-shadersdynamicbool">setCameraShader(camera:String, shaders:Dynamic):Bool</h3>
+<p><strong>Parker 扩展。</strong> 把若干已加载的着色器作为滤镜挂到某台相机上。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>camera</code></td>
+<td><code>String</code></td>
+<td>相机名（<code>'camGame'</code> / <code>'camHUD'</code> / <code>'camOther'</code> / <code>'camVideo'</code>）</td>
+</tr>
+<tr>
+<td><code>shaders</code></td>
+<td><code>Table</code></td>
+<td>一个或多个 <code>makeShader</code> 的 tag；未找到的会被跳过并警告</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：<code>Bool</code>，成功 <code>true</code>。每次调用都会<strong>整体替换</strong>该相机的滤镜列表。</p>
+<h3 id="dotweenfloatarraytagstring-namesdynamic-valuesdynamic-durationfloat-easestring">doTweenFloatArray(tag:String, names:Dynamic, values:Dynamic, duration:Float, ?ease:String)</h3>
+<p><strong>Parker 扩展。</strong> 同时补间多个<strong>脚本变量</strong>的数值。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tag</code></td>
+<td><code>String</code></td>
+<td>补间 tag</td>
+</tr>
+<tr>
+<td><code>names</code></td>
+<td><code>Table</code></td>
+<td>变量名数组</td>
+</tr>
+<tr>
+<td><code>values</code></td>
+<td><code>Table</code></td>
+<td>目标值数组；长度不匹配但只有一个值时，全部用这一个值</td>
+</tr>
+<tr>
+<td><code>duration</code></td>
+<td><code>Float</code></td>
+<td>时长（秒）</td>
+</tr>
+<tr>
+<td><code>ease</code></td>
+<td><code>String</code></td>
+<td>缓动名</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：无返回。起始值取变量表里的当前值；完成后触发 <code>onTweenCompleted(tag)</code>。</p>
+<h3 id="setvararraynamesdynamic-valuesdynamic">setVarArray(names:Dynamic, values:Dynamic)</h3>
+<p><strong>Parker 扩展。</strong> 批量写脚本变量。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>names</code></td>
+<td><code>Table</code></td>
+<td>变量名数组</td>
+</tr>
+<tr>
+<td><code>values</code></td>
+<td><code>Table</code></td>
+<td>值数组；长度不匹配时广播第一个值</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：无返回。除了写进变量表，还会 <code>set()</code> 成该脚本的 Lua 全局，让同名变量在脚本里可直接读。</p>
+<h3 id="文本与打字机">文本与打字机</h3>
+<p><strong>Parker 扩展</strong>，共 4 个。</p>
+<h3 id="settexttagstring-textstringbool">setText(tag:String, text:String):Bool</h3>
+<p><strong>Parker 扩展。</strong> 设置文本内容。<strong>如果这个 tag 用 <code>setTextSpeed()</code> 设过正的速度，且新内容长度大于 1，就会自动播放打字机效果</strong>，每显示一个字符触发一次 <code>onTyping(tag)</code>。</p>
+<p>返回：<code>Bool</code>，找到文本 <code>true</code>。</p>
+<h3 id="settextaligntagstring-alignmentstring-leftbool">setTextAlign(tag:String, alignment:String = 'left'):Bool</h3>
+<p><strong>Parker 扩展。</strong> 设置对齐（<code>'right'</code> / <code>'center'</code>，其他为左对齐）。</p>
+<p>返回：<code>Bool</code>。</p>
+<h3 id="settextspeedtagstring-speedfloat">setTextSpeed(tag:String, speed:Float)</h3>
+<p><strong>Parker 扩展。</strong> 设置打字机速度。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tag</code></td>
+<td><code>String</code></td>
+<td>文本 tag</td>
+</tr>
+<tr>
+<td><code>speed</code></td>
+<td><code>Float</code></td>
+<td>每个字符的间隔秒数；<strong><code>&lt;= 0</code> 表示关闭打字机</strong>并停掉正在跑的计时器</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：无返回。</p>
+<h3 id="settextgradienttagstring-color1string-color2string-null-anglefloat-0">setTextGradient(tag:String, color1:String, color2:String = null, angle:Float = 0)</h3>
+<p><strong>Parker 扩展。</strong> 渐变文字。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tag</code></td>
+<td><code>String</code></td>
+<td>文本 tag</td>
+</tr>
+<tr>
+<td><code>color1</code></td>
+<td><code>String</code></td>
+<td>顶部/主色</td>
+</tr>
+<tr>
+<td><code>color2</code></td>
+<td><code>String</code></td>
+<td>第二个颜色，<strong>当前实现未使用</strong></td>
+</tr>
+<tr>
+<td><code>angle</code></td>
+<td><code>Float</code></td>
+<td>角度，<strong>当前实现未使用</strong></td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：无返回。源码注释写明 <code>FlxText</code> 没有渐变支持，所以这里只是把 <code>color1</code> 当纯色用，属于「有接口但不完整」的实现，别指望真的渐变。</p>
+<h3 id="音符与-strum">音符与 strum</h3>
+<p><strong>Parker 扩展</strong>，共 8 个。全部<strong>只在歌曲中可用</strong>，菜单态会警告「Strums only exist while a song is playing!」。</p>
+<h3 id="setnoteynoteint-yfloat">setNoteY(note:Int, y:Float)</h3>
+<p><strong>Parker 扩展。</strong> 设置第 <code>note</code> 个 strum 的 Y。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>note</code></td>
+<td><code>Int</code></td>
+<td>strum 下标；负数取 0，超长按长度取模</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：无返回。</p>
+<h3 id="setnoteanglenoteint-anglefloat">setNoteAngle(note:Int, angle:Float)</h3>
+<p><strong>Parker 扩展。</strong> 设置第 <code>note</code> 个 strum 的角度。返回：无返回。</p>
+<h3 id="setstrumygroupstring-yfloat">setStrumY(group:String, y:Float)</h3>
+<p><strong>Parker 扩展。</strong> 设置整组 strum 的 Y。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>group</code></td>
+<td><code>String</code></td>
+<td><code>'player'</code> / <code>'bf'</code> / <code>'boyfriend'</code>、<code>'opponent'</code> / <code>'dad'</code> / <code>'enemy'</code>，其他值（含 <code>nil</code>）为全部 strum</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：无返回。</p>
+<h3 id="setstrumposgroupstring-xfloat-yfloat">setStrumPos(group:String, x:Float, y:Float)</h3>
+<p><strong>Parker 扩展。</strong> 同组一起 <code>setPosition</code>。<code>group</code> 规则同上。返回：无返回。</p>
+<h3 id="setstrumalphagroupstring-alphafloat">setStrumAlpha(group:String, alpha:Float)</h3>
+<p><strong>Parker 扩展。</strong> 同组一起设透明度。<code>group</code> 规则同上。返回：无返回。</p>
+<h3 id="strumtweenxtagstring-groupstring-xfloat-durationfloat-easestring">strumTweenX(tag:String, group:String, x:Float, duration:Float, ?ease:String)</h3>
+<p><strong>Parker 扩展。</strong> 整组 strum 的 X 补间（一组的每个 strum 各建一条补间，只把第一条登记到 tag 下供 <code>cancelTween</code> 取消）。</p>
+<p>返回：无返回。完成后触发 <code>onTweenCompleted(tag)</code>。</p>
+<h3 id="strumtweenalphatagstring-groupstring-alphafloat-durationfloat-easestring">strumTweenAlpha(tag:String, group:String, alpha:Float, duration:Float, ?ease:String)</h3>
+<p><strong>Parker 扩展。</strong> 整组 strum 的透明度补间。返回：无返回。</p>
+<h3 id="stepeventsteportabledynamic-funcdynamic">stepEvent(stepOrTable:Dynamic, ?func:Dynamic)</h3>
+<p><strong>Parker 扩展。</strong> 在指定步数触发一个 Lua 函数。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>stepOrTable</code></td>
+<td><code>Table</code> 或 <code>Int</code></td>
+<td>一个步数，或步数数组</td>
+</tr>
+<tr>
+<td><code>func</code></td>
+<td><code>Function</code></td>
+<td>要调用的 Lua 函数（无参）</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：无返回。引擎依赖 <code>onEventSet(curStep)</code> 记录的 <code>lastEventSetStep</code> 判断是否到达；每个步数只触发一次（记在 <code>firedSteps</code> 里）；本轮没触发成功时函数引用会被释放，避免堆积。</p>
+<h3 id="菜单与-freeplay">菜单与 Freeplay</h3>
+<p><strong>Parker 扩展</strong>，共 10 个。主要用于 <code>states/&lt;名字&gt;.lua</code> 这类自定义菜单状态脚本。</p>
+<h3 id="switchluamenunamestringbool">switchLuaMenu(name:String):Bool</h3>
+<p><strong>Parker 扩展。</strong> 切换到另一个 Lua 菜单状态。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>name</code></td>
+<td><code>String</code></td>
+<td>状态名（可带 <code>.lua</code>，会被去掉）；实际去加载 <code>states/&lt;名字&gt;.lua</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：<code>Bool</code>，成功 <code>true</code>。</p>
+<h3 id="switchsourcemenunamestringbool">switchSourceMenu(name:String):Bool</h3>
+<p><strong>Parker 扩展。</strong> 切换到引擎内置状态，按顺序在 <code>options.</code>、<code>states.menu.</code>、<code>states.</code>、<code>substates.</code>、<code>substates.game.</code>、无包名 这 6 个前缀里查找类。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>name</code></td>
+<td><code>String</code></td>
+<td>类名，如 <code>'FreeplayState'</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：<code>Bool</code>，成功 <code>true</code>；找不到或构造失败时警告并返回 <code>false</code>。会走 <code>MusicBeatState.switchState()</code>，保留引擎转场。</p>
+<h3 id="playmenumusicnamestring-volumefloat-1-loopbool-true">playMenuMusic(name:String, ?volume:Float = 1, ?loop:Bool = true)</h3>
+<p><strong>Parker 扩展。</strong> 菜单里播放音乐（<code>Paths.music</code> + <code>FlxG.sound.playMusic</code>）。</p>
+<p>返回：无返回。</p>
+<h3 id="preloadsoundnamestring">preloadSound(name:String)</h3>
+<p><strong>Parker 扩展。</strong> 预加载一个音效（内部只调 <code>Paths.sound(name)</code> 触发加载）。</p>
+<p>返回：无返回。</p>
+<h3 id="getfreeplaysongcountint">getFreeplaySongCount():Int</h3>
+<p><strong>Parker 扩展。</strong> 可玩歌曲总数。数据来源见下。</p>
+<p>返回：<code>Int</code>。</p>
+<h3 id="getfreeplaysongnameindexintstring">getFreeplaySongName(index:Int):String</h3>
+<p><strong>Parker 扩展。</strong> 第 <code>index</code> 首歌的歌曲名（用于谱面文件路径）。</p>
+<p>返回：<code>String</code>；下标越界返回 <code>null</code>。</p>
+<h3 id="getfreeplaysongdisplayindexintstring">getFreeplaySongDisplay(index:Int):String</h3>
+<p><strong>Parker 扩展。</strong> 第 <code>index</code> 首歌的显示名。Psych 歌曲没有单独的显示名，所以<strong>当前实现返回与 <code>getFreeplaySongName</code> 相同的值</strong>。</p>
+<p>返回：<code>String</code> 或 <code>null</code>。</p>
+<h3 id="getfreeplaydiffcountindexintint">getFreeplayDiffCount(index:Int):Int</h3>
+<p><strong>Parker 扩展。</strong> 第 <code>index</code> 首歌的难度个数。</p>
+<p>返回：<code>Int</code>；歌曲不存在返回 <code>0</code>。</p>
+<h3 id="getfreeplaydiffnameindexint-difficultyintstring">getFreeplayDiffName(index:Int, difficulty:Int):String</h3>
+<p><strong>Parker 扩展。</strong> 第 <code>index</code> 首歌第 <code>difficulty</code> 个难度的名字（越界会自动 clamp 到首/末位）。</p>
+<p>返回：<code>String</code> 或 <code>null</code>。</p>
+<h3 id="startfreeplaysongindexindexint-difficultyint-0bool">startFreeplaySongIndex(index:Int, ?difficulty:Int = 0):Bool</h3>
+<p><strong>Parker 扩展。</strong> 直接开始第 <code>index</code> 首歌。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>index</code></td>
+<td><code>Int</code></td>
+<td>歌曲下标</td>
+</tr>
+<tr>
+<td><code>difficulty</code></td>
+<td><code>Int</code></td>
+<td>难度下标，默认 <code>0</code>，越界会 clamp</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：<code>Bool</code>，成功 <code>true</code>。会设置 <code>Paths.currentModDirectory</code>、<code>PlayState.storyWeek</code>、<code>PlayState.SONG</code>，然后走 <code>LoadingState.loadAndSwitchState(new PlayState())</code>。谱面文件找不到时警告并返回 <code>false</code>。</p>
+<blockquote>
+<p><strong>Freeplay 列表的来源</strong>：当前 mod 有 <code>weeks/</code> 目录时，只读该 mod 自己的 week JSON（尊重 <code>songList.txt</code> / <code>weekList.txt</code>、<code>hideFreeplay</code>、<code>startUnlocked</code>、<code>weekBefore</code> 的解锁判定）；否则回落到 <code>WeekData</code> 的全部 week。结果会缓存在静态变量里，同一进程内只算一次。</p>
+</blockquote>
+<h3 id="窗口助手">窗口助手</h3>
+<p><strong>Parker 扩展</strong>，共 9 个。除 <code>isFullscreen</code> / <code>setWindowScale</code> / 边框相关在 <code>sys</code> 平台可用外，透明窗口与任务栏两项需要 <strong>Windows 桌面（<code>cpp &amp;&amp; windows</code>）</strong> 构建，其余平台只会警告。</p>
+<h3 id="isfullscreenvalueboolbool">isFullscreen(?value:Bool):Bool</h3>
+<p><strong>Parker 扩展。</strong> 查询/设置全屏。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>value</code></td>
+<td><code>Bool</code></td>
+<td>传了值就设置；不传只查询</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：<code>Bool</code> 当前全屏状态；非 <code>sys</code> 平台恒为 <code>false</code>。</p>
+<h3 id="setwindowscalewidthfloat-heightfloat-0">setWindowScale(width:Float, ?height:Float = 0)</h3>
+<p><strong>Parker 扩展。</strong> 调整窗口大小。<code>height &lt;= 0</code> 时按 16:9 由宽度推算；算出小于 1 的尺寸会警告并放弃。</p>
+<p>返回：无返回。</p>
+<h3 id="doborderless">doBorderless()</h3>
+<p><strong>Parker 扩展。</strong> 去掉窗口边框。返回：无返回。</p>
+<h3 id="removeborderless">removeBorderless()</h3>
+<p><strong>Parker 扩展。</strong> 恢复窗口边框。返回：无返回。</p>
+<h3 id="dotranswindow">doTransWindow()</h3>
+<p><strong>Parker 扩展。</strong> 开启分层透明窗口（黑色为透明色），<strong>仅 Windows 桌面</strong>，其他平台警告并忽略。</p>
+<p>返回：无返回。</p>
+<h3 id="removetranswindow">removeTransWindow()</h3>
+<p><strong>Parker 扩展。</strong> 关闭透明窗口，<strong>仅 Windows 桌面</strong>。返回：无返回。</p>
+<h3 id="hidetaskbar">HideTaskBar()</h3>
+<p><strong>Parker 扩展。</strong> 隐藏任务栏，<strong>仅 Windows 桌面</strong>。返回：无返回。</p>
+<h3 id="restoretaskbar">RestoreTaskBar()</h3>
+<p><strong>Parker 扩展。</strong> 恢复任务栏，<strong>仅 Windows 桌面</strong>。返回：无返回。</p>
+<h3 id="systemclose">SystemClose()</h3>
+<p><strong>Parker 扩展。</strong> 直接 <code>Sys.exit(0)</code> 退出游戏（<code>sys</code> 平台；其他平台警告）。</p>
+<p>返回：无返回。</p>
+<h2 id="parker-相对-psych-的增量亮点">Parker 相对 Psych 的增量亮点</h2>
+<ol>
+<li><strong>更短的属性/对象别名</strong>：<code>set</code> / <code>get</code> / <code>add</code> / <code>remove</code> / <code>scale</code> / <code>scroll</code> / <code>setCam</code> / <code>setOrder</code> / <code>addAnim</code> / <code>addArray</code> / <code>setArray</code>，把 Psych 那套长名字 API 压成 ES 脚本常见的一行式写法。</li>
+<li><strong>着色器按 tag 管理</strong>：<code>makeShader(tag, name)</code> + <code>setCameraShader(camera, {tags})</code>，着色器不再必须挂在精灵上，可以直接当相机滤镜；并且与 Psych 的 <code>setSpriteShader</code> 互通。</li>
+<li><strong>菜单脚本体系</strong>：<code>switchLuaMenu</code> / <code>switchSourceMenu</code> / <code>playMenuMusic</code> / <code>getFreeplay*</code> / <code>startFreeplaySongIndex</code> 让 <code>.lua</code> 能整段替换菜单，配合 <code>LuaSState</code> 的「半屏滚动 camGame + 原始 camHUD」相机布局与菜单专用注册表。</li>
+<li><strong>角色/视觉表现扩展</strong>：<code>makeChar</code>、<code>setLongSing</code>、<code>MoveCamOnAnim</code>、<code>makeHealthBar</code>、<code>makeTrailSpirit</code> + 5 个 <code>trail*</code> 调节、<code>BGSprite</code> / <code>FlxBackdrop</code> / <code>ColorBox</code>，以及数字数组补间 <code>doTweenFloatArray</code>、保持视觉中心的 <code>doTweenScale</code>。</li>
+<li><strong>打字机文本与窗口控制</strong>：<code>setTextSpeed</code> / <code>setText</code> / <code>onTyping</code> 提供逐字显示；<code>isFullscreen</code> / <code>setWindowScale</code> / <code>doBorderless</code> / <code>doTransWindow</code> / <code>HideTaskBar</code> / <code>SystemClose</code> 提供桌面窗口级控制。</li>
+<li><strong>步数事件</strong>：<code>stepEvent({steps}, func)</code> + <code>onEventSet(curStep)</code> 让脚本自己排「第 N 步做什么」，不必写一堆 <code>if curStep == n</code>。</li>
+</ol>
+<h2 id="与-psych-函数重叠的地方要留意">与 Psych 函数重叠的地方要留意</h2>
+<ul>
+<li><strong><code>setTextBorder</code> 的参数顺序在做兼容</strong>：ES 写 <code>setTextBorder(tag, color, size)</code>，Psych 写 <code>setTextBorder(tag, size, color)</code>。<code>FunkinLua</code> 里的实现会检测「<code>size</code> 是字符串而 <code>color</code> 不是」并自动交换，两种写法都能用。</li>
+<li><strong><code>setHealthBarColors</code> 有三个参数的重载</strong>：<code>setHealthBarColors(barTag, leftHex, rightHex)</code> 会转交给 <code>ESCompat.setHealthBarColors()</code>，作用于 <code>makeHealthBar()</code> 建的血条；只传两个参数时仍然是 Psych 原版行为（改引擎自带血条）。血条不存在时警告。</li>
+<li><strong><code>makeLuaSprite</code> 被扩了行为</strong>：<code>images/&lt;image&gt;.xml</code> 存在时会自动按 Sparrow 图集加载；菜单态下可选的第 5、6 个参数是 <code>scrollFactor</code>。</li>
+<li><strong>菜单态 <code>setObjectCamera</code> 是 <code>nil</code></strong>，用 <code>setCam()</code>；这是刻意的，源码里显式 <code>pushnil</code> 了它。</li>
+</ul></article>
+<nav class="pk-pager" aria-label="翻页">
+	<a class="mdui-btn mdui-btn-raised mdui-ripple pk-pager-btn pk-pager-prev" href="/docs/lua-psych/"><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M14.7 5.3 8 12l6.7 6.7 1.4-1.4L10.8 12l5.3-5.3z"/></svg><span class="pk-pager-text"><span class="pk-pager-label">上一页</span><span class="pk-pager-title">Psych 原版函数全解</span></span></a>
+	<a class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme pk-pager-btn pk-pager-next" href="/docs/lua-this-proxy/"><span class="pk-pager-text"><span class="pk-pager-label">下一页</span><span class="pk-pager-title">this 代理</span></span><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M9.3 5.3 7.9 6.7 13.2 12l-5.3 5.3 1.4 1.4L16 12z"/></svg></a>
+</nav>
+</div>
+</main>
+<footer class="pk-footer">
+	<div class="mdui-container">
+		<div class="pk-footer-inner">
+			<span>Parker Engine v0.2.8 · 中文文档</span>
+			<span class="pk-footer-links">
+				<a href="https://github.com/FNF-Pk-Dev/FNF_Parker-Engine-new" target="_blank" rel="noopener">GitHub 仓库</a>
+				<a href="https://github.com/FNF-Pk-Dev/FNF_Parker-Engine-new/releases" target="_blank" rel="noopener">下载</a>
+				<a href="/docs/">文档门户</a>
+			</span>
+		</div>
+		<div class="pk-footer-note">
+			基于 <a href="https://github.com/ShadowMario/FNF-PsychEngine" target="_blank" rel="noopener">Psych Engine</a> 分支开发 · 本站静态托管于 GitHub Pages
+		</div>
+	</div>
+</footer>
+<script src="/assets/mdui/js/mdui.min.js"></script>
+<script src="/assets/site.js"></script>
+</body>
+</html>

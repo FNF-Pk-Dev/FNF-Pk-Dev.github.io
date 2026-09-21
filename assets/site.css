@@ -1,0 +1,908 @@
+/* ==========================================================================
+   Parker Engine 中文文档站 — MDUI v1 补充样式
+   原则：布局与组件一律用 mdui 类，这里只放少量定制变量与补丁：
+   字体栈（中文优先）、正文排版、代码块配色、表格紧凑度、提示色块、
+   侧边栏/翻页/门户卡片/页脚的间距微调。
+   ========================================================================== */
+
+:root {
+	/* 主题色（与 mdui-theme-primary-pink 一致，便于自定义区块引用） */
+	--pk-primary: #e91e63;
+	--pk-primary-dark: #c2185b;
+	--pk-accent: #00bcd4;
+
+	/* 提示色块 */
+	--pk-note: #4fc3f7;
+	--pk-note-bg: rgba(79, 195, 247, 0.1);
+	--pk-warn: #ffca28;
+	--pk-warn-bg: rgba(255, 202, 40, 0.12);
+	--pk-deprecated: #ef5350;
+	--pk-deprecated-bg: rgba(239, 83, 80, 0.12);
+
+	/* 代码块 */
+	--pk-code-bg: #2b2b2b;
+	--pk-code-border: rgba(255, 255, 255, 0.14);
+	--pk-code-inline-bg: rgba(255, 255, 255, 0.08);
+	--pk-code-inline-fg: #ffcdd2;
+
+	/* 边框/分隔（深色布局） */
+	--pk-line: rgba(255, 255, 255, 0.12);
+	--pk-line-soft: rgba(255, 255, 255, 0.07);
+
+	--pk-font: "Microsoft YaHei", "PingFang SC", "Hiragino Sans GB", "Source Han Sans SC",
+		"Noto Sans CJK SC", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+	--pk-font-mono: Consolas, "Cascadia Mono", "Courier New", ui-monospace, monospace;
+}
+
+/* --------------------------------------------------------------------------
+   1. 字体与基础排版（中文优先，非拉丁字符不强行套用 Roboto）
+   -------------------------------------------------------------------------- */
+body,
+button,
+input,
+select,
+textarea,
+.mdui-btn,
+.mdui-typo,
+.mdui-list-item,
+.mdui-card,
+.mdui-panel,
+.mdui-subheader,
+.mdui-toolbar {
+	font-family: var(--pk-font);
+}
+
+body {
+	font-size: 15px;
+	-webkit-font-smoothing: antialiased;
+}
+
+.mdui-typo {
+	font-size: 15px;
+	line-height: 1.85;
+}
+
+.mdui-typo h1,
+.mdui-typo h2,
+.mdui-typo h3,
+.mdui-typo h4 {
+	font-weight: 500;
+	line-height: 1.45;
+}
+
+.mdui-typo h1 {
+	margin-top: 0;
+	padding-bottom: 12px;
+	font-size: 30px;
+	border-bottom: 2px solid var(--pk-line);
+}
+
+.mdui-typo h2 {
+	margin-top: 1.8em;
+	padding-bottom: 8px;
+	font-size: 23px;
+	border-bottom: 1px solid var(--pk-line-soft);
+}
+
+.mdui-typo h3 {
+	margin-top: 1.5em;
+	font-size: 19px;
+}
+
+.mdui-typo h4 {
+	font-size: 16px;
+}
+
+.mdui-typo hr {
+	height: 0;
+	margin: 2em 0;
+	border-bottom: 1px solid var(--pk-line);
+}
+
+.mdui-typo ul,
+.mdui-typo ol {
+	padding-left: 1.6em;
+}
+
+.mdui-typo li {
+	margin-bottom: 0.35em;
+}
+
+.mdui-typo a {
+	color: #ff80ab;
+	word-break: break-word;
+}
+
+.mdui-typo a::before {
+	background-color: #ff80ab;
+}
+
+.mdui-typo strong {
+	font-weight: 700;
+}
+
+/* --------------------------------------------------------------------------
+   2. 代码块与表格
+   -------------------------------------------------------------------------- */
+.mdui-typo pre,
+.mdui-typo pre code,
+.mdui-typo code,
+.mdui-typo kbd,
+.mdui-typo samp {
+	font-family: var(--pk-font-mono);
+}
+
+.mdui-typo pre {
+	margin: 0 0 1.4em;
+	padding: 14px 16px;
+	font-size: 13.5px;
+	line-height: 1.65;
+	background-color: var(--pk-code-bg);
+	border: 1px solid var(--pk-code-border);
+	border-left: 3px solid var(--pk-primary);
+	border-radius: 2px;
+}
+
+.mdui-typo pre code {
+	color: #e8e8e8;
+	background-color: transparent;
+}
+
+.mdui-typo :not(pre) > code {
+	padding: 2px 6px;
+	font-size: 13px;
+	color: var(--pk-code-inline-fg);
+	background-color: var(--pk-code-inline-bg);
+	border-radius: 2px;
+}
+
+/* 代码块右上角的复制按钮（site.js 注入） */
+.pk-code-wrap {
+	position: relative;
+	margin: 0 0 1.4em;
+}
+
+.pk-code-wrap > pre {
+	margin-bottom: 0;
+}
+
+.pk-copy-btn {
+	position: absolute;
+	top: 6px;
+	right: 8px;
+	padding: 2px 10px;
+	font-family: var(--pk-font);
+	font-size: 12px;
+	line-height: 20px;
+	color: rgba(255, 255, 255, 0.72);
+	cursor: pointer;
+	background-color: rgba(255, 255, 255, 0.1);
+	border: none;
+	border-radius: 2px;
+	transition: background-color 0.2s, color 0.2s;
+}
+
+.pk-copy-btn:hover {
+	color: #fff;
+	background-color: rgba(255, 255, 255, 0.2);
+}
+
+.pk-copy-btn.pk-copy-ok {
+	color: #fff;
+	background-color: var(--pk-primary);
+}
+
+.pk-copy-btn.pk-copy-fail {
+	color: #fff;
+	background-color: var(--pk-deprecated);
+}
+
+/* 文档表格：紧凑、可横向滚动 */
+.pk-table-wrap {
+	margin: 0 0 1.4em;
+}
+
+.mdui-typo .mdui-table-fluid {
+	border-radius: 2px;
+}
+
+.mdui-typo .mdui-table {
+	font-size: 13.5px;
+}
+
+.mdui-typo .mdui-table th,
+.mdui-typo .mdui-table td {
+	padding: 8px 12px;
+	line-height: 1.6;
+	vertical-align: top;
+}
+
+.mdui-typo .mdui-table th:first-child,
+.mdui-typo .mdui-table td:first-child {
+	padding-right: 12px;
+	padding-left: 12px;
+}
+
+.mdui-typo .mdui-table th {
+	font-weight: 700;
+	font-size: 12.5px;
+	line-height: 1.6;
+	white-space: nowrap;
+}
+
+.mdui-typo .mdui-table td code {
+	white-space: nowrap;
+}
+
+/* --------------------------------------------------------------------------
+   3. 提示色块（build.py 把「注意：/警告：/废弃：」引用块转成这些类）
+   -------------------------------------------------------------------------- */
+.pk-callout {
+	margin: 0 0 1.4em;
+	padding: 12px 16px;
+	border: 1px solid transparent;
+	border-left-width: 4px;
+	border-radius: 2px;
+}
+
+.pk-callout-body > :last-child {
+	margin-bottom: 0;
+}
+
+.pk-callout-title {
+	margin-bottom: 6px;
+	font-weight: 700;
+	font-size: 13px;
+	letter-spacing: 0.06em;
+}
+
+.pk-callout-note {
+	color: rgba(255, 255, 255, 0.92);
+	background-color: var(--pk-note-bg);
+	border-color: var(--pk-note);
+	border-left-color: var(--pk-note);
+}
+
+.pk-callout-note .pk-callout-title {
+	color: var(--pk-note);
+}
+
+.pk-callout-warn {
+	color: rgba(255, 255, 255, 0.92);
+	background-color: var(--pk-warn-bg);
+	border-color: var(--pk-warn);
+	border-left-color: var(--pk-warn);
+}
+
+.pk-callout-warn .pk-callout-title {
+	color: var(--pk-warn);
+}
+
+.pk-callout-deprecated {
+	color: rgba(255, 255, 255, 0.92);
+	background-color: var(--pk-deprecated-bg);
+	border-color: var(--pk-deprecated);
+	border-left-color: var(--pk-deprecated);
+}
+
+.pk-callout-deprecated .pk-callout-title {
+	color: var(--pk-deprecated);
+}
+
+/* --------------------------------------------------------------------------
+   4. 顶栏 / 侧边栏
+   -------------------------------------------------------------------------- */
+.pk-brand {
+	color: #fff;
+	text-decoration: none;
+}
+
+.pk-brand-sub {
+	margin-left: 10px;
+	font-size: 13px;
+	opacity: 0.82;
+}
+
+.pk-drawer-scroll {
+	padding-bottom: 24px;
+}
+
+.pk-drawer-hero {
+	display: block;
+	padding: 18px 16px 14px;
+	color: #fff;
+	text-decoration: none;
+}
+
+.pk-drawer-hero-title {
+	display: block;
+	font-weight: 500;
+	font-size: 18px;
+	line-height: 1.4;
+}
+
+.pk-drawer-hero-sub {
+	display: block;
+	margin-top: 2px;
+	font-size: 12px;
+	opacity: 0.66;
+}
+
+.pk-nav-group {
+	height: 40px;
+	padding-left: 16px;
+	font-size: 13px;
+	font-weight: 500;
+	line-height: 40px;
+	color: rgba(255, 255, 255, 0.55);
+}
+
+.pk-nav-item {
+	height: auto;
+	min-height: 40px;
+	color: rgba(255, 255, 255, 0.87);
+}
+
+.pk-nav-item .mdui-list-item-content {
+	padding: 9px 0;
+	font-size: 14px;
+	line-height: 1.5;
+}
+
+.pk-nav-item:hover {
+	background-color: rgba(255, 255, 255, 0.06);
+}
+
+.pk-nav-item.mdui-list-item-active {
+	color: #fff;
+	background-color: rgba(233, 30, 99, 0.28);
+	box-shadow: inset 3px 0 0 var(--pk-primary);
+}
+
+.pk-nav-icon {
+	display: inline-flex;
+	vertical-align: -4px;
+	margin-right: 6px;
+	color: inherit;
+}
+
+.pk-nav-icon svg {
+	width: 18px;
+	height: 18px;
+}
+
+.pk-nav-divider {
+	margin: 10px 0;
+	background-color: var(--pk-line);
+}
+
+.pk-badge {
+	flex: none;
+	margin-left: 8px;
+	padding: 2px 8px;
+	font-size: 11px;
+	line-height: 18px;
+	color: #fff;
+	white-space: nowrap;
+	background-color: rgba(255, 255, 255, 0.14);
+	border-radius: 12px;
+}
+
+/* --------------------------------------------------------------------------
+   5. 正文容器 / 面包屑 / 翻页 / 页脚
+   -------------------------------------------------------------------------- */
+.pk-container {
+	max-width: 1100px;
+	padding: 24px 16px 48px;
+}
+
+.pk-breadcrumb {
+	margin-bottom: 18px;
+	font-size: 13px;
+	color: rgba(255, 255, 255, 0.6);
+}
+
+.pk-breadcrumb a {
+	color: rgba(255, 255, 255, 0.72);
+	text-decoration: none;
+}
+
+.pk-breadcrumb a:hover {
+	color: #ff80ab;
+}
+
+.pk-breadcrumb-sep {
+	margin: 0 8px;
+	opacity: 0.5;
+}
+
+.pk-breadcrumb-current {
+	color: rgba(255, 255, 255, 0.92);
+}
+
+.pk-doc {
+	padding: 24px 28px 32px;
+	overflow-wrap: break-word;
+}
+
+.pk-pager {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: stretch;
+	justify-content: space-between;
+	gap: 12px;
+	margin-top: 28px;
+}
+
+.pk-pager-btn {
+	display: inline-flex;
+	align-items: center;
+	flex: 1 1 42%;
+	min-width: 0;
+	max-width: 48%;
+	min-height: 56px;
+	padding: 8px 16px;
+	text-transform: none;
+}
+
+.pk-pager-empty {
+	flex: 1 1 42%;
+	max-width: 48%;
+	visibility: hidden;
+}
+
+.pk-pager-next {
+	justify-content: flex-end;
+	text-align: right;
+}
+
+.pk-pager-text {
+	display: flex;
+	flex-direction: column;
+	min-width: 0;
+	margin: 0 8px;
+}
+
+.pk-pager-label {
+	font-size: 11px;
+	line-height: 1.5;
+	opacity: 0.7;
+}
+
+.pk-pager-title {
+	font-size: 14px;
+	font-weight: 500;
+	line-height: 1.5;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.pk-footer {
+	margin-top: 40px;
+	padding: 24px 0 32px;
+	font-size: 13px;
+	color: rgba(255, 255, 255, 0.62);
+	border-top: 1px solid var(--pk-line);
+}
+
+.pk-footer a {
+	color: rgba(255, 255, 255, 0.78);
+	text-decoration: none;
+}
+
+.pk-footer a:hover {
+	color: #ff80ab;
+}
+
+.pk-footer-inner {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	gap: 8px;
+}
+
+.pk-footer-links a {
+	margin-left: 16px;
+}
+
+.pk-footer-links a:first-child {
+	margin-left: 0;
+}
+
+.pk-footer-note {
+	margin-top: 10px;
+	font-size: 12px;
+	opacity: 0.72;
+}
+
+/* --------------------------------------------------------------------------
+   6. 文档门户 / 404
+   -------------------------------------------------------------------------- */
+.pk-portal-hero {
+	margin-bottom: 28px;
+	padding: 32px 28px;
+	border-radius: 2px;
+	box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+}
+
+.pk-portal-hero-title {
+	margin: 0 0 8px;
+	font-size: 34px;
+	font-weight: 500;
+	line-height: 1.3;
+}
+
+.pk-portal-hero-desc {
+	margin: 0;
+	max-width: 720px;
+	font-size: 14px;
+	line-height: 1.8;
+	opacity: 0.94;
+}
+
+.pk-portal-hero-actions {
+	margin-top: 20px;
+}
+
+.pk-portal-hero-actions .mdui-btn + .mdui-btn {
+	margin-left: 8px;
+}
+
+.pk-btn-on-theme,
+.pk-btn-on-theme-flat {
+	text-transform: none;
+	color: #fff;
+}
+
+.pk-btn-on-theme {
+	background-color: rgba(0, 0, 0, 0.24);
+}
+
+.pk-btn-on-theme-flat {
+	background-color: rgba(255, 255, 255, 0.12);
+}
+
+.pk-col {
+	margin-bottom: 20px;
+}
+
+.pk-portal-card {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+}
+
+.pk-portal-card .mdui-card-primary-title {
+	font-size: 18px;
+}
+
+.pk-portal-card .mdui-card-primary-subtitle {
+	font-size: 12px;
+	opacity: 0.66;
+}
+
+.pk-portal-list {
+	flex: 1 1 auto;
+	padding: 4px 0 8px;
+}
+
+.pk-portal-item {
+	height: auto;
+	color: rgba(255, 255, 255, 0.9);
+}
+
+.pk-portal-item .mdui-list-item-content {
+	padding: 10px 0;
+}
+
+.pk-portal-title {
+	font-size: 14px;
+	font-weight: 500;
+	line-height: 1.5;
+}
+
+.pk-card-desc {
+	margin-top: 4px;
+	font-size: 12px;
+	line-height: 1.65;
+	opacity: 0.66;
+}
+
+.pk-404 {
+	max-width: 640px;
+	margin: 24px auto;
+	padding-bottom: 8px;
+}
+
+.pk-404-code {
+	font-size: 48px;
+	line-height: 1.1;
+	color: var(--pk-primary);
+}
+
+.pk-404-list {
+	padding-left: 1.4em;
+	line-height: 1.9;
+}
+
+.pk-404 .mdui-card-content {
+	font-size: 14px;
+	line-height: 1.85;
+}
+
+/* 旧地址跳转 stub（build.py 的 REDIRECTS 生成，样式同 404 卡片） */
+.pk-redirect {
+	max-width: 640px;
+	margin: 24px auto;
+	padding-bottom: 8px;
+}
+
+.pk-redirect-title {
+	color: var(--pk-primary);
+}
+
+.pk-redirect .mdui-card-primary-subtitle code,
+.pk-redirect .mdui-card-content code {
+	padding: 2px 6px;
+	font-family: var(--pk-font-mono);
+	font-size: 12px;
+	color: var(--pk-code-inline-fg);
+	background-color: var(--pk-code-inline-bg);
+	border-radius: 4px;
+}
+
+.pk-redirect .mdui-card-content {
+	font-size: 14px;
+	line-height: 1.85;
+}
+
+/* --------------------------------------------------------------------------
+   7. 首页（Hero / 特性 / 下载 / FAQ）
+   -------------------------------------------------------------------------- */
+.pk-hero {
+	position: relative;
+	padding: 64px 0 56px;
+	color: #fff;
+	/* 实心深色，不用渐变 */
+	background-color: #212121;
+	box-shadow: inset 0 -1px 0 var(--pk-line);
+}
+
+.pk-hero::after {
+	position: absolute;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	height: 3px;
+	content: "";
+	background-color: var(--pk-primary);
+}
+
+.pk-hero-inner {
+	max-width: 1100px;
+}
+
+.pk-hero-badge {
+	display: inline-block;
+	margin-bottom: 16px;
+	font-size: 12px;
+}
+
+.pk-hero-title {
+	margin: 0 0 14px;
+	font-size: 46px;
+	font-weight: 500;
+	line-height: 1.15;
+	letter-spacing: 0.01em;
+}
+
+.pk-hero-sub {
+	max-width: 760px;
+	margin: 0;
+	font-size: 16px;
+	line-height: 1.85;
+	color: rgba(255, 255, 255, 0.82);
+}
+
+.pk-hero-actions {
+	margin-top: 26px;
+}
+
+.pk-hero-actions .mdui-btn {
+	min-height: 44px;
+	padding: 0 22px;
+	font-size: 15px;
+	text-transform: none;
+}
+
+.pk-btn-lg + .pk-btn-lg {
+	margin-left: 10px;
+}
+
+.pk-btn-secondary {
+	color: #fff;
+	background-color: rgba(255, 255, 255, 0.14);
+}
+
+.pk-hero-meta {
+	margin-top: 24px;
+	font-size: 13px;
+	color: rgba(255, 255, 255, 0.6);
+}
+
+.pk-hero-meta span {
+	margin-right: 20px;
+	white-space: nowrap;
+}
+
+.pk-section {
+	max-width: 1100px;
+	padding: 40px 16px 8px;
+}
+
+.pk-section-title {
+	margin: 0 0 6px;
+	font-size: 26px;
+	font-weight: 500;
+	line-height: 1.4;
+}
+
+.pk-section-desc {
+	margin: 0 0 22px;
+	font-size: 14px;
+	color: rgba(255, 255, 255, 0.66);
+}
+
+.pk-feature-card {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+}
+
+.pk-feature-card .mdui-card-primary {
+	padding-bottom: 0;
+}
+
+.pk-feature-card .mdui-card-primary-title {
+	font-size: 17px;
+	line-height: 1.5;
+}
+
+.pk-feature-card .mdui-card-content {
+	font-size: 13.5px;
+	line-height: 1.8;
+	color: rgba(255, 255, 255, 0.76);
+}
+
+.pk-feature-icon {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 44px;
+	height: 44px;
+	margin: 20px 0 0 20px;
+	border-radius: 2px;
+}
+
+.pk-feature-icon svg {
+	width: 24px;
+	height: 24px;
+	fill: currentColor;
+}
+
+.pk-download .mdui-card-primary-title {
+	font-size: 20px;
+}
+
+.pk-download .mdui-card-actions {
+	padding: 8px 16px 16px;
+}
+
+.pk-download .mdui-btn {
+	text-transform: none;
+}
+
+.pk-faq .mdui-panel-item-title {
+	flex: 1 1 auto;
+	width: auto;
+	min-width: 0;
+	padding-right: 40px;
+	font-weight: 500;
+	line-height: 1.6;
+	white-space: normal;
+	overflow: visible;
+	text-overflow: clip;
+}
+
+.pk-faq .mdui-panel-item-open > .mdui-panel-item-header {
+	height: auto;
+	min-height: 64px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+
+.pk-faq .mdui-panel-item-body {
+	font-size: 14px;
+	line-height: 1.9;
+}
+
+.pk-panel-arrow {
+	display: block;
+	width: 24px;
+	height: 24px;
+}
+
+.pk-panel-arrow svg {
+	display: block;
+	width: 24px;
+	height: 24px;
+	fill: currentColor;
+}
+
+/* --------------------------------------------------------------------------
+   8. 响应式
+   -------------------------------------------------------------------------- */
+@media (max-width: 599.9px) {
+	.pk-doc {
+		padding: 18px 16px 24px;
+	}
+
+	.pk-portal-hero {
+		padding: 22px 18px;
+	}
+
+	.pk-portal-hero-title {
+		font-size: 26px;
+	}
+
+	.pk-pager-btn,
+	.pk-pager-empty {
+		flex: 1 1 100%;
+		max-width: 100%;
+	}
+
+	.pk-hero {
+		padding: 40px 0 36px;
+	}
+
+	/* 窄屏顶栏空间有限：去掉副标题，避免主标题被截成「Parker Eng…」 */
+	.pk-brand-sub {
+		display: none;
+	}
+
+	.pk-brand {
+		font-size: 18px;
+	}
+
+	.pk-hero-title {
+		font-size: 32px;
+	}
+
+	.pk-hero-sub {
+		font-size: 15px;
+	}
+
+	.pk-hero-actions .mdui-btn {
+		display: block;
+		width: 100%;
+		margin-left: 0 !important;
+	}
+
+	.pk-hero-actions .mdui-btn + .mdui-btn {
+		margin-top: 10px;
+	}
+
+	.pk-section {
+		padding-top: 28px;
+	}
+
+	.pk-section-title {
+		font-size: 22px;
+	}
+
+	.pk-footer-links a {
+		margin-left: 0;
+		margin-right: 16px;
+	}
+}

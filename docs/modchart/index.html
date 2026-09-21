@@ -1,0 +1,1237 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#e91e63">
+<meta name="description" content="修饰器栈、事件时间轴与内置特效：ModManager、NoteModifier、EventTimeline 全解。">
+<title>Modchart 修饰器系统 - Parker Engine 中文文档</title>
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="stylesheet" href="/assets/mdui/css/mdui.min.css">
+<link rel="stylesheet" href="/assets/site.css">
+</head>
+<body class="mdui-theme-primary-pink mdui-theme-accent-cyan mdui-theme-layout-dark mdui-appbar-with-toolbar">
+<header class="mdui-appbar mdui-appbar-fixed mdui-color-theme">
+	<div class="mdui-toolbar">
+		<button type="button" class="mdui-btn mdui-btn-icon mdui-ripple pk-drawer-toggle" aria-label="打开导航"><svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" aria-hidden="true"><path d="M3 6h18v2H3zM3 11h18v2H3zM3 16h18v2H3z"/></svg></button>
+		<a class="mdui-typo-title pk-brand" href="/">Parker Engine</a>
+		<span class="pk-brand-sub">中文文档</span>
+		<div class="mdui-toolbar-spacer"></div>
+		<a class="mdui-btn mdui-btn-icon mdui-ripple" href="/docs/" aria-label="文档门户" mdui-tooltip="{content:'文档门户'}"><svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" aria-hidden="true"><path d="M6 2h11a3 3 0 0 1 3 3v14a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3V5a3 3 0 0 1 3-3zm0 2a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h1V4H6zm3 0v16h8a1 1 0 0 0 1-1V5a1 1 0 0 0-1-1H9z"/></svg></a>
+		<a class="mdui-btn mdui-btn-icon mdui-ripple" href="https://github.com/FNF-Pk-Dev/FNF_Parker-Engine-new" target="_blank" rel="noopener" aria-label="GitHub 仓库" mdui-tooltip="{content:'GitHub 仓库'}"><svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" aria-hidden="true"><path d="M12 .5A11.5 11.5 0 0 0 .5 12a11.5 11.5 0 0 0 7.86 10.92c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.53-1.34-1.29-1.7-1.29-1.7-1.05-.72.08-.71.08-.71 1.16.08 1.77 1.2 1.77 1.2 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.7 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.47.11-3.06 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.79 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.77.12 3.06.74.81 1.19 1.84 1.19 3.1 0 4.43-2.7 5.4-5.26 5.69.41.36.78 1.06.78 2.14v3.17c0 .31.2.67.8.56A11.5 11.5 0 0 0 23.5 12A11.5 11.5 0 0 0 12 .5z"/></svg></a>
+	</div>
+</header>
+<aside class="mdui-drawer pk-drawer" id="pk-drawer">
+	<div class="pk-drawer-scroll">
+		<a class="pk-drawer-hero mdui-ripple" href="/">
+			<span class="pk-drawer-hero-title">Parker Engine</span>
+			<span class="pk-drawer-hero-sub">v0.2.8 · 中文文档</span>
+		</a>
+		<div class="mdui-subheader pk-nav-group">快速开始</div>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="/docs/">
+			<div class="mdui-list-item-content"><span class="pk-nav-icon"><svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" aria-hidden="true"><path d="M12 3 2 12h3v9h6v-6h2v6h6v-9h3z"/></svg></span>文档总览</div>
+			<span class="pk-badge">总览</span>
+		</a>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="/docs/lua-tutorial/">
+			<div class="mdui-list-item-content">Lua 编码基础</div>
+			<span class="pk-badge">Lua</span>
+		</a>
+		<div class="mdui-subheader pk-nav-group">Lua 脚本</div>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="/docs/callbacks/">
+			<div class="mdui-list-item-content">回调模板</div>
+			<span class="pk-badge">回调</span>
+		</a>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="/docs/lua-psych/">
+			<div class="mdui-list-item-content">Psych 原版函数全解</div>
+			<span class="pk-badge">Lua</span>
+		</a>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="/docs/lua-es-extensions/">
+			<div class="mdui-list-item-content">ES 扩展（Parker 独有）</div>
+			<span class="pk-badge">ES</span>
+		</a>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="/docs/lua-this-proxy/">
+			<div class="mdui-list-item-content">this 代理</div>
+			<span class="pk-badge">Lua</span>
+		</a>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="/docs/modchart-functions/">
+			<div class="mdui-list-item-content">ES ModChart 特效</div>
+			<span class="pk-badge">特效</span>
+		</a>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="/docs/hscript-haxe/">
+			<div class="mdui-list-item-content">Lua 调用 Haxe</div>
+			<span class="pk-badge">Haxe</span>
+		</a>
+		<div class="mdui-subheader pk-nav-group">HScript</div>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="/docs/hscript/">
+			<div class="mdui-list-item-content">HScript 完整文档</div>
+			<span class="pk-badge">HScript</span>
+		</a>
+		<div class="mdui-subheader pk-nav-group">Python</div>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="/docs/python/">
+			<div class="mdui-list-item-content">Python 脚本</div>
+			<span class="pk-badge">Python</span>
+		</a>
+		<div class="mdui-subheader pk-nav-group">LScript</div>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="/docs/lscript/">
+			<div class="mdui-list-item-content">LScript (Luau)</div>
+			<span class="pk-badge">Luau</span>
+		</a>
+		<div class="mdui-subheader pk-nav-group">Modchart</div>
+		<a class="mdui-list-item mdui-ripple pk-nav-item mdui-list-item-active" href="/docs/modchart/">
+			<div class="mdui-list-item-content">Modchart 修饰器系统</div>
+			<span class="pk-badge">Modchart</span>
+		</a>
+		<div class="mdui-divider pk-nav-divider"></div>
+		<div class="mdui-subheader pk-nav-group">相关链接</div>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="https://github.com/FNF-Pk-Dev/FNF_Parker-Engine-new/releases" target="_blank" rel="noopener"><div class="mdui-list-item-content">下载 / Releases</div></a>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="https://github.com/FNF-Pk-Dev/FNF_Parker-Engine-new" target="_blank" rel="noopener"><div class="mdui-list-item-content">GitHub 仓库</div></a>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="/"><div class="mdui-list-item-content">返回首页</div></a>
+	</div>
+</aside>
+<main class="pk-main">
+<div class="mdui-container pk-container">
+<nav class="pk-breadcrumb" aria-label="面包屑">
+	<a href="/">首页</a><span class="pk-breadcrumb-sep">/</span><a href="/docs/">文档</a><span class="pk-breadcrumb-sep">/</span><span>Modchart</span><span class="pk-breadcrumb-sep">/</span><span class="pk-breadcrumb-current">Modchart 修饰器系统</span>
+</nav>
+<article class="mdui-typo mdui-card mdui-shadow-2 pk-doc"><h1 id="modchart音符修饰器系统">Modchart（音符修饰器系统）</h1>
+<blockquote>
+<p><strong>适用版本：Parker Engine 0.2.8</strong>（<code>Project.xml</code> 的 <code>&lt;app version&gt;</code>）。参考工具链：Haxe 4.3.7 + HaxeFlixel。</p>
+<p><strong>本文以源码为准。</strong> 修饰器注册名、参数（次模）、排序值、事件类型都是从 <code>source/modchart/</code> 逐个读出来的；源码里有、但当前版本实际跑不到的东西（例如 <code>Modifier.active</code>、<code>HScriptModifier</code> 这条路径）都在 §7 / §8 明确标注。</p>
+</blockquote>
+<p>引擎里的 Modchart 是 <strong>Schmovin' / Andromeda 风格的「修饰器栈」</strong>，源码全在 <code>source/modchart/</code>。它和 <code>backend/Paths.hx</code> 那套「mod 文件夹」毫无关系——<code>ModManager</code> 是<strong>修饰器（modifier）注册表</strong>，不是模组管理器。也不同于维基里另一页记录的 Andromeda「ModChat / Modifiers」（note-field + <code>startMod()</code> 那套）：那是另一套系统，本页只讲 <code>source/modchart/</code>。</p>
+<hr>
+<h2 id="1-概念">1. 概念</h2>
+<ul>
+<li><strong>Modifier（修饰器）</strong>：一个有名、有值（percent）、可带次模（submod）的变换单元。同一个修饰器对两侧玩家各存一个值（<code>percents = [0, 0]</code>），值 = 百分比 / 100——<code>setValue('drunk', 0.5)</code> 表示 50%。</li>
+<li><strong>玩家编号</strong>：<code>player = 0</code> 是<strong>玩家侧</strong>（<code>playerStrums</code> / bf），<code>player = 1</code> 是<strong>对手侧</strong>（<code>opponentStrums</code> / dad）。传 <code>-1</code> 表示「两侧都设」。</li>
+<li><strong>两类修饰器</strong>（<code>ModifierType</code>）：</li>
+<li><code>NOTE_MOD</code> —— 参与 note / receptor 的位置与渲染管线（<code>getPos</code> / <code>updateNote</code> / <code>updateReceptor</code>）。</li>
+<li><code>MISC_MOD</code> —— 其他一切，只作为 <code>Modifier</code> 基类默认值。</li>
+<li><strong>管线</strong>（每帧，<code>PlayState.update()</code>）：</li>
+</ul>
+<p>```
+  modManager.updateTimeline(curDecStep)      // 跑 EventTimeline 上的计划事件（step 为单位）
+  modManager.update(elapsed)                 // 见 §8 的注意：当前实际不会调用任何修饰器的 update()</p>
+<p>// 每根 strum（startedCountdown &amp;&amp; songIsModcharted）
+  pos = modManager.getPos(0, 0, 0, curDecBeat, strum.noteData, player, strum, [], strum.vec3Cache)
+  modManager.updateObject(curDecBeat, strum, pos, player)   // 让 NOTE_MOD 改缩放/角度/alpha
+  strum.x = pos.x; strum.y = pos.y</p>
+<p>// 每个 note（同上，getPos 用 strumTime + getVisPos 求视觉差）
+  pos  = modManager.getPos(strumTime, visDiff, strumTime - songPosition, curBeat, noteData, player, note, [], note.vec3Cache)
+  modManager.updateObject(curBeat, note, pos, player)
+  note.x = pos.x; note.y = pos.y
+  // sustain 尾巴：对「75ms 之后」的位置再算一次 getPos，用两点方向给 note.mAngle
+  ```</p>
+<ul>
+<li><code>getPos(time, diff, tDiff, beat, data, player, obj, ?exclusions, ?pos)</code> 的初始位置：</li>
+</ul>
+<p><code>haxe
+  pos.x = getBaseX(data, player);   // strum 基准 x（含左右两侧偏移）
+  pos.y = 50 + diff;                // diff = 视觉滚动差
+  pos.z = 0;</code></p>
+<p>然后按 <code>activeMods[player]</code> 的顺序（已按 <code>getOrder()</code> 升序排好）依次调用 <code>mod.getPos(...)</code>；<code>exclusions</code> 里的名字会被跳过（<code>AlphaModifier</code> 就靠它重算一次「不含 reverse」的位置）。<code>getVisPos(songPos, strumTime, songSpeed)</code> = <code>-(0.45 * (songPos - strumTime) * songSpeed)</code>。</p>
+<ul>
+<li><strong>单位</strong>：<code>EventTimeline</code> 用 <strong>step</strong>（<code>curDecStep</code>，可以是小数），不是 beat、不是秒。</li>
+</ul>
+<hr>
+<h2 id="2-启用与注册时序">2. 启用与注册时序</h2>
+<p>Modchart 不需要「手工开启」——引擎默认就开着，开关是一个 gameplay setting：</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>位置</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>backend/ClientPrefs.hx</code></td>
+<td><code>gameplaySettings</code> 默认值里有 <code>'modchart' =&gt; true</code></td>
+</tr>
+<tr>
+<td><code>substates/game/GameplayChangersSubstate.hx</code></td>
+<td><code>new GameplayOption('ModChart', 'modchart', 'bool', true)</code>（游戏内设置页开关）</td>
+</tr>
+<tr>
+<td><code>states/game/PlayState.hx:409</code></td>
+<td><code>songIsModcharted = ClientPrefs.getGameplaySetting('modchart', true);</code></td>
+</tr>
+<tr>
+<td><code>states/game/PlayState.hx:1046</code></td>
+<td><code>modManager = new ModManager(this);</code>（在 <code>generateSong()</code> 之后）</td>
+</tr>
+<tr>
+<td><code>states/game/PlayState.hx:1048-1049</code></td>
+<td><code>setDefaultLScripts("modManager", modManager)</code> / <code>setDefaultHScripts(...)</code> —— 让脚本拿到同一个实例</td>
+</tr>
+<tr>
+<td><code>modchart/ModManager.hx:178</code></td>
+<td><code>new ModManager(state)</code> 自己也会读同一个设置；为 <code>false</code> 时把内部 <code>state</code> 置空</td>
+</tr>
+</tbody>
+</table></div>
+<p><code>songIsModcharted == false</code> 时，<code>PlayState</code> 完全跳过 strum/note 的 <code>getPos</code> + <code>updateObject</code>（修饰器的值照样能设、事件照样跑，只是不会作用到画面上）。</p>
+<p>注册时序（<code>PlayState.startCountdown()</code> → 完成时）：</p>
+<pre><code class="language-haxe">modManager.receptors = [playerStrums.members, opponentStrums.members];  // 注意 0 = 玩家侧
+callOnLuas('preModifierRegister', []);
+callOnScripts('preModifierRegister', []);      // HScript + LScript + Python
+modManager.registerDefaultModifiers();         // ← 内置修饰器在这里注册
+callOnLuas('postModifierRegister', []);
+callOnScripts('postModifierRegister', []);
+// Modcharts.loadModchart(modManager, SONG.song);   ← 源码里被注释掉了
+</code></pre>
+<p>也就是说：<strong><code>preModifierRegister</code> 里内置修饰器还不存在</strong>（改它们的值要等到 <code>postModifierRegister</code>）；<code>registerDefaultModifiers()</code> 会把每个内置修饰器的值重置为 0。</p>
+<h3 id="相关回调">相关回调</h3>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>回调</th>
+<th>时机</th>
+<th>参数</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>preModifierRegister</code></td>
+<td>建好 strums 之后、注册内置修饰器之前（<code>PlayState:1881</code>，只到 HScript/LScript/Python）</td>
+<td>无</td>
+<td><code>modManager.receptors</code> 已经可用</td>
+</tr>
+<tr>
+<td><code>postModifierRegister</code></td>
+<td>注册内置修饰器之后（<code>PlayState:1884</code>）</td>
+<td>无</td>
+<td><strong>设置初始 mod 值的标准位置</strong></td>
+</tr>
+<tr>
+<td><code>generateModchart</code></td>
+<td>倒计时每个 tick，与 <code>onCountdownTick</code> 同处（<code>PlayState:2055</code>），共 5 次（swagCounter 0→4）</td>
+<td>无</td>
+<td>写 <code>queueSet</code> / <code>queueEase</code> 谱面的标准位置；只到 HScript/LScript/Python（<code>callOnLuas</code> 那份是给 Lua 的）</td>
+</tr>
+</tbody>
+</table></div>
+<hr>
+<h2 id="3-内置修饰器全表16-个注册名">3. 内置修饰器全表（16 个注册名）</h2>
+<p><code>registerDefaultModifiers()</code> 实际注册的名字如下（注册名 = <code>Modifier.getName()</code>，也就是 <code>setValue('名字', ...)</code> 里用的字串）：</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>注册名</th>
+<th>类（文件）</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>flip</code></td>
+<td><code>FlipModifier</code></td>
+<td>左右镜像整条轨道</td>
+</tr>
+<tr>
+<td><code>reverse</code></td>
+<td><code>ReverseModifier</code></td>
+<td>反向滚动 / 反转下落方向</td>
+</tr>
+<tr>
+<td><code>invert</code></td>
+<td><code>InvertModifier</code></td>
+<td>交换相邻两列（0↔1、2↔3）</td>
+</tr>
+<tr>
+<td><code>drunk</code></td>
+<td><code>DrunkModifier</code></td>
+<td>喝醉式摇晃（x/y/z 全带）</td>
+</tr>
+<tr>
+<td><code>beat</code></td>
+<td><code>BeatModifier</code></td>
+<td>跟着节拍横向弹一下</td>
+</tr>
+<tr>
+<td><code>stealth</code></td>
+<td><code>AlphaModifier</code></td>
+<td>隐身 / 透明度（hidden、sudden、blink…）</td>
+</tr>
+<tr>
+<td><code>mini</code></td>
+<td><code>ScaleModifier</code></td>
+<td>缩放、拉伸、挤压</td>
+</tr>
+<tr>
+<td><code>confusion</code></td>
+<td><code>ConfusionModifier</code></td>
+<td>旋转 note / receptor</td>
+</tr>
+<tr>
+<td><code>opponentSwap</code></td>
+<td><code>OpponentModifier</code></td>
+<td>把一侧推到另一侧（0.5 = 中间滚动）</td>
+</tr>
+<tr>
+<td><code>transformX</code></td>
+<td><code>TransformModifier</code></td>
+<td>直接位移 x/y/z（像素）</td>
+</tr>
+<tr>
+<td><code>infinite</code></td>
+<td><code>InfinitePathModifier</code>（继承 <code>PathModifier</code>）</td>
+<td>沿 3D 闭合圆环路径运动</td>
+</tr>
+<tr>
+<td><code>perspectiveDONTUSE</code></td>
+<td><code>PerspectiveModifier</code></td>
+<td>z → 透视投影，<strong>别手动设值</strong></td>
+</tr>
+<tr>
+<td><code>rotateX</code></td>
+<td><code>RotateModifier</code></td>
+<td>绕各列自身原点旋转</td>
+</tr>
+<tr>
+<td><code>centerrotateX</code></td>
+<td><code>RotateModifier</code>（origin = 屏幕中心）</td>
+<td>绕屏幕中心旋转</td>
+</tr>
+<tr>
+<td><code>localrotateX</code></td>
+<td><code>LocalRotateModifier</code></td>
+<td>绕固定局部原点旋转（preserve z 尺度）</td>
+</tr>
+<tr>
+<td><code>noteSpawnTime</code></td>
+<td><code>SubModifier</code></td>
+<td>纯数值槽，注册时默认 1250</td>
+</tr>
+</tbody>
+</table></div>
+<p>说明：</p>
+<ul>
+<li><code>PerspectiveModifier</code> 的 <code>getOrder()</code> 是 <code>LAST + 100</code>（= 1100），<code>RotateModifier</code> 是 <code>LAST + 2</code>（= 1002），<code>ScaleModifier</code> 是 <code>PRE_REVERSE</code>（= -3），<code>ReverseModifier</code> 是 <code>REVERSE</code>（= -2），<code>LocalRotateModifier</code> 是 <code>POST_REVERSE</code>（= -1），<code>TransformModifier</code> 是 <code>LAST</code>（= 1000），其余为 <code>DEFAULT</code>（= 0）。顺序决定 <code>getPos</code> 乘算的先后。</li>
+<li>所有 <code>getSubmods()</code> 列出的次模 <strong>也会以各自的名字被单独注册</strong>（<code>registerMod</code> 里递归 <code>quickRegister</code>），所以 <code>setValue('hidden', 1, 0)</code> 这类写法合法；次模带 <code>parent</code>，设置次模的值会<strong>连带把父修饰器激活</strong>（<code>ModManager.setValue</code> 里靠 <code>mod.parent</code> 找父级）。</li>
+<li><code>noteSpawnTime</code>：源码里除注册与 <code>setValue(..., 1250)</code> 之外没有任何地方读它，是留给脚本的数值槽。</li>
+<li><code>Modcharts.hx</code> 目前是<strong>死代码</strong>：<code>isModcharted()</code>（只有 <code>["fresh"]</code> 在列表里）与 <code>loadModchart()</code> 都没有调用者，PlayState 里唯一那行是注释（<code>// Modcharts.loadModchart(modManager, SONG.song);</code>）。它原本要做的是：<code>ClientPrefs.middleScroll</code> 时给对手侧设 <code>opponentSwap = 0.5</code>、<code>alpha = 1</code>。</li>
+</ul>
+<h3 id="31-flip">3.1 <code>flip</code></h3>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>项</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>注册名</td>
+<td><code>flip</code></td>
+</tr>
+<tr>
+<td>类型</td>
+<td><code>NoteModifier</code>（NOTE_MOD）</td>
+</tr>
+<tr>
+<td>作用</td>
+<td><code>pos.x += Note.swagWidth * (receptors.length / 2) * (1.5 - data) * value</code>，即把整条轨道左右镜像；<code>value = 1</code> 时 0↔3、1↔2 完全对调</td>
+</tr>
+<tr>
+<td>参数</td>
+<td>无</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="32-reverse">3.2 <code>reverse</code></h3>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>项</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>注册名</td>
+<td><code>reverse</code></td>
+</tr>
+<tr>
+<td>类型</td>
+<td><code>NoteModifier</code>，<code>getOrder() = REVERSE (-2)</code></td>
+</tr>
+<tr>
+<td>作用</td>
+<td><code>value</code> 是「反向程度」：0 = 正常向上滚，1 = 完全反向下落。<code>pos.y = shift + visualDiff * mult</code>，<code>shift</code> 由 value 在 <code>50 … FlxG.height - 150</code> 之间插值，<code>mult</code> 在 <code>1 … -1</code> 之间插值；<code>ClientPrefs.downScroll</code> 打开时自动取反。sustain 长条还有一套专门的贴合/裁剪修正（<code>clipRect</code>）</td>
+</tr>
+</tbody>
+</table></div>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>次模</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>reverse</code></td>
+<td>就是主值（<code>getValue</code>），整个轨道反向</td>
+</tr>
+<tr>
+<td><code>reverse0</code> <code>reverse1</code> <code>reverse2</code> <code>reverse3</code></td>
+<td>单列反向</td>
+</tr>
+<tr>
+<td><code>split</code></td>
+<td>右半边列（<code>dir &gt;= kNum / 2</code>）反向</td>
+</tr>
+<tr>
+<td><code>alternate</code></td>
+<td>奇数列（<code>dir % 2 == 1</code>）反向</td>
+</tr>
+<tr>
+<td><code>cross</code></td>
+<td>中间若干列（<code>kNum/4 ≤ dir ≤ kNum-1-kNum/4</code>）反向</td>
+</tr>
+<tr>
+<td><code>reverseScroll</code> / <code>crossScroll</code> / <code>splitScroll</code> / <code>alternateScroll</code></td>
+<td>同上，但只改滚动方向（<code>getReverseValue(..., scrolling = true)</code> 的那一路），不参与位置计算</td>
+</tr>
+<tr>
+<td><code>centered</code></td>
+<td>把 <code>shift</code> 从 <code>50 … height-150</code> 改成 <code>height / 2 - 56</code>（以屏幕中心为轴反向）</td>
+</tr>
+<tr>
+<td><code>unboundedReverse</code></td>
+<td>置 1 时不做 <code>val %= 2</code> 的折叠（允许反向超过一圈）</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="33-invert">3.3 <code>invert</code></h3>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>项</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>注册名</td>
+<td><code>invert</code></td>
+</tr>
+<tr>
+<td>类型</td>
+<td><code>NoteModifier</code></td>
+</tr>
+<tr>
+<td>作用</td>
+<td><code>pos.x += Note.swagWidth * ((data % 2 == 0) ? 1 : -1) * value</code>，交换相邻列</td>
+</tr>
+<tr>
+<td>参数</td>
+<td>无</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="34-drunk">3.4 <code>drunk</code></h3>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>项</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>注册名</td>
+<td><code>drunk</code></td>
+</tr>
+<tr>
+<td>作用</td>
+<td>以时间（<code>Conductor.songPosition / 1000</code>）为变量的余弦摇晃：<code>drunk</code> 走 x、<code>tipsy</code> 走 y、<code>tipZ</code> 走 z、<code>bumpy</code> 走 z（另一条公式）</td>
+</tr>
+</tbody>
+</table></div>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>次模</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>drunk</code></td>
+<td>主值，x 轴摇摆幅度</td>
+</tr>
+<tr>
+<td><code>drunkSpeed</code> / <code>drunkOffset</code> / <code>drunkPeriod</code></td>
+<td>x 摇摆的频率 / 列间相位 / 视觉差周期系数</td>
+</tr>
+<tr>
+<td><code>tipsy</code></td>
+<td>y 轴摇摆幅度</td>
+</tr>
+<tr>
+<td><code>tipsySpeed</code> / <code>tipsyOffset</code></td>
+<td>y 摇摆频率 / 列间相位</td>
+</tr>
+<tr>
+<td><code>tipZ</code></td>
+<td>z 轴摇摆幅度</td>
+</tr>
+<tr>
+<td><code>tipZSpeed</code> / <code>tipZOffset</code></td>
+<td>z 摇摆频率 / 列间相位</td>
+</tr>
+<tr>
+<td><code>bumpy</code></td>
+<td>z 轴起伏幅度（按 <code>visualDiff</code> 而非时间）</td>
+</tr>
+<tr>
+<td><code>bumpyPeriod</code> / <code>bumpyOffset</code></td>
+<td>z 起伏的周期 / 相位</td>
+</tr>
+<tr>
+<td><code>drunkZ</code> <code>drunkZSpeed</code> <code>drunkZOffset</code> <code>drunkZPeriod</code></td>
+<td><strong>只出现在 <code>getSubmods()</code> 里，<code>getPos</code> 没有读它们</strong>（写了不会有任何效果）</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="35-beat">3.5 <code>beat</code></h3>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>项</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>注册名</td>
+<td><code>beat</code></td>
+</tr>
+<tr>
+<td>作用</td>
+<td>节拍同步的横向位移：取 <code>PlayState.curBeat + 0.3</code> 的小数部分，<code>&lt; 0.3</code> 加速、到 <code>0.7</code> 结束（<code>accelTime = 0.3</code>、<code>totalTime = 0.7</code>），<code>shift = 40 * amount * sin(visualDiff / 30 + π/2)</code>；当 <code>(curBeat + 0.3) % 2 != 0</code> 时整体取负（源码变量名叫 <code>evenBeat</code>，条件写的却是 <code>!= 0</code>）</td>
+</tr>
+<tr>
+<td>参数</td>
+<td>无</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="36-stealth">3.6 <code>stealth</code></h3>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>项</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>注册名</td>
+<td><code>stealth</code></td>
+</tr>
+<tr>
+<td>类型</td>
+<td><code>NoteModifier</code>，<code>ignorePos() = true</code>（不参与 <code>getPos</code>，只在 <code>updateNote</code> / <code>updateReceptor</code> 里改透明度）</td>
+</tr>
+<tr>
+<td>作用</td>
+<td>主值 = 整体变暗（<code>alpha -= value</code>）；写的是 <code>note.colorSwap.daAlpha</code> 与 <code>receptor.colorSwap.daAlpha</code>（以及 glow）</td>
+</tr>
+<tr>
+<td>静态可调</td>
+<td><code>AlphaModifier.fadeDistY = 120</code>（hidden/sudden 的渐隐距离）</td>
+</tr>
+</tbody>
+</table></div>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>次模</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>alpha</code></td>
+<td>整体透明乘数（<code>1 - alpha</code>）</td>
+</tr>
+<tr>
+<td><code>noteAlpha</code></td>
+<td>只对 note 的透明乘数</td>
+</tr>
+<tr>
+<td><code>alpha0</code>…<code>alpha3</code> / <code>noteAlpha0</code>…<code>noteAlpha3</code></td>
+<td>单列的上去两参数</td>
+</tr>
+<tr>
+<td><code>hidden</code></td>
+<td>上半屏渐隐</td>
+</tr>
+<tr>
+<td><code>hiddenOffset</code></td>
+<td>hidden 分界的上下偏移</td>
+</tr>
+<tr>
+<td><code>sudden</code></td>
+<td>下半屏渐显</td>
+</tr>
+<tr>
+<td><code>suddenOffset</code></td>
+<td>sudden 分界的上下偏移</td>
+</tr>
+<tr>
+<td><code>blink</code></td>
+<td>闪烁（用 <code>FlxMath.fastSin(time * 10)</code> 量化）</td>
+</tr>
+<tr>
+<td><code>randomVanish</code></td>
+<td>按位置随机消失</td>
+</tr>
+<tr>
+<td><code>dark</code> / <code>dark0</code>…<code>dark3</code></td>
+<td>receptor 变暗</td>
+</tr>
+<tr>
+<td><code>stealthPastReceptors</code></td>
+<td>置 1 时「已越过 receptor 的 note」也参与隐身计算</td>
+</tr>
+<tr>
+<td><code>useStealthGlow</code></td>
+<td><strong>实际无效</strong>：<code>getSubmods()</code> 注册的是 <code>useStealthGlow</code>，但 <code>updateNote()</code> 读的是 <code>dontUseStealthGlow</code>；未知名字一律返回 0，条件恒成立，所以永远走 glow 分支</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="37-mini">3.7 <code>mini</code></h3>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>项</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>注册名</td>
+<td><code>mini</code></td>
+</tr>
+<tr>
+<td>类型</td>
+<td><code>NoteModifier</code>，<code>getOrder() = PRE_REVERSE (-3)</code>，<code>ignorePos() = true</code></td>
+</tr>
+<tr>
+<td>作用</td>
+<td>主值 = 整体缩小（<code>scale *= 1 - value</code>，1 就是完全看不见）；sustain 长条的 y 缩放会被还原，避免长度变形</td>
+</tr>
+</tbody>
+</table></div>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>次模</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>miniX</code> / <code>miniY</code></td>
+<td>单独的 x / y 缩小</td>
+</tr>
+<tr>
+<td><code>mini0X</code>…<code>mini3X</code> / <code>mini0Y</code>…<code>mini3Y</code></td>
+<td>单列缩小</td>
+</tr>
+<tr>
+<td><code>stretch</code> / <code>stretch0</code>…<code>stretch3</code></td>
+<td>拉伸（x→0.5、y→2 插值）</td>
+</tr>
+<tr>
+<td><code>squish</code> / <code>squish0</code>…<code>squish3</code></td>
+<td>挤压（x→2、y→0.5 插值）</td>
+</tr>
+</tbody>
+</table></div>
+<p>（<code>getScale()</code> 里 <code>var angle = 0;</code> 是硬编码的，所以旋转相关的两项其实恒等于 1×……它只影响 stretch/squish 的组合系数。）</p>
+<h3 id="38-confusion">3.8 <code>confusion</code></h3>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>项</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>注册名</td>
+<td><code>confusion</code></td>
+</tr>
+<tr>
+<td>作用</td>
+<td>旋转：<code>note.angle = value + confusion{N} + note{N}Angle</code>、<code>receptor.angle = value + confusion{N} + receptor{N}Angle</code>。sustain note 改用 <code>note.mAngle</code>（由 PlayState 根据两点方向算出的角度）。<strong>单位是度</strong>（直接写进 <code>FlxSprite.angle</code>）</td>
+</tr>
+</tbody>
+</table></div>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>次模</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>noteAngle</code> / <code>receptorAngle</code></td>
+<td>全体 note / receptor 的额外角度</td>
+</tr>
+<tr>
+<td><code>note0Angle</code>…<code>note3Angle</code> / <code>receptor0Angle</code>…<code>receptor3Angle</code></td>
+<td>单列角度</td>
+</tr>
+<tr>
+<td><code>confusion0</code>…<code>confusion3</code></td>
+<td>单列的主值增量</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="39-opponentswap">3.9 <code>opponentSwap</code></h3>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>项</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>注册名</td>
+<td><code>opponentSwap</code></td>
+</tr>
+<tr>
+<td>作用</td>
+<td>把 note 从自己这侧推向对侧：<code>distX = getBaseX(data, 1-player) - getBaseX(data, player)</code>，<code>pos.x += distX * value</code>。<code>0.5</code> = 中间滚动（引擎在 <code>ClientPrefs.middleScroll</code> 时就是设 0.5）</td>
+</tr>
+<tr>
+<td>参数</td>
+<td>无</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="310-transformx">3.10 <code>transformX</code></h3>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>项</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>注册名</td>
+<td><code>transformX</code></td>
+</tr>
+<tr>
+<td>类型</td>
+<td><code>NoteModifier</code>，<code>getOrder() = LAST (1000)</code></td>
+</tr>
+<tr>
+<td>作用</td>
+<td>直接往 <code>pos</code> 上加像素：<code>pos.x += value + transformX-a</code>，<code>pos.y += transformY + transformY-a</code>，<code>pos.z += transformZ + transformZ-a</code>，再加单列版</td>
+</tr>
+</tbody>
+</table></div>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>次模</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>transformY</code> / <code>transformZ</code></td>
+<td>主值的 y / z 分量（x 分量就是主值本身）</td>
+</tr>
+<tr>
+<td><code>transformX-a</code> / <code>transformY-a</code> / <code>transformZ-a</code></td>
+<td>「附加」分量，跟在主值后面相加</td>
+</tr>
+<tr>
+<td><code>transform0X</code>…<code>transform3X</code>、<code>transform0Y</code>…、<code>transform0Z</code>…</td>
+<td>单列位移</td>
+</tr>
+<tr>
+<td><code>transform0X-a</code>…<code>transform3X-a</code>、<code>…Y-a</code>、<code>…Z-a</code></td>
+<td>单列的附加分量</td>
+</tr>
+</tbody>
+</table></div>
+<p>（<code>ClientPrefs.middleScroll</code> 时 PlayState 给对手侧设的就是 <code>transform0X</code>…<code>transform3X</code>。）</p>
+<h3 id="311-infinite">3.11 <code>infinite</code></h3>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>项</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>注册名</td>
+<td><code>infinite</code>（类名 <code>InfinitePathModifier</code>，继承 <code>PathModifier</code>）</td>
+</tr>
+<tr>
+<td>作用</td>
+<td>note 沿一条 3D 闭合曲线运动：半径 600 的圆，角度从 0° 到 345° 每隔 15° 取一点，四条轨道各自独立；<code>getMoveSpeed() = 1850</code> 决定「多快跑完一圈」。主值 = 沿路径插值的比例（0 = 原始位置，1 = 完全贴合路径）</td>
+</tr>
+<tr>
+<td>参数</td>
+<td>无（<code>getSubmods()</code> 返回 <code>[]</code>）</td>
+</tr>
+</tbody>
+</table></div>
+<p><code>PathModifier</code> 基类的注册名是 <code>basePath</code>（<code>getMoveSpeed() = 5000</code>、<code>getPath()</code> 返回空），<strong>没有被注册</strong>；路径在构造时预计算成 <code>PathInfo{position, start, end, dist}</code> 数组，并整体偏移 <code>-Note.swagWidth / 2</code>。</p>
+<h3 id="312-perspectivedontuse">3.12 <code>perspectiveDONTUSE</code></h3>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>项</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>注册名</td>
+<td><code>perspectiveDONTUSE</code>（名字自带警告）</td>
+</tr>
+<tr>
+<td>类型</td>
+<td><code>NoteModifier</code>，<code>getOrder() = LAST + 100 (1100)</code>，<code>shouldExecute()</code> 恒为 <code>true</code></td>
+</tr>
+<tr>
+<td>作用</td>
+<td>把 <code>pos.z</code> 做透视投影回 x/y（<code>fov = π/2</code>、<code>near = 0</code>、<code>far = 2</code>，aspect 硬编码为 1），并让 <code>updateReceptor</code> / <code>updateNote</code> 按 <code>1 / pos.z</code> 缩放精灵。它是给 <code>tipZ</code> / <code>bumpy</code> 这类 z 轴修饰器兜底的，<strong>不要手动设值</strong></td>
+</tr>
+<tr>
+<td>参数</td>
+<td>无</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="313-rotatex">3.13 <code>rotateX</code></h3>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>项</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>注册名</td>
+<td><code>rotateX</code></td>
+</tr>
+<tr>
+<td>类型</td>
+<td><code>NoteModifier</code>，<code>getOrder() = LAST + 2 (1002)</code></td>
+</tr>
+<tr>
+<td>作用</td>
+<td>绕「该列自己的原点」旋转：原点 = <code>(modMgr.getBaseX(data, player), FlxG.height / 2 - Note.swagWidth / 2)</code>。计算时 <code>diff.z</code> 先乘 <code>FlxG.height</code>，旋转完再除回来</td>
+</tr>
+<tr>
+<td>参数</td>
+<td><code>rotateY</code>、<code>rotateZ</code>（次模，分别绕 Y / Z 轴）</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>角度单位是弧度</strong>：内部用 <code>CoolUtil.rotate(x, y, angle)</code>，而它是 <code>Math.cos(angle)</code> / <code>Math.sin(angle)</code>。</p>
+<h3 id="314-centerrotatex">3.14 <code>centerrotateX</code></h3>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>项</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>注册名</td>
+<td><code>centerrotateX</code></td>
+</tr>
+<tr>
+<td>类型</td>
+<td>同 <code>RotateModifier</code>，但构造时把原点固定成 <code>(FlxG.width / 2 - Note.swagWidth / 2, FlxG.height / 2 - Note.swagWidth / 2)</code></td>
+</tr>
+<tr>
+<td>作用</td>
+<td>绕屏幕中心整片旋转</td>
+</tr>
+<tr>
+<td>参数</td>
+<td><code>centerrotateY</code>、<code>centerrotateZ</code></td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="315-localrotatex">3.15 <code>localrotateX</code></h3>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>项</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>注册名</td>
+<td><code>localrotateX</code></td>
+</tr>
+<tr>
+<td>类型</td>
+<td><code>NoteModifier</code>（<code>LocalRotateModifier</code>），<code>getOrder() = POST_REVERSE (-1)</code></td>
+</tr>
+<tr>
+<td>作用</td>
+<td>原点 x 按 <code>swagWidth</code> 计算<strong>且不含左右两侧偏移</strong>（也就是「轨道局部坐标」的原点），旋转同样带 z 尺度换算</td>
+</tr>
+<tr>
+<td>参数</td>
+<td><code>localrotateY</code>、<code>localrotateZ</code></td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="316-notespawntime">3.16 <code>noteSpawnTime</code></h3>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>项</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>注册名</td>
+<td><code>noteSpawnTime</code>（<code>new SubModifier("noteSpawnTime", this)</code>）</td>
+</tr>
+<tr>
+<td>作用</td>
+<td>纯数值槽，注册后立刻 <code>setValue("noteSpawnTime", 1250)</code>。引擎源码里没有任何地方读它</td>
+</tr>
+<tr>
+<td>参数</td>
+<td>无</td>
+</tr>
+</tbody>
+</table></div>
+<hr>
+<h2 id="4-数值与次模-api">4. 数值与次模 API</h2>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>方法</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>setValue(modName, val, player = -1)</code></td>
+<td>设值（<code>val</code> 是 0…1 的比例）。<code>player = -1</code> 递归设两侧；内部会按 <code>mod.parent</code> 找父修饰器、维护 <code>activeMods</code> 并按 <code>getOrder()</code> 重新排序</td>
+</tr>
+<tr>
+<td><code>setPercent(modName, val, player = -1)</code></td>
+<td>同上，参数是百分数（内部 <code>/ 100</code>）</td>
+</tr>
+<tr>
+<td><code>getValue(modName, player)</code> / <code>getPercent(modName, player)</code></td>
+<td>读值（注意：源码里是 <code>inline</code>）</td>
+</tr>
+<tr>
+<td><code>get(modName)</code></td>
+<td>取修饰器实例（<code>inline</code>）</td>
+</tr>
+<tr>
+<td><code>registerMod(modName, mod, ?registerSubmods = true)</code></td>
+<td>注册（会连带注册所有次模、把值归零、重排 <code>modArray</code>）</td>
+</tr>
+<tr>
+<td><code>quickRegister(mod)</code></td>
+<td>用 <code>mod.getName()</code> 注册</td>
+</tr>
+<tr>
+<td><code>receptors</code></td>
+<td><code>[playerStrums.members, opponentStrums.members]</code>，索引 <strong>0 = 玩家侧</strong></td>
+</tr>
+</tbody>
+</table></div>
+<p>次模在脚本里的用法举例：<code>setValue('hidden', 1, 0)</code>（玩家侧上半渐隐）、<code>setValue('cross', 1)</code>（中间两列反向）、<code>setValue('transform0X', -100, 1)</code>。</p>
+<hr>
+<h2 id="5-事件系统eventtimeline">5. 事件系统（EventTimeline）</h2>
+<p><code>ModManager.timeline</code> 是一个 <code>EventTimeline</code>，由 <code>updateTimeline(curDecStep)</code> 每帧驱动。事件按 <code>executionStep</code> 排序，<code>step &gt;= executionStep</code> 时 <code>run(step)</code>；跑完（<code>finished</code>）就移出队列。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>事件类</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>BaseEvent</code></td>
+<td>基类：<code>manager</code>、<code>parent</code>、<code>executionStep</code>、<code>ignoreExecution</code>、<code>finished</code>、<code>run(curStep)</code></td>
+</tr>
+<tr>
+<td><code>ModEvent</code></td>
+<td>绑定一个 mod：<code>modName</code>、<code>endVal</code>、<code>player</code>，构造时就 <code>modMgr.get(modName)</code> 找实例</td>
+</tr>
+<tr>
+<td><code>SetEvent</code></td>
+<td>到 step 立刻把值设成 <code>endVal</code>，然后 <code>finished</code></td>
+</tr>
+<tr>
+<td><code>EaseEvent</code></td>
+<td>在 <code>step → endStep</code> 之间用 <code>EaseFunction</code> 把值从 <code>startVal</code>（不给就用当前值）缓动到 <code>endVal</code>；超过 <code>endStep</code> 后落地并 <code>finished</code></td>
+</tr>
+<tr>
+<td><code>ModEaseEvent</code></td>
+<td>与 <code>EaseEvent</code> 几乎相同，多一个「mod 名为空则报错退出」的保护，结束时设的是 <code>easeFunc(1) * endVal</code></td>
+</tr>
+<tr>
+<td><code>CallbackEvent</code></td>
+<td>一次性：到 step 调 <code>callback(this, curStep)</code> 后 <code>finished</code></td>
+</tr>
+<tr>
+<td><code>StepCallbackEvent</code></td>
+<td>从 <code>step</code> 到 <code>endStep</code> <strong>每 step</strong> 调一次 <code>callback</code>，并给出 <code>progress = (curStep - executionStep) / (endStep - executionStep)</code>（结束置 1）</td>
+</tr>
+</tbody>
+</table></div>
+<p><code>ModManager</code> 上暴露的排队 API（脚本通过代理表调用的就是这些）：</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>方法</th>
+<th>参数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>queueSet(step, modName, target, player = -1)</code></td>
+<td>step 到点设值（<code>target</code> 是 0…1 比例）</td>
+</tr>
+<tr>
+<td><code>queueSetP(step, modName, percent, player = -1)</code></td>
+<td>同上，百分数</td>
+</tr>
+<tr>
+<td><code>queueEase(step, endStep, modName, target, style = 'linear', player = -1, ?startVal)</code></td>
+<td>缓动（<code>target</code> / <code>startVal</code> 都是 0…1）</td>
+</tr>
+<tr>
+<td><code>queueEaseP(step, endStep, modName, percent, style = 'linear', player = -1, ?startVal)</code></td>
+<td>同上，百分数（内部把两个值都 <code>/ 100</code>）</td>
+</tr>
+<tr>
+<td><code>queueFunc(step, endStep, callback)</code></td>
+<td>区间内每 step 回调（<code>StepCallbackEvent</code>）</td>
+</tr>
+<tr>
+<td><code>queueFuncOnce(step, callback)</code></td>
+<td>到点回调一次（<code>CallbackEvent</code>）</td>
+</tr>
+<tr>
+<td><code>randomFloat(minVal, maxVal)</code></td>
+<td><code>FlxG.random.float</code></td>
+</tr>
+</tbody>
+</table></div>
+<p><code>style</code> 是 <code>FlxEase</code> 上的字段名（<code>Reflect.getProperty(FlxEase, style)</code>），例如 <code>'linear'</code>、<code>'quadInOut'</code>、<code>'cubeOut'</code>、<code>'sineIn'</code>……找不到就退回 <code>linear</code>。<code>step</code> / <code>endStep</code> 都可以是小数。</p>
+<hr>
+<h2 id="6-从脚本操控">6. 从脚本操控</h2>
+<h3 id="lscript-hscript">LScript / HScript</h3>
+<p>引擎把 <code>modManager</code> 直接塞成脚本全局（<code>PlayState:1048</code> 的 <code>setDefaultLScripts</code> / <code>setDefaultHScripts</code>），所以：</p>
+<pre><code class="language-lua">function postModifierRegister()
+    modManager:setValue('opponentSwap', 0.5)          -- 两侧
+    modManager:setValue('mini', 0.25, 1)              -- 只对手侧
+end
+
+function generateModchart()
+    modManager:queueEase(0, 16, 'drunk', 0.5, 'quadOut', 0)
+    modManager:queueSet(32, 'reverse', 1)
+    modManager:queueFuncOnce(48, function(event, step)
+        modManager:setValue('flip', 0)
+    end)
+end
+</code></pre>
+<p><code>ModManager</code> 的 <code>getValue</code> / <code>getPercent</code> / <code>get</code> / <code>getVisPos</code> / <code>quickRegister</code> / <code>setPercent</code> 都是 <code>inline</code>，经代理表 <code>Reflect.getProperty()</code> 反射未必取得到实体；稳妥做法是只用上表里那些非 inline 方法，要记数就自己维护变量。</p>
+<h3 id="lua">Lua</h3>
+<p>Lua 侧不需要碰 <code>modManager</code>，<code>FunkinLua</code> 直接注册了一整套同名函数：</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>Lua 函数</th>
+<th>等价于</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>setValue(modName, val, player = -1)</code></td>
+<td><code>modManager.setValue</code></td>
+</tr>
+<tr>
+<td><code>setPercent(modName, val, player = -1)</code></td>
+<td><code>modManager.setPercent</code></td>
+</tr>
+<tr>
+<td><code>getValue(modName, player)</code> / <code>getPercent(modName, player)</code></td>
+<td>读值</td>
+</tr>
+<tr>
+<td><code>queueSet(step, modName, target, player = -1)</code></td>
+<td><code>modManager.queueSet</code></td>
+</tr>
+<tr>
+<td><code>queueSetP(step, modName, perc, player = -1)</code></td>
+<td><code>modManager.queueSetP</code></td>
+</tr>
+<tr>
+<td><code>queueEase(step, endStep, modName, percent, style = 'linear', player = -1, ?startVal)</code></td>
+<td><code>modManager.queueEase</code></td>
+</tr>
+<tr>
+<td><code>queueEaseP(...)</code></td>
+<td><code>modManager.queueEaseP</code></td>
+</tr>
+<tr>
+<td><code>addBlankMod(modName, defaultVal = 0, player = -1)</code></td>
+<td><code>quickRegister(new SubModifier(modName, modManager))</code> + <code>setValue</code>，即「注册一个纯数值槽」</td>
+</tr>
+</tbody>
+</table></div>
+<hr>
+<h2 id="7-自定义修饰器">7. 自定义修饰器</h2>
+<h3 id="71-hscriptmodifiersourcemodcharthscriptmodifierhx">7.1 HScriptModifier（<code>source/modchart/HScriptModifier.hx</code>）</h3>
+<p>设计意图：用 HScript 写一个 <code>Modifier</code>，让引擎在 <code>getPos</code> / <code>updateNote</code> / <code>updateReceptor</code> 时回调脚本函数。</p>
+<ul>
+<li><code>HScriptModifier.fromString(modMgr, ?parent, scriptSource)</code> —— 从字符串建；</li>
+<li><code>HScriptModifier.fromName(modMgr, ?parent, scriptName)</code> —— 从 <code>modifiers/&lt;scriptName&gt;.hscript</code> 建（先 <code>Paths.modFolders()</code>，再 <code>Paths.getPreloadPath()</code>），并把 <code>mod.name</code> 设成脚本名；找不到就 <code>trace</code> 一条并返回 <code>null</code>。</li>
+<li>脚本环境：构造时先把 <code>onAddScript</code> 钩子挂上，然后 <code>modchart()</code> 往脚本里塞 <code>this</code>（修饰器本身）、<code>modMgr</code>、<code>parent</code>，以及 <code>getValue</code> / <code>getPercent</code> / <code>getSubmodValue</code> / <code>getSubmodPercent</code> / <code>setValue</code> / <code>setPercent</code> / <code>setSubmodValue</code> / <code>setSubmodPercent</code>，最后依次执行 <code>onCreate</code>、<code>onCreatePost</code>。</li>
+<li>转发给脚本的成员（<code>script.exitsVar(...)</code> 存在才转，否则用基类实现）：<code>getModType</code>、<code>ignorePos</code>、<code>ignoreUpdateReceptor</code>、<code>ignoreUpdateNote</code>、<code>doesUpdate</code>、<code>shouldExecute(player, value)</code>、<code>getOrder</code>、<code>getName</code>、<code>getValue(player)</code>、<code>getPercent(player)</code>、<code>setValue(value, player)</code>、<code>setPercent(percent, player)</code>、<code>getSubmods</code>、<code>getSubmodPercent</code>、<code>getSubmodValue</code>、<code>updateReceptor(beat, receptor, player)</code>、<code>updateNote(beat, note, player)</code>。</li>
+<li><code>_scriptEnums</code>（<code>NOTE_MOD</code> / <code>MISC_MOD</code> / <code>FIRST</code> / <code>PRE_REVERSE</code> / <code>REVERSE</code> / <code>POST_REVERSE</code> / <code>DEFAULT</code> / <code>LAST</code>）本来是为 <code>FunkinHScript.fromString(..., enums)</code> 准备的，那两行现在是注释，枚举并没有被真正注入。</li>
+</ul>
+<p><strong>完整示例</strong>（按上面转发的方法名写）：</p>
+<pre><code class="language-haxe">// 路径：mods/&lt;mod&gt;/modifiers/wave.hscript
+// 注册：Haxe 侧调用 HScriptModifier.fromName(modManager, null, 'wave')
+//       —— 引擎没有任何目录扫描逻辑会自动加载它
+
+var amplitude:Float = 40;   // 自定义次模，先写进 getSubmods() 才能被 setValue 驱动
+
+function getName() return 'wave';
+function getModType() return NOTE_MOD;                       // 参与 note / receptor 渲染
+function getOrder() return DEFAULT;
+function shouldExecute(player:Int, value:Float) return true; // 值归 0 时也想继续跑就返回 true
+function getSubmods() return ['amplitude'];
+
+function updateNote(beat:Float, note:Note, player:Int)
+{
+    wave(note, player);
+}
+
+function updateReceptor(beat:Float, receptor:StrumNote, player:Int)
+{
+    wave(receptor, player);
+}
+
+function wave(obj:FlxSprite, player:Int)
+{
+    var amount:Float = getValue(player);
+    if (amount == 0) return;
+
+    var amp:Float = getSubmodValue('amplitude', player);
+    if (amp == 0) amp = amplitude;
+
+    obj.y += Math.sin(Conductor.songPosition / 1000 * 4) * amp * amount;
+}
+</code></pre>
+<p><strong>源码现状（必须知道）</strong>：<code>HScriptModifier</code> 在当前树里<strong>没有任何已编译代码引用它</strong>（<code>HScriptUtil.hx:196</code> 那行是注释），而它自身对着本 fork 的 <code>Modifier</code> 有几处不一致，所以这条路径目前是<strong>不可用/未维护</strong>的：</p>
+<ol>
+<li>大量分支用 <code>script.exitsVar(...)</code>，但 <code>FunkinHScript</code> 上只有 <code>exists()</code>（<code>exitsVar</code> 全仓库只出现在这个文件里）；</li>
+<li><code>getPos</code> 的转发被<strong>整段注释掉</strong>了（<code>// override public function getPos(...)</code>）——也就是说 HScript 修饰器<strong>无法参与位置计算</strong>，只能在 <code>updateNote</code> / <code>updateReceptor</code> 里直接改精灵；</li>
+<li><code>updateNote(beat, note, player)</code> / <code>updateReceptor(beat, receptor, player)</code> 的形参个数与基类 <code>Modifier</code> 的 <code>(beat, note, pos, player)</code> / <code>(beat, receptor, pos, player)</code> 不一致；<code>update(elapsed, beat)</code> 也和 <code>Modifier.update(elapsed)</code> 不一致；</li>
+<li><code>getExtraInfo()</code> / <code>isRenderMod()</code> 依赖的 <code>RenderInfo</code>、<code>Modifier.getExtraInfo</code>、<code>Modifier.isRenderMod</code> 在本 fork 里根本不存在；</li>
+<li><code>setPercent</code> 内部转发的是 <code>executeFunc("setValue", ...)</code>（疑似笔误）。</li>
+</ol>
+<p>因此<strong>想加自定义修饰器，当前唯一可靠的做法是加一个 Haxe 类</strong>：</p>
+<pre><code class="language-haxe">// source/modchart/modifiers/WaveModifier.hx
+package modchart.modifiers;
+
+import flixel.FlxSprite;
+import math.Vector3;
+
+class WaveModifier extends NoteModifier
+{
+    override function getName()
+        return 'wave';                       // 注册名 / setValue 用的字串
+
+    override function getOrder()
+        return Modifier.ModifierOrder.DEFAULT;
+
+    override function getSubmods()
+        return ['amplitude'];
+
+    override function getPos(time:Float, visualDiff:Float, timeDiff:Float, beat:Float, pos:Vector3, data:Int, player:Int, obj:FlxSprite)
+    {
+        var amp:Float = getSubmodValue('amplitude', player);
+        if (amp == 0)
+            amp = 40;
+
+        pos.y += Math.sin(Conductor.songPosition / 1000 * 4) * amp * getValue(player);
+        return pos;
+    }
+}
+</code></pre>
+<p>然后在 <code>ModManager.registerDefaultModifiers()</code> 的 <code>quickRegs</code> 数组里加 <code>WaveModifier</code>（或另找时机 <code>quickRegister(new WaveModifier(this))</code>），重新编译即可。<code>getPos</code> 里拿到的是待修改的 <code>Vector3</code>，<code>updateNote</code> / <code>updateReceptor</code> 里拿到的是精灵本身。</p>
+<h3 id="72-纯数值槽-事件的伪修饰器">7.2 「纯数值槽 + 事件」的伪修饰器</h3>
+<p>如果只是想要一个被谱面驱动的数值（不做位置计算），可以模仿 <code>noteSpawnTime</code>：注册一个 <code>SubModifier</code>，用 <code>queueFunc</code> / <code>queueEase</code> 驱动它，再在自己的脚本回调里读取。Lua 端有现成的 <code>addBlankMod(modName, defaultVal, player)</code>；LScript 端可以 <code>import('modchart.SubModifier')</code> 后用 <code>modManager:registerMod('myValue', SubModifier:new('myValue', modManager))</code> 做同样的事（<code>SubModifier</code> 的构造签名是 <code>(name, modMgr, ?parent)</code>，默认 <code>getOrder()</code> 是 <code>LAST</code>、<code>doesUpdate()</code> 是 <code>false</code>）。</p>
+<hr>
+<h2 id="8-已知限制与坑">8. 已知限制与坑</h2>
+<ol>
+<li><strong><code>Modifier.active</code> 永远是 <code>false</code></strong>。<code>ModManager.update(elapsed)</code> 的条件是 <code>if (mod.active &amp;&amp; mod.doesUpdate()) mod.update(elapsed)</code>，而整个 <code>source/modchart/</code> 里没有任何地方把 <code>active</code> 设成 <code>true</code>。结论：<strong>修饰器的 <code>update()</code> 钩子当前不可达</strong>，每帧逻辑请写在 <code>queueFunc</code>（<code>StepCallbackEvent</code>）里。另外 <code>ignorePos()</code> / <code>ignoreUpdateNote()</code> / <code>ignoreUpdateReceptor()</code> 这三个开关<strong>在整个仓库里都没有被调用过</strong>（只有定义和 override），<code>updateObject()</code> 只检查 <code>obj.active</code>（FlxObject 的 active，正常恒为 true）——它们目前只是文档性/预留的成员。</li>
+<li><strong>修饰器的值默认是 0，且不影响 <code>activeMods</code></strong>：<code>setValue</code> 里靠 <code>shouldExecute(player, val)</code>（默认 <code>val != 0</code>）决定是否进 <code>activeMods</code>；<code>AlphaModifier</code> / <code>ReverseModifier</code> / <code>ConfusionModifier</code> / <code>ScaleModifier</code> / <code>PerspectiveModifier</code> 覆写成恒 <code>true</code>，所以它们只要被设过值就一直留在 <code>activeMods</code> 里。</li>
+<li><strong>次模会连带激活父修饰器</strong>，所以「只设某一个次模」是正常用法（<code>setValue('hidden', 1, 0)</code>）。</li>
+<li><strong><code>preModifierRegister</code> 时内置修饰器还没注册</strong>，设值会被 <code>registerDefaultModifiers()</code> 里的 <code>setValue(modName, 0)</code> 覆盖掉；请用 <code>postModifierRegister</code> 或 <code>generateModchart</code>。</li>
+<li><strong><code>songIsModcharted == false</code> 时画面不会变</strong>，即使脚本照常设值、事件照常跑。</li>
+<li><strong><code>getPos</code> 的 <code>exclusions</code> 数组</strong>是按修饰器注册名过滤的（例如 <code>AlphaModifier</code> 传入 <code>["reverse"]</code> 重算位置）；脚本自己调用 <code>getPos</code> 时也要自己传。</li>
+<li><strong><code>rotate*</code> 用弧度、<code>confusion</code> 用度</strong>（前者经过 <code>CoolUtil.rotate</code> → <code>Math.cos/sin</code>，后者直接写 <code>FlxSprite.angle</code>）。</li>
+<li><strong><code>perspectiveDONTUSE</code> 不要手动设值</strong>：它 <code>shouldExecute()</code> 恒 <code>true</code>，被激活后会把 z 按 <code>near = 0</code>、<code>far = 2</code>、<code>fov = π/2</code>、aspect 硬编码 1 投影，是给 z 轴修饰器兜底用的。</li>
+<li><strong><code>basePath</code> 未注册</strong>：<code>PathModifier</code> 基类只有子类 <code>InfinitePathModifier</code>（注册名 <code>infinite</code>）被 <code>registerDefaultModifiers()</code> 注册。</li>
+<li><strong><code>stealth</code> 的 <code>useStealthGlow</code> 无效</strong>（代码读的是 <code>dontUseStealthGlow</code>，见 §3.6）。</li>
+<li><strong><code>drunk</code> 的 <code>drunkZ</code> / <code>drunkZSpeed</code> / <code>drunkZOffset</code> / <code>drunkZPeriod</code> 无效</strong>（只在 <code>getSubmods()</code> 里声明，<code>getPos</code> 未使用）。</li>
+<li><strong><code>mini</code> 里的 <code>angle</code> 恒为 0</strong>，<code>stretch</code> / <code>squish</code> 的旋转耦合项实际是固定系数。</li>
+<li><strong><code>Modcharts.hx</code> 是死代码</strong>（<code>isModcharted()</code>、<code>loadModchart()</code> 都没有调用者）。</li>
+</ol></article>
+<nav class="pk-pager" aria-label="翻页">
+	<a class="mdui-btn mdui-btn-raised mdui-ripple pk-pager-btn pk-pager-prev" href="/docs/lscript/"><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M14.7 5.3 8 12l6.7 6.7 1.4-1.4L10.8 12l5.3-5.3z"/></svg><span class="pk-pager-text"><span class="pk-pager-label">上一页</span><span class="pk-pager-title">LScript (Luau)</span></span></a>
+</nav>
+</div>
+</main>
+<footer class="pk-footer">
+	<div class="mdui-container">
+		<div class="pk-footer-inner">
+			<span>Parker Engine v0.2.8 · 中文文档</span>
+			<span class="pk-footer-links">
+				<a href="https://github.com/FNF-Pk-Dev/FNF_Parker-Engine-new" target="_blank" rel="noopener">GitHub 仓库</a>
+				<a href="https://github.com/FNF-Pk-Dev/FNF_Parker-Engine-new/releases" target="_blank" rel="noopener">下载</a>
+				<a href="/docs/">文档门户</a>
+			</span>
+		</div>
+		<div class="pk-footer-note">
+			基于 <a href="https://github.com/ShadowMario/FNF-PsychEngine" target="_blank" rel="noopener">Psych Engine</a> 分支开发 · 本站静态托管于 GitHub Pages
+		</div>
+	</div>
+</footer>
+<script src="/assets/mdui/js/mdui.min.js"></script>
+<script src="/assets/site.js"></script>
+</body>
+</html>

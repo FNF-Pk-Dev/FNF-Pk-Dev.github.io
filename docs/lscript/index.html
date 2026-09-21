@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#e91e63">
+<meta name="description" content="内置 Luau 运行时：.lscript 脚本的加载、回调、代理表与 states/&lt;名称&gt;.lscript 覆盖。">
+<title>LScript (Luau) - Parker Engine 中文文档</title>
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="stylesheet" href="/assets/mdui/css/mdui.min.css">
+<link rel="stylesheet" href="/assets/site.css">
+</head>
+<body class="mdui-theme-primary-pink mdui-theme-accent-cyan mdui-theme-layout-dark mdui-appbar-with-toolbar">
+<header class="mdui-appbar mdui-appbar-fixed mdui-color-theme">
+	<div class="mdui-toolbar">
+		<button type="button" class="mdui-btn mdui-btn-icon mdui-ripple pk-drawer-toggle" aria-label="打开导航"><svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" aria-hidden="true"><path d="M3 6h18v2H3zM3 11h18v2H3zM3 16h18v2H3z"/></svg></button>
+		<a class="mdui-typo-title pk-brand" href="/">Parker Engine</a>
+		<span class="pk-brand-sub">中文文档</span>
+		<div class="mdui-toolbar-spacer"></div>
+		<a class="mdui-btn mdui-btn-icon mdui-ripple" href="/docs/" aria-label="文档门户" mdui-tooltip="{content:'文档门户'}"><svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" aria-hidden="true"><path d="M6 2h11a3 3 0 0 1 3 3v14a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3V5a3 3 0 0 1 3-3zm0 2a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h1V4H6zm3 0v16h8a1 1 0 0 0 1-1V5a1 1 0 0 0-1-1H9z"/></svg></a>
+		<a class="mdui-btn mdui-btn-icon mdui-ripple" href="https://github.com/FNF-Pk-Dev/FNF_Parker-Engine-new" target="_blank" rel="noopener" aria-label="GitHub 仓库" mdui-tooltip="{content:'GitHub 仓库'}"><svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" aria-hidden="true"><path d="M12 .5A11.5 11.5 0 0 0 .5 12a11.5 11.5 0 0 0 7.86 10.92c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.53-1.34-1.29-1.7-1.29-1.7-1.05-.72.08-.71.08-.71 1.16.08 1.77 1.2 1.77 1.2 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.7 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.47.11-3.06 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.79 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.77.12 3.06.74.81 1.19 1.84 1.19 3.1 0 4.43-2.7 5.4-5.26 5.69.41.36.78 1.06.78 2.14v3.17c0 .31.2.67.8.56A11.5 11.5 0 0 0 23.5 12A11.5 11.5 0 0 0 12 .5z"/></svg></a>
+	</div>
+</header>
+<aside class="mdui-drawer pk-drawer" id="pk-drawer">
+	<div class="pk-drawer-scroll">
+		<a class="pk-drawer-hero mdui-ripple" href="/">
+			<span class="pk-drawer-hero-title">Parker Engine</span>
+			<span class="pk-drawer-hero-sub">v0.2.8 · 中文文档</span>
+		</a>
+		<div class="mdui-subheader pk-nav-group">快速开始</div>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="/docs/">
+			<div class="mdui-list-item-content"><span class="pk-nav-icon"><svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" aria-hidden="true"><path d="M12 3 2 12h3v9h6v-6h2v6h6v-9h3z"/></svg></span>文档总览</div>
+			<span class="pk-badge">总览</span>
+		</a>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="/docs/lua-tutorial/">
+			<div class="mdui-list-item-content">Lua 编码基础</div>
+			<span class="pk-badge">Lua</span>
+		</a>
+		<div class="mdui-subheader pk-nav-group">Lua 脚本</div>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="/docs/callbacks/">
+			<div class="mdui-list-item-content">回调模板</div>
+			<span class="pk-badge">回调</span>
+		</a>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="/docs/lua-psych/">
+			<div class="mdui-list-item-content">Psych 原版函数全解</div>
+			<span class="pk-badge">Lua</span>
+		</a>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="/docs/lua-es-extensions/">
+			<div class="mdui-list-item-content">ES 扩展（Parker 独有）</div>
+			<span class="pk-badge">ES</span>
+		</a>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="/docs/lua-this-proxy/">
+			<div class="mdui-list-item-content">this 代理</div>
+			<span class="pk-badge">Lua</span>
+		</a>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="/docs/modchart-functions/">
+			<div class="mdui-list-item-content">ES ModChart 特效</div>
+			<span class="pk-badge">特效</span>
+		</a>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="/docs/hscript-haxe/">
+			<div class="mdui-list-item-content">Lua 调用 Haxe</div>
+			<span class="pk-badge">Haxe</span>
+		</a>
+		<div class="mdui-subheader pk-nav-group">HScript</div>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="/docs/hscript/">
+			<div class="mdui-list-item-content">HScript 完整文档</div>
+			<span class="pk-badge">HScript</span>
+		</a>
+		<div class="mdui-subheader pk-nav-group">Python</div>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="/docs/python/">
+			<div class="mdui-list-item-content">Python 脚本</div>
+			<span class="pk-badge">Python</span>
+		</a>
+		<div class="mdui-subheader pk-nav-group">LScript</div>
+		<a class="mdui-list-item mdui-ripple pk-nav-item mdui-list-item-active" href="/docs/lscript/">
+			<div class="mdui-list-item-content">LScript (Luau)</div>
+			<span class="pk-badge">Luau</span>
+		</a>
+		<div class="mdui-subheader pk-nav-group">Modchart</div>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="/docs/modchart/">
+			<div class="mdui-list-item-content">Modchart 修饰器系统</div>
+			<span class="pk-badge">Modchart</span>
+		</a>
+		<div class="mdui-divider pk-nav-divider"></div>
+		<div class="mdui-subheader pk-nav-group">相关链接</div>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="https://github.com/FNF-Pk-Dev/FNF_Parker-Engine-new/releases" target="_blank" rel="noopener"><div class="mdui-list-item-content">下载 / Releases</div></a>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="https://github.com/FNF-Pk-Dev/FNF_Parker-Engine-new" target="_blank" rel="noopener"><div class="mdui-list-item-content">GitHub 仓库</div></a>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="/"><div class="mdui-list-item-content">返回首页</div></a>
+	</div>
+</aside>
+<main class="pk-main">
+<div class="mdui-container pk-container">
+<nav class="pk-breadcrumb" aria-label="面包屑">
+	<a href="/">首页</a><span class="pk-breadcrumb-sep">/</span><a href="/docs/">文档</a><span class="pk-breadcrumb-sep">/</span><span>LScript</span><span class="pk-breadcrumb-sep">/</span><span class="pk-breadcrumb-current">LScript (Luau)</span>
+</nav>
+<article class="mdui-typo mdui-card mdui-shadow-2 pk-doc"><h1 id="lscriptlscript">LScript（<code>.lscript</code>）</h1>
+<blockquote>
+<p><strong>适用版本：Parker Engine 0.2.8</strong>（<code>Project.xml</code> 的 <code>&lt;app version&gt;</code>）。参考工具链：Haxe 4.3.7 + HaxeFlixel。</p>
+<p><strong>本文以源码为准。</strong> 每条 API、回调、路径都是从引擎源码里读出来的；白名单里「有名字、但当前派发点用的是 <code>callOnLuas()</code> 所以到不了 LScript」的回调，都在 §3.1 表里明确标注为<strong>不会到达 LScript</strong>。</p>
+</blockquote>
+<p><code>.lscript</code> 是 Parker Engine 自带的 <strong>Luau 运行时</strong>，由 <code>source/script/FunkinLScript.hx</code> 全权实现，底层直接使用 <code>llua</code> 的 <code>Lua</code> / <code>LuaL</code> / <code>Convert</code>（和 <code>psych/script/FunkinLua.hx</code> 驱动 <code>.lua</code> 用的是同一套 plumbing）。</p>
+<p>它 <strong>不是 haxelib</strong>：仓库里没有 <code>lscript</code> 依赖，<code>Project.xml</code> / <code>hmm.json</code> 里也找不到它，任何地方都不要 <code>import lscript.*</code>。整个类体包在 <code>#if LUA_ALLOWED</code> 内；未开启时 <code>FunkinLScript</code> 退化成空壳，只在屏幕上打印一句 <code>LUA support is disabled. Script functionality is limited.</code>。</p>
+<p>脚本源码通过 <code>LuaL.luau_loadsource(lua, chunkName, code)</code> 加载，chunk 名就是文件路径（Luau 的报错会指到具体文件）。<code>.lua</code> 脚本走的也是同一个 <code>luau_loadsource</code>，因此两者跑在同一个 VM 上——区别不在语言，而在 API 面、回调白名单和 parent 模型（见 §7）。</p>
+<hr>
+<h2 id="1-文件放在哪-自动发现">1. 文件放在哪 / 自动发现</h2>
+<p><code>.lscript</code> 的自动发现路径和 <code>.lua</code> 一致（都是按「当前 mod → 全局 mod → <code>mods/</code> 根 → <code>assets/</code>」查找），因此换扩展名即可迁移：</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>位置</th>
+<th>加载者</th>
+<th>时机</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>scripts/&lt;name&gt;.lscript</code></td>
+<td><code>PlayState.loadGlobalScripts()</code></td>
+<td>歌曲 <code>create()</code> 早期</td>
+<td>只扫目录一层，<strong>不递归</strong>；重名文件按 mod 优先级只加载一次</td>
+</tr>
+<tr>
+<td><code>data/&lt;formatted-song&gt;/&lt;name&gt;.lscript</code></td>
+<td><code>PlayState.loadSongScripts()</code></td>
+<td><code>initScripts()</code></td>
+<td>歌曲专属脚本，<code>&lt;formatted-song&gt;</code> 走 <code>Paths.formatToSongPath()</code>（小写、空格转 <code>-</code>）</td>
+</tr>
+<tr>
+<td><code>stages/&lt;stage&gt;.lscript</code></td>
+<td><code>PlayState.startLuahxOnFolder()</code></td>
+<td>建台阶段</td>
+<td>舞台脚本</td>
+</tr>
+<tr>
+<td><code>custom_notetypes/&lt;type&gt;.lscript</code></td>
+<td><code>startLuahxOnFolder()</code></td>
+<td>遇到该 note type 时</td>
+<td>自定义 note 类型脚本</td>
+</tr>
+<tr>
+<td><code>custom_events/&lt;event&gt;.lscript</code></td>
+<td><code>startLuahxOnFolder()</code></td>
+<td>遇到该事件时</td>
+<td>自定义事件脚本</td>
+</tr>
+<tr>
+<td><code>states/&lt;StateName&gt;.lscript</code></td>
+<td><code>FNFGame.switchState()</code> → <code>LScriptSState</code></td>
+<td>状态切换时</td>
+<td>替换内置状态，见 §8</td>
+</tr>
+<tr>
+<td><code>modifiers/&lt;name&gt;.hscript</code></td>
+<td><code>HScriptModifier.fromName()</code></td>
+<td>未启用</td>
+<td>那是 HScript 修饰器，不是 LScript，见 modchart 文档</td>
+</tr>
+</tbody>
+</table></div>
+<p>查找顺序（mod 优先）：<code>Paths.modFolders(file)</code> 命中就用 mod 里的，否则用 <code>Paths.getPreloadPath(file)</code>（即 <code>assets/</code>）。</p>
+<p><strong>注意：<code>characters/&lt;name&gt;.lscript</code> 不会被加载。</strong> <code>PlayState.initCharScript()</code> 只用 <code>HScriptUtil.extns</code>（<code>.hx</code> / <code>.hscript</code> / <code>.hsc</code> / <code>.hxs</code>）查找角色脚本，没有 <code>.lscript</code> 分支。角色逻辑请写 HScript。</p>
+<hr>
+<h2 id="2-生命周期与加载顺序">2. 生命周期与加载顺序</h2>
+<p><code>FunkinLScript</code> 的构造分三步：</p>
+<ol>
+<li><code>createState()</code> —— <code>LuaL.newstate()</code> + <code>LuaL.openlibs()</code>，失败只报错不抛异常；</li>
+<li><code>installBridge()</code> —— 先跑 Lua 侧的桥（<code>PRELUDE</code>），再把 <code>__lscript_index</code> / <code>__lscript_invoke</code> / <code>__lscript_setprop</code> / <code>__lscript_len</code> / <code>__lscript_tostring</code> / <code>__lscript_call</code> 六个 Haxe 函数绑成全局；</li>
+<li><code>setupEnvironment()</code> —— 把类、工具函数、<code>this</code>、<code>add</code>/<code>remove</code>/<code>insert</code>/<code>members</code>、<code>foreground</code> 等全部绑定，然后写入 <code>defaultVars</code> 里的公共变量。</li>
+</ol>
+<p>脚本主体 <strong>不</strong> 在构造里执行。真正的顺序（歌曲内由 <code>PlayState.initLScript()</code> 驱动）是：</p>
+<pre><code>new FunkinLScript(filePath)      -- 建 VM、绑环境，不跑脚本
+  → lscriptArray.push(script)
+  → onAddSScript()               -- 向所有 lscript 推 curStep/curBeat/bpm/camGame/角色/notes…（见 §5）
+  → script.execute()             -- 读文件 → runChunk() → call('onCreate')
+  → script.setParent(this)       -- this / game / add / remove / insert / members 指向 PlayState
+</code></pre>
+<p><code>execute()</code> 只会跑一次（<code>executed</code> 标志），第二次调用是 no-op。<code>runChunk()</code> 用 <code>Lua.pcall</code> 保护，解析错误 / 运行期错误 / 从绑定函数里逃出来的 Haxe 异常都会被 <code>scriptMessage()</code> 报出来，<strong>不会</strong> 直接结束进程；chunk 失败时该脚本的 VM 会被 <code>closeState()</code> 关掉（<code>lua = null</code>），之后所有 <code>call()</code> 直接返回 <code>Function_Continue</code>。</p>
+<p><code>stop()</code> 会置 <code>closed = true</code>；如果此刻脚本代码正在栈上运行（<code>running == true</code>，即从回调内部自杀），则只做标记，由正在执行它的那一层（<code>call()</code> / <code>runChunk()</code>）在返回后关闭 VM。</p>
+<hr>
+<h2 id="3-callbacks-白名单共-47-条">3. CALLBACKS 白名单（共 47 条）</h2>
+<p><code>FunkinLScript.CALLBACKS</code> 是 <strong>回调白名单</strong>：<code>call(method, args)</code> 先查 <code>CALLBACKS.contains(method)</code>，不在名单里的名字会被拒绝，并在屏幕上打一条红字：</p>
+<pre><code>FunkinLScript&lt;path&gt;: &quot;&lt;name&gt;&quot; is not a dispatchable callback, skipping it
+</code></pre>
+<p>同时返回 <code>Function_Continue</code>。引擎新增回调时必须往这个数组里补名字，否则分发不进去。</p>
+<h3 id="31-全表">3.1 全表</h3>
+<p>「参数」列是该回调在 <code>callOnScripts(event, args)</code> 里实际传给 LScript 的实参；「派发点」只列 <code>states/game/PlayState.hx</code> 的行号（<code>LScriptSState</code> 自己派发的单独标注）。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>回调名</th>
+<th>触发时机 / 派发点</th>
+<th>参数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>onCreate</code></td>
+<td>脚本主体执行完之后立刻（<code>FunkinLScript.execute()</code> 内部，PlayState:6159 <code>initLScript</code>）</td>
+<td>无</td>
+</tr>
+<tr>
+<td><code>onCreatePost</code></td>
+<td>PlayState <code>create()</code> 尾部（:1310）；LScriptSState 在 <code>super.create()</code> 之后</td>
+<td>无</td>
+</tr>
+<tr>
+<td><code>onLoad</code></td>
+<td>紧接 <code>onCreatePost</code>（:1311）；LScriptSState 构造里、脚本主体之后</td>
+<td>无</td>
+</tr>
+<tr>
+<td><code>onStartCountdown</code></td>
+<td>倒计时开始（:1850）</td>
+<td>无</td>
+</tr>
+<tr>
+<td><code>onCountdownTick</code></td>
+<td>倒计时每个 tick（:2052），共 5 次（swagCounter 0→4）</td>
+<td><code>swagCounter:Int</code></td>
+</tr>
+<tr>
+<td><code>onSongStart</code></td>
+<td>歌曲正式开始（:2243）</td>
+<td>无</td>
+</tr>
+<tr>
+<td><code>onStepHit</code></td>
+<td>每一步（:5228）；LScriptSState <code>stepHit()</code></td>
+<td><code>curStep:Int</code></td>
+</tr>
+<tr>
+<td><code>onBeatHit</code></td>
+<td>每一拍（:5337）；LScriptSState <code>beatHit()</code></td>
+<td><code>curBeat:Int</code></td>
+</tr>
+<tr>
+<td><code>onSectionHit</code></td>
+<td>每一段（:5372）</td>
+<td><code>curSection:Int</code></td>
+</tr>
+<tr>
+<td><code>onUpdate</code></td>
+<td>每帧（:2798）；LScriptSState <code>update()</code> 最先</td>
+<td><code>elapsed:Float</code></td>
+</tr>
+<tr>
+<td><code>onUpdatePost</code></td>
+<td>每帧、<code>super.update()</code> 之后（:3293）；LScriptSState 同位置</td>
+<td><code>elapsed:Float</code></td>
+</tr>
+<tr>
+<td><code>onSpawnNote</code></td>
+<td>note 生成进 <code>notes</code> 组时（:3052）</td>
+<td><code>note:Note</code></td>
+</tr>
+<tr>
+<td><code>onMoveCamera</code></td>
+<td>镜头要跟随某个角色时（:3905 / :3914 / :3920）</td>
+<td><code>gf</code> / <code>dad</code> / <code>boyfriend</code>（角色对象，不是字符串）</td>
+</tr>
+<tr>
+<td><code>goodNoteHit</code></td>
+<td>玩家命中（:4970）</td>
+<td><code>note:Note</code></td>
+</tr>
+<tr>
+<td><code>opponentNoteHit</code></td>
+<td>对手命中（:4850）</td>
+<td><code>note:Note</code></td>
+</tr>
+<tr>
+<td><code>noteMiss</code></td>
+<td>玩家漏接（:4739）</td>
+<td><code>daNote:Note</code></td>
+</tr>
+<tr>
+<td><code>noteMissPress</code></td>
+<td>空按（没有对应 note，:4790）</td>
+<td><code>direction:Int</code></td>
+</tr>
+<tr>
+<td><code>popUpScore</code></td>
+<td>每次弹出评分/连击提示（:4426）</td>
+<td><code>rating:String</code>, <code>comboSpr:FlxSprite</code>, <code>numScore:FlxSprite</code></td>
+</tr>
+<tr>
+<td><code>onUpdateScore</code></td>
+<td><code>updateScore(miss)</code> 尾部（:2141）</td>
+<td><code>miss:Bool</code></td>
+</tr>
+<tr>
+<td><code>onRecalculateRating</code></td>
+<td>重算评级（:5989）</td>
+<td>无</td>
+</tr>
+<tr>
+<td><code>SkinNoteSplash</code></td>
+<td><code>spawnNoteSplash()</code> 里（:5005），此时 <code>skin</code> 还是默认值 <code>'noteSplashes'</code>，且返回值被忽略——纯通知</td>
+<td><code>skin:String</code></td>
+</tr>
+<tr>
+<td><code>onEvent</code></td>
+<td>每个事件触发（:3890）</td>
+<td><code>eventName:String</code>, <code>value1:String</code>, <code>value2:String</code></td>
+</tr>
+<tr>
+<td><code>eventEarlyTrigger</code></td>
+<td>每帧检查待触发事件时（:2535）</td>
+<td><code>event:String</code>, <code>value1:String</code>, <code>value2:String</code>, <code>strumTime:Float</code></td>
+</tr>
+<tr>
+<td><code>onPause</code></td>
+<td>暂停（<code>callOnScriptAll('onPause')</code>，:3298）；返回 <code>Function_Stop</code> 可阻止暂停</td>
+<td>无</td>
+</tr>
+<tr>
+<td><code>onResume</code></td>
+<td>恢复（:2683）</td>
+<td>无</td>
+</tr>
+<tr>
+<td><code>onGameOver</code></td>
+<td>死亡判定通过、进 GameOver 之前（:3364）</td>
+<td>无</td>
+</tr>
+<tr>
+<td><code>onEndSong</code></td>
+<td>歌曲正常结束（:4076）</td>
+<td>无</td>
+</tr>
+<tr>
+<td><code>onDestroy</code></td>
+<td><code>PlayState.destroy()</code> 里逐脚本调用（:5164）；LScriptSState <code>destroy()</code></td>
+<td>无</td>
+</tr>
+<tr>
+<td><code>onDestroyPost</code></td>
+<td><strong>只有</strong> <code>LScriptSState.destroy()</code> 会派发（:126）；歌曲内不会被调用</td>
+<td>无</td>
+</tr>
+<tr>
+<td><code>preModifierRegister</code></td>
+<td>建好 strums 之后、注册内置修饰器之前（:1881）</td>
+<td>无</td>
+</tr>
+<tr>
+<td><code>postModifierRegister</code></td>
+<td>注册内置修饰器之后（:1884）</td>
+<td>无</td>
+</tr>
+<tr>
+<td><code>generateModchart</code></td>
+<td>倒计时每个 tick，与 <code>onCountdownTick</code> 同处（:2055），共 5 次</td>
+<td>无</td>
+</tr>
+<tr>
+<td><code>onCountdownStarted</code></td>
+<td>只经 <code>callOnLuas</code> 派发（:1903）——<strong>当前不会到达 LScript</strong></td>
+<td>无</td>
+</tr>
+<tr>
+<td><code>onEventSet</code></td>
+<td>只经 <code>callOnLuas</code> 派发（:5225）——<strong>不会到达 LScript</strong></td>
+<td><code>curStep</code></td>
+</tr>
+<tr>
+<td><code>onGhostTap</code></td>
+<td>只经 <code>callOnLuas</code>（:4527）——<strong>不会到达 LScript</strong></td>
+<td><code>key</code></td>
+</tr>
+<tr>
+<td><code>onKeyPress</code></td>
+<td>只经 <code>callOnLuas</code>（:4551）——<strong>不会到达 LScript</strong></td>
+<td><code>key</code></td>
+</tr>
+<tr>
+<td><code>onKeyRelease</code></td>
+<td>只经 <code>callOnLuas</code>（:4578）——<strong>不会到达 LScript</strong></td>
+<td><code>key</code></td>
+</tr>
+<tr>
+<td><code>onNextDialogue</code></td>
+<td>只经 <code>callOnLuas</code>（:2180）——<strong>不会到达 LScript</strong></td>
+<td><code>dialogueCount</code></td>
+</tr>
+<tr>
+<td><code>onSkipDialogue</code></td>
+<td>只经 <code>callOnLuas</code>（:2185）——<strong>不会到达 LScript</strong></td>
+<td><code>dialogueCount</code></td>
+</tr>
+<tr>
+<td><code>onUpdateOptions</code></td>
+<td>只经 <code>callOnLuas</code>（<code>FunkinLua:5296</code>）——<strong>不会到达 LScript</strong></td>
+<td><code>elapsed</code></td>
+</tr>
+<tr>
+<td><code>onGameOverStart</code></td>
+<td>只经 <code>callOnLuas</code>（<code>GameOverSubstate:47</code>）——<strong>不会到达 LScript</strong></td>
+<td>无</td>
+</tr>
+<tr>
+<td><code>onGameOverConfirm</code></td>
+<td>只经 <code>callOnLuas</code>（<code>GameOverSubstate:125/199</code>）——<strong>不会到达 LScript</strong></td>
+<td><code>?restart:Bool</code></td>
+</tr>
+<tr>
+<td><code>onCustomSubstateCreate</code></td>
+<td>只经 <code>callOnLuas</code>（<code>FunkinLua:5395</code>）——<strong>不会到达 LScript</strong></td>
+<td><code>name</code></td>
+</tr>
+<tr>
+<td><code>onCustomSubstateCreatePost</code></td>
+<td>只经 <code>callOnLuas</code>（<code>FunkinLua:5397</code>）——<strong>不会到达 LScript</strong></td>
+<td><code>name</code></td>
+</tr>
+<tr>
+<td><code>onCustomSubstateUpdate</code></td>
+<td>只经 <code>callOnLuas</code>（<code>FunkinLua:5409</code>）——<strong>不会到达 LScript</strong></td>
+<td><code>name</code>, <code>elapsed</code></td>
+</tr>
+<tr>
+<td><code>onCustomSubstateUpdatePost</code></td>
+<td>只经 <code>callOnLuas</code>（<code>FunkinLua:5411</code>）——<strong>不会到达 LScript</strong></td>
+<td><code>name</code>, <code>elapsed</code></td>
+</tr>
+<tr>
+<td><code>onCustomSubstateDestroy</code></td>
+<td>只经 <code>callOnLuas</code>（<code>FunkinLua:5416</code>）——<strong>不会到达 LScript</strong></td>
+<td><code>name</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>统计：47 条在名单内；其中 <strong>32 条</strong>在当前源码里真的会被分发给 LScript，另外 <strong>15 条</strong>（<code>onCountdownStarted</code>、<code>onEventSet</code>、<code>onGhostTap</code>、<code>onKeyPress</code>、<code>onKeyRelease</code>、<code>onNextDialogue</code>、<code>onSkipDialogue</code>、<code>onUpdateOptions</code>、<code>onGameOverStart</code>、<code>onGameOverConfirm</code>、<code>onCustomSubstate*</code> 五条）只被 <code>callOnLuas()</code> 派发，也就是「只有 <code>.lua</code> 收得到」。它们留在白名单里是为了让脚本写了也不报错。</p>
+<h3 id="32-分发语义">3.2 分发语义</h3>
+<ul>
+<li><strong>未定义的回调被跳过</strong>：<code>call()</code> 直接 <code>Lua.getglobal(method)</code>，取到的不是 function 就 <code>pop</code> 掉、静默返回 <code>Function_Continue</code>。不再有旧 <code>lscript</code> 那个把未定义全局转发到 <code>script.parent</code> 的 <code>_G</code> 元表，所以「回调没写」永远不会崩进程。</li>
+<li><strong>回调内报错</strong>：<code>Lua.pcall</code> 捕获后 <code>scriptMessage()</code> 上屏，返回 <code>Function_Continue</code>。</li>
+<li><strong>返回值</strong>：回调返回 <code>nil</code> / 什么都不返回 → 引擎链保持 <code>Function_Continue</code>。返回 <code>Function_Stop</code> / <code>Function_Continue</code> / <code>Function_Halt</code>（这三个全局是字符串 <code>'FUNC_STOP'</code> / <code>'FUNC_CONT'</code> / <code>'FUNC_HALT'</code>）时按同名字符串比较，语义与其他脚本一致：<code>Function_Stop</code> 在 <code>ignoreStops = false</code> 的调用点会中断后续脚本。</li>
+<li><strong>暂停的脚本永远不会被分发</strong>：<code>call()</code> 开头 <code>if (paused) return Function_Continue;</code>。</li>
+</ul>
+<p>类型判断不走 <code>Lua.LUA_TFUNCTION</code>（预编译 Luau 库与 vendored <code>lua.h</code> 的枚举不一定一致），而是 <code>Lua.typename(lua, Lua.type(lua, i))</code> 字符串比较。</p>
+<hr>
+<h2 id="4-引擎注入的全局-api">4. 引擎注入的全局 API</h2>
+<p><code>setupEnvironment()</code> 绑定的全部名字（<code>set()</code> 对函数走 <code>bind()</code>，其余走 <code>pushValue()</code>）：</p>
+<p><strong>核心类 / 工具</strong></p>
+<p><code>FlxG</code>、<code>FlxSprite</code>、<code>FlxGraphic</code>、<code>FlxBasic</code>、<code>FlxObject</code>、<code>FlxCamera</code>、<code>FlxSpriteGroup</code>、<code>FlxTypedGroup</code>、<code>FlxVideo</code>、<code>FlxVideoSprite</code>、<code>PsychVideoSprite</code>、<code>ParkerVideoSprite</code>（= <code>PsychVideoSprite</code>）、<code>Handle</code>、<code>FlxTween</code>、<code>FlxEase</code>、<code>FlxTimer</code>、<code>FlxText</code>、<code>FlxTextFormat</code>、<code>FlxShader</code>、<code>FlxRuntimeShader</code>、<code>ShaderFilter</code>、<code>FlxSound</code>、<code>FlxAxes</code>（表 <code>{X, Y, XY}</code>）、<code>Lib</code>、<code>Capabilities</code>、<code>BlendMode</code>（表，12 个模式）、<code>Std</code>、<code>Type</code>、<code>Reflect</code>、<code>Math</code>、<code>StringTools</code>、<code>Json</code>（表 <code>{parse, stringify}</code>）</p>
+<p><strong>引擎类</strong></p>
+<p><code>PlayState</code>、<code>game</code>（= <code>PlayState.instance</code>，非歌曲状态里是 nil，<code>LScriptSState</code> 会覆盖成自己）、<code>Paths</code>、<code>ClientPrefs</code>、<code>Note</code>、<code>StrumNote</code>、<code>NoteSplash</code>、<code>Character</code>、<code>Boyfriend</code>、<code>Section</code>、<code>Conductor</code>、<code>WeekData</code>、<code>Highscore</code>、<code>StageData</code>、<code>Song</code></p>
+<p><strong>常量与函数</strong></p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>名字</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Function_Stop</code> / <code>Function_Continue</code> / <code>Function_Halt</code></td>
+<td>回调返回策略，值为字符串 <code>'FUNC_STOP'</code> / <code>'FUNC_CONT'</code> / <code>'FUNC_HALT'</code></td>
+</tr>
+<tr>
+<td><code>print(...)</code></td>
+<td>任意参数，拼成一行送 <code>scriptMessage()</code>（白字）</td>
+</tr>
+<tr>
+<td><code>import(className, ?varName)</code></td>
+<td>见下方说明</td>
+</tr>
+<tr>
+<td><code>add(obj, ?front)</code> / <code>remove(obj)</code> / <code>insert(pos, obj)</code> / <code>members</code></td>
+<td>先绑到 <code>FlxG.state</code>，<code>setParent()</code> 之后再指向真正的 state</td>
+</tr>
+<tr>
+<td><code>foreground</code></td>
+<td>见 §9 的限制</td>
+</tr>
+<tr>
+<td><code>this</code></td>
+<td>脚本运行的状态（<code>setParent()</code> 之前是 <code>PlayState.instance</code>，否则 <code>FlxG.state</code>）</td>
+</tr>
+<tr>
+<td><code>pauseScript()</code> / <code>resumeScript()</code></td>
+<td>暂停/恢复自己</td>
+</tr>
+<tr>
+<td><code>setScriptPaused(tag, paused)</code></td>
+<td>按 tag 暂停/恢复任意脚本（<code>PlayState.setScriptPaused</code>）</td>
+</tr>
+<tr>
+<td><code>addTouchPad(DPad, Action)</code> / <code>removeTouchPad()</code></td>
+<td>仅 <code>#if android</code></td>
+</tr>
+<tr>
+<td><code>FileSystem</code> / <code>File</code> / <code>Sys</code></td>
+<td>仅 <code>#if sys</code></td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>只有正在玩歌时才注入</strong>（<code>FlxG.state is PlayState &amp;&amp; PlayState.instance != null</code>）：</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>名字</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>modManager</code></td>
+<td><code>PlayState.modManager</code>，Modchart 修饰器管理器（也是个代理表）</td>
+</tr>
+<tr>
+<td><code>global</code></td>
+<td>当前 state 的 <code>variables:Map&lt;String, Dynamic&gt;</code>（<code>MusicBeatState</code> 字段），可读写</td>
+</tr>
+<tr>
+<td><code>setGlobalFunc(name, func)</code></td>
+<td>往 <code>variables</code> 里塞函数</td>
+</tr>
+<tr>
+<td><code>callGlobalFunc(name, args)</code></td>
+<td>调用它</td>
+</tr>
+<tr>
+<td><code>createGlobalCallback(name, func)</code></td>
+<td>同时塞给<strong>所有</strong> <code>.lua</code> 脚本（并写进 <code>FunkinLua.customFunctions</code>），用于跨脚本回调</td>
+</tr>
+</tbody>
+</table></div>
+<p>另外 <code>PlayState.onAddSScript()</code> 在每个 LScript 创建后（<code>execute()</code> 之前）通过 <code>setOnScripts()</code> 推一批变量：<code>curStep</code>、<code>curSection</code>、<code>curBeat</code>、<code>bpm</code>、<code>camGame</code>、<code>camHUD</code>、<code>camOther</code>、<code>camFollow</code>、<code>camFollowPos</code>、<code>boyfriend</code>、<code>dad</code>、<code>gf</code>、<code>boyfriendGroup</code>、<code>dadGroup</code>、<code>gfGroup</code>、<code>notes</code>、<code>strumLineNotes</code>、<code>playerStrums</code>、<code>opponentStrums</code>、<code>unspawnNotes</code>。对象以代理表形式给出（活的），<strong>数字是值拷贝</strong>（死的）——见 §9。</p>
+<p><code>import()</code> 的三种用法（<code>importClass()</code>）：</p>
+<pre><code class="language-lua">import('flixel.FlxSprite')                 -- 按类名末段绑定：全局 FlxSprite
+import('flixel.FlxSprite', 'Spr')          -- 绑定为指定名字
+import('flixel.*')                          -- 取最长可解析前缀的类，把它的静态字段逐个绑成全局
+</code></pre>
+<hr>
+<h2 id="5-代理表机制">5. 代理表机制</h2>
+<p>脚本看到的「引擎对象」不是快照，而是代理表（proxy table），所有读写/调用都回到 Haxe：</p>
+<ul>
+<li><code>pushValue(value)</code> 分流：<code>null</code> → <code>nil</code>，<code>Bool</code> / <code>Int</code> / <code>Float</code> / <code>String</code> → 原生值，<code>Function</code> → 可调用闭包（也走 <code>bind()</code>），<strong>其他一切（包括 Class）</strong> → <code>pushProxy()</code>。</li>
+<li>代理表只有一个字段 <code>__lscript_ref</code>，里面是 Haxe 值的 id；metatable 是 <code>PRELUDE</code> 里的 <code>__lscript_proxy</code>：</li>
+</ul>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>元方法</th>
+<th>回调 Haxe</th>
+<th>行为</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>__index(t, key)</code></td>
+<td><code>luaIndex(ref, key)</code></td>
+<td>读字段</td>
+</tr>
+<tr>
+<td><code>__newindex(t, key, value)</code></td>
+<td><code>luaSetProp(ref, key, value)</code></td>
+<td>写字段</td>
+</tr>
+<tr>
+<td><code>__len(t)</code></td>
+<td><code>luaLen(ref)</code></td>
+<td><code>#t</code>，只对数组返回长度，其他一律 0</td>
+</tr>
+<tr>
+<td><code>__tostring(t)</code></td>
+<td><code>luaToString(ref)</code></td>
+<td><code>tostring(t)</code></td>
+</tr>
+</tbody>
+</table></div>
+<ul>
+<li><strong>同一个 Haxe 值永远给同一张表</strong>：<code>__lscript_wrapped</code> 是 weak-value 缓存，<code>registerRef()</code> 也用 <code>ObjectMap</code> 去重。<code>spr == spr</code> 成立。</li>
+<li><strong>桥的返回值协议</strong>：Haxe 端返回 <code>[kind, value]</code> 描述符——<code>[0]</code> = 无（Lua 侧得到 <code>nil</code>，用 <code>KIND_NONE</code> 而不是裸 <code>nil</code>，避免和数字 0 混淆）、<code>[1]</code> = 值、<code>[2]</code> = 函数、<code>[3]</code> = 另一个代理的 ref。Lua 侧的 <code>__lscript_decode()</code> 负责还原。</li>
+</ul>
+<p>各方法的细节（都带 try/catch，出错只 <code>reportFailure()</code> 上屏，不抛进 VM）：</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>调用</th>
+<th>支持的目标</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>luaIndex</code></td>
+<td><code>IMap</code> → <code>map.get(key)</code>；类 → 只查 <code>Type.getClassFields()</code> 里的静态字段（<code>'new'</code> 单独处理）；数组 → 数字键；其余 → <code>Reflect.getProperty()</code></td>
+</tr>
+<tr>
+<td><code>luaSetProp</code></td>
+<td><code>IMap</code> → <code>map.set(key, v)</code>；数组 → 按下标赋值，越界则 <code>push</code>；其余 → <code>Reflect.setProperty()</code></td>
+</tr>
+<tr>
+<td><code>luaInvoke</code></td>
+<td>类 + <code>key == 'new'</code> → <code>Type.createInstance()</code>；<code>IMap</code> → 取 map 里的函数；其余 → <code>Reflect.getProperty()</code> 再 <code>Reflect.callMethod(null, fn, args)</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>几点由此推出的语法事实：</p>
+<ul>
+<li><strong>数组下标是 1-based</strong>：<code>arrayIndex()</code> 把 Lua 传来的 <code>name</code> 转成 Haxe 下标时是 <code>index &gt; 0 ? index - 1 : -1</code>，也就是 <code>proxy_arr[1]</code> → Haxe <code>arr[0]</code>；而 <code>proxy_arr[0]</code> 会当成普通字段名去找，结果是 <code>nil</code>。遍历用 <code>for i = 1, #arr do</code>。</li>
+<li><strong>方法两种写法都能用</strong>：<code>spr:playAnim('idle')</code> 和 <code>spr.playAnim('idle')</code> 都行。<code>:</code> 语法会把表自身作为第一个参数传进闭包，Lua 侧检测到它是「同一张代理表」就 <code>table.remove(args, 1)</code> 丢掉。成员函数本身已携带对象（<code>HX_DEFINE_DYNAMIC_FUNC*</code>），Haxe 侧不用再传 <code>this</code>。</li>
+<li><strong>脚本传给引擎的参数会被还原</strong>：<code>unwrap()</code> / <code>unwrapArgs()</code> 会把代理表换回真正的 Haxe 值（递归处理数组）。</li>
+<li><strong>类可以 <code>new</code></strong>：<code>FlxSprite:new(0, 0)</code> / <code>FlxSprite.new(0, 0)</code> 都能构造（走 <code>Type.createInstance</code>）。类只暴露静态成员，防止 hxcpp 为了读一个字段而临时造实例。</li>
+<li><strong><code>bind()</code> 是引擎函数唯一的入口</strong>：Haxe 函数进 <code>bindings</code> 表，Lua 侧拿到 <code>__lscript_bind(name)</code> 生成的闭包，调用时经 <code>__lscript_call</code> → <code>luaCall()</code> → <code>Reflect.callMethod</code>。函数抛出的异常在这里被捕获并上屏，返回值也在这条路径上被转换。</li>
+<li><code>set(name, value)</code> 对函数自动转 <code>bind()</code>，对普通值 <code>pushValue()</code>；<code>setClass(cls)</code> 按类名末段绑定；<code>get(name)</code> / <code>hasFunction(name)</code> 用来探测脚本自己的全局。</li>
+</ul>
+<hr>
+<h2 id="6-与-lua-的差异">6. 与 <code>.lua</code> 的差异</h2>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>项目</th>
+<th><code>.lua</code>（<code>psych/script/FunkinLua.hx</code>）</th>
+<th><code>.lscript</code>（<code>script/FunkinLScript.hx</code>）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>VM / chunk 加载</td>
+<td><code>llua</code> + <code>LuaL.luau_loadsource</code></td>
+<td>相同</td>
+</tr>
+<tr>
+<td>回调白名单</td>
+<td><strong>没有</strong>。<code>call()</code> 直接用名字取全局，任意名字都能试</td>
+<td><strong>有</strong>。<code>CALLBACKS</code> 47 条，名单外会上屏报错并跳过</td>
+</tr>
+<tr>
+<td>未定义 / 非 function 的全局</td>
+<td>返回 <code>Function_Continue</code>；若那个值不是 <code>nil</code> 还会 <code>luaTrace</code> 一条 <code>ERROR: attempt to call a &lt;type&gt; value</code></td>
+<td>静默跳过，不报错</td>
+</tr>
+<tr>
+<td>脚本可见 API</td>
+<td>数百个 Psych 风格 helper（<code>getProperty</code>/<code>setProperty</code>/<code>makeSprite</code>/<code>doTween*</code>/<code>setObjectOrder</code>…）外加 <code>ESCompat</code> 注册的约 70 个「Engine Custom ES」回调</td>
+<td>只有类/工具全局 + <code>this</code>/<code>game</code>/<code>modManager</code>/<code>print</code>/<code>import</code> + 暂停与触摸板 helper</td>
+</tr>
+<tr>
+<td>parent 模型</td>
+<td><code>script.parent</code> + <code>LuaProxy</code>（<code>this</code> 走 <code>setProxy()</code> 才是活的）</td>
+<td><strong>不存在</strong> parent 反射；<code>this</code>/<code>game</code> 就是代理表，脚本里给全局赋值只留在脚本内，不会落到 state 上</td>
+</tr>
+<tr>
+<td>Modchart API</td>
+<td>额外有一整套 Lua 函数：<code>setValue</code> / <code>setPercent</code> / <code>getValue</code> / <code>getPercent</code> / <code>queueSet</code> / <code>queueSetP</code> / <code>queueEase</code> / <code>queueEaseP</code> / <code>addBlankMod</code></td>
+<td>没有这些函数，改用 <code>modManager</code> 代理：<code>modManager:setValue(...)</code>、<code>modManager:queueEase(...)</code></td>
+</tr>
+<tr>
+<td>状态覆盖</td>
+<td><code>states/&lt;Name&gt;.lua</code> → <code>LuaSState</code>，优先级<strong>高于</strong> LScript</td>
+<td><code>states/&lt;Name&gt;.lscript</code> → <code>LScriptSState</code>，优先级最低</td>
+</tr>
+<tr>
+<td>错误显示</td>
+<td><code>luaTrace()</code>（菜单模式走 overlay，歌曲内走 <code>addTextToDebug</code>）</td>
+<td><code>scriptMessage()</code> → 有 <code>PlayState</code> 走 <code>addTextToDebug</code>，否则 <code>ScriptDebugOverlay.report()</code></td>
+</tr>
+<tr>
+<td>开关</td>
+<td><code>#if LUA_ALLOWED</code></td>
+<td>同一个 <code>#if LUA_ALLOWED</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>移植提示：<code>.lua</code> 里最常见的 <code>setProperty('camGame.zoom', 1.2)</code>、<code>makeSprite(...)</code>、<code>doTweenX(...)</code> 在 <code>.lscript</code> 里都要改写成代理写法（<code>camGame.zoom = 1.2</code>、自己 <code>FlxSprite:new()</code>、<code>FlxTween.tween(...)</code>）。</p>
+<hr>
+<h2 id="7-statesnamelscript-覆盖内置状态">7. <code>states/&lt;Name&gt;.lscript</code> 覆盖内置状态</h2>
+<p><code>FNFGame.switchState()</code> 在切换任何 <code>MusicBeatState</code>（且 <code>state.canBeScripted == true</code>，默认就是 true）时依次找：</p>
+<ol>
+<li><code>states/globals/&lt;StateName&gt;.hx|.hscript|.hsc|.hxs</code> → <code>OScriptState</code>（<strong>优先级最高</strong>）</li>
+<li><code>states/&lt;StateName&gt;.lua</code> → <code>FunkinLua.LuaSState</code>（<code>#if LUA_ALLOWED &amp;&amp; MODS_ALLOWED</code>）</li>
+<li><code>states/&lt;StateName&gt;.lscript</code> → <code>LScriptSState</code>（<strong>优先级最低</strong>）</li>
+</ol>
+<p><code>&lt;StateName&gt;</code> 是短类名，例如 <code>TitleState</code>、<code>MainMenuState</code>、<code>StoryMenuState</code>、<code>PlayState</code>。查找走 <code>Paths.modFolders('states/...')</code>（mod 感知）。</p>
+<p><code>LScriptSState</code>（<code>source/script/LScriptSState.hx</code>，整体在 <code>#if LUA_ALLOWED</code> 内）：</p>
+<ul>
+<li>构造函数 <code>super(false)</code> —— <strong>关掉</strong> <code>canBeScripted</code>，避免自己被再次覆盖成递归。</li>
+<li><code>loadScript('states/&lt;Name&gt;.lscript')</code>：mod 优先、否则 preload；找不到就 <code>trace</code> + <code>ScriptDebugOverlay.report()</code> 红字，返回 false。</li>
+<li>绑定顺序：<code>new FunkinLScript(scriptPath)</code> → <code>setParent(this)</code>，并把 <code>this</code> / <code>game</code> / <code>add</code> / <code>remove</code> / <code>insert</code> / <code>members</code> 全部指向这个 state（因为 wrapper 绑定时 <code>PlayState.instance</code> 可能是 nil、<code>FlxG.state</code> 还是旧 state）→ <code>lscript.execute()</code> （脚本主体 + <code>onCreate</code>）→ 返回后构造函数再调 <code>onLoad</code>。</li>
+<li>生命周期：<code>create()</code> → <code>ScriptDebugOverlay.attach(this)</code>（顺便把之前排队的报错刷出来）→ <code>super.create()</code> → <code>onCreatePost</code>；<code>update()</code> → <code>onUpdate</code>（返回 <code>Function_Stop</code> 直接 return，不调 <code>super</code>）→ <code>super.update()</code> → <code>onUpdatePost</code>；<code>beatHit()</code> / <code>stepHit()</code> 先派发再 <code>super</code>；<code>destroy()</code> → <code>onDestroy</code>（返回 <code>Function_Stop</code> 则跳过 <code>onDestroyPost</code>）→ <code>onDestroyPost</code> → <code>lscript.stop()</code>。</li>
+<li>脚本就在这个 state 上跑：<code>this</code> 是它，<code>add(sprite)</code> 也加进它。</li>
+</ul>
+<hr>
+<h2 id="8-报错显示">8. 报错显示</h2>
+<p><code>FunkinLScript.scriptMessage(msg, color)</code>：</p>
+<pre><code class="language-haxe">final playState:PlayState = PlayState.instance;
+if (playState != null)
+    playState.addTextToDebug(msg, color);   // 歌曲内：左下角 debug 文本
+else
+    ScriptDebugOverlay.report(msg, color);  // 没在玩歌：共享的屏上 overlay
+</code></pre>
+<p><code>ScriptDebugOverlay</code> 是 <code>LuaSState</code> / <code>LScriptSState</code> / <code>OScriptState</code> 共用的屏上报错层，<code>attach(this)</code> 由 <code>LScriptSState.create()</code> 调用；从构造函数里报的消息会先排队，等 <code>create()</code> 时一起刷出。overlay 用独立的 <code>FlxCamera</code> 并把自己重新追加到 <code>FlxG.cameras.list</code> 末尾，所以始终压在 state 的 sprite 和 substates 之上。</p>
+<p>会上屏的内容包括：VM 创建失败、chunk 解析/运行失败、回调内异常、白名单拒绝、<code>import</code> 失败、<code>set()</code> 失败、桥调用失败（读/写/调字段）。</p>
+<hr>
+<h2 id="9-已知限制与坑">9. 已知限制与坑</h2>
+<ol>
+<li><strong>回调必须在白名单里</strong>（§3）；不在名单里的名字连试都不会试，只有一条红字提示。</li>
+<li><strong>未定义的回调被静默跳过</strong>——写错一个字（<code>onBeatHit</code> 写成 <code>onbeathit</code>）不会报错，只是永远不触发；可以用 <code>hasFunction('onBeatHit')</code> 自查。</li>
+<li><strong>15 条白名单回调当前只有 <code>.lua</code> 收得到</strong>（§3.1 表尾），因为派发点用的是 <code>callOnLuas()</code>。写了不会报错，但不会执行。</li>
+<li><strong>数字全局是快照，不会随歌曲更新</strong>。<code>curStep</code> / <code>curBeat</code> / <code>curSection</code> / <code>bpm</code> 由 <code>onAddSScript()</code> 在脚本创建时推一次（<code>setOnScripts</code>），歌曲中只有 Lua 会被逐 step 更新（<code>setOnLuas('curStep', ...)</code>）。<strong>请一律用回调参数</strong>（<code>onStepHit(step)</code>、<code>onBeatHit(beat)</code>、<code>onSectionHit(section)</code>），不要读全局。</li>
+<li><strong><code>modManager</code> 在脚本主体执行时可能还是 nil</strong>。顺序是 <code>initScripts()</code>（加载并 execute 脚本）→ <code>generateSong()</code> → <code>new ModManager()</code> → <code>setDefaultLScripts("modManager", ...)</code>。所以脚本顶部别缓存它，在回调里用全局名。</li>
+<li><strong>没有 <code>script.parent</code></strong>。脚本里给全局赋值是给自己赋值，不会写到 state 上；要动 state 就写 <code>this.xxx = ...</code>。</li>
+<li><strong><code>foreground</code> 目前不会显示</strong>。<code>FunkinLScript.foreground</code> 建了一个 <code>FlxTypedGroup</code> 并绑成全局，但源码里没有任何地方把它 add 进 state（只有 <code>FunkinHScript</code> 那边接了 <code>foreground</code>）。要显示 sprite 请 <code>add(spr)</code> 或 <code>this:add(spr)</code>。</li>
+<li><strong>数组下标 1-based</strong>（§5），越界写会 <code>push</code> 到数组末尾而不是报错。</li>
+<li><strong>类只有静态成员可读</strong>，实例字段请通过对象读写；<code>IMap</code> 的字段读写直达 map。</li>
+<li><strong><code>stop()</code> 之后再 <code>call()</code> 都是 no-op</strong>（<code>lua == null</code>）；想让脚本「停一会儿」用 <code>pauseScript()</code> / <code>resumeScript()</code>，别 stop。</li>
+<li><code>.lscript</code> 只认 <code>.lscript</code> 扩展名——没有 <code>HScriptUtil.extns</code> 那套多扩展名匹配。</li>
+<li><strong><code>inline</code> / 原生方法经代理表反射调用不一定可用</strong>。代理走的是 <code>Reflect.getProperty()</code>，而 hxcpp 下被内联掉的方法（例如 <code>Math.sin</code> 这类原生数学函数，或 <code>ModManager</code> 里标了 <code>inline</code> 的 <code>getValue</code> / <code>getPercent</code> / <code>get</code> / <code>getVisPos</code>）在严格 DCE 后可能根本没有可反射的实体。优先调非 inline 的普通方法（如 <code>modManager:setValue(...)</code>），数学运算自己用 Luau 的 <code>math</code> 库。</li>
+</ol>
+<hr>
+<h2 id="10-最小示例">10. 最小示例</h2>
+<pre><code class="language-lua">-- mods/&lt;mod&gt;/data/&lt;song&gt;/&lt;song&gt;.lscript
+local bg = nil
+
+function onCreate()
+    bg = FlxSprite:new(0, 0)
+    bg:loadGraphic(Paths.image('menuDesat'))
+    bg.screenCenter()
+    bg.alpha = 0.6
+    add(bg)
+    print('LScript ready, bpm =', bpm)
+end
+
+function onBeatHit(beat)          -- 用参数，别读全局 curBeat
+    if beat % 4 == 0 then
+        this.camGame.zoom = 1.02       -- 代理表：读写直达 Haxe（赋值只能写点，不能写冒号）
+    end
+end
+
+function onStepHit(step)
+    if step % 16 == 0 then
+        modManager:queueSet(step, 'drunk', 0.5, 0)   -- player 0 = 玩家侧
+    end
+end
+
+function onUpdatePost(elapsed)
+    if bg ~= nil then
+        bg.angle = bg.angle + elapsed * 30
+    end
+end
+
+function onDestroy()
+    bg = nil
+end
+</code></pre>
+<p>可用的辅助探测：<code>print(...)</code> 打日志，<code>import('flixel.FlxSprite', 'Spr')</code> 临时引入类，<code>hasFunction('onBeatHit')</code>（Haxe 侧）检查回调是否存在。</p></article>
+<nav class="pk-pager" aria-label="翻页">
+	<a class="mdui-btn mdui-btn-raised mdui-ripple pk-pager-btn pk-pager-prev" href="/docs/python/"><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M14.7 5.3 8 12l6.7 6.7 1.4-1.4L10.8 12l5.3-5.3z"/></svg><span class="pk-pager-text"><span class="pk-pager-label">上一页</span><span class="pk-pager-title">Python 脚本</span></span></a>
+	<a class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme pk-pager-btn pk-pager-next" href="/docs/modchart/"><span class="pk-pager-text"><span class="pk-pager-label">下一页</span><span class="pk-pager-title">Modchart 修饰器系统</span></span><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M9.3 5.3 7.9 6.7 13.2 12l-5.3 5.3 1.4 1.4L16 12z"/></svg></a>
+</nav>
+</div>
+</main>
+<footer class="pk-footer">
+	<div class="mdui-container">
+		<div class="pk-footer-inner">
+			<span>Parker Engine v0.2.8 · 中文文档</span>
+			<span class="pk-footer-links">
+				<a href="https://github.com/FNF-Pk-Dev/FNF_Parker-Engine-new" target="_blank" rel="noopener">GitHub 仓库</a>
+				<a href="https://github.com/FNF-Pk-Dev/FNF_Parker-Engine-new/releases" target="_blank" rel="noopener">下载</a>
+				<a href="/docs/">文档门户</a>
+			</span>
+		</div>
+		<div class="pk-footer-note">
+			基于 <a href="https://github.com/ShadowMario/FNF-PsychEngine" target="_blank" rel="noopener">Psych Engine</a> 分支开发 · 本站静态托管于 GitHub Pages
+		</div>
+	</div>
+</footer>
+<script src="/assets/mdui/js/mdui.min.js"></script>
+<script src="/assets/site.js"></script>
+</body>
+</html>

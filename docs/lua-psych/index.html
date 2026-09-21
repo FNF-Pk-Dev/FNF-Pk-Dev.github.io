@@ -1,0 +1,3614 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#e91e63">
+<meta name="description" content="Parker Engine 中 Psych 原版 Lua 运行时注册的全部全局函数（含已弃用项）。">
+<title>Psych 原版函数全解 - Parker Engine 中文文档</title>
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="stylesheet" href="/assets/mdui/css/mdui.min.css">
+<link rel="stylesheet" href="/assets/site.css">
+</head>
+<body class="mdui-theme-primary-pink mdui-theme-accent-cyan mdui-theme-layout-dark mdui-appbar-with-toolbar">
+<header class="mdui-appbar mdui-appbar-fixed mdui-color-theme">
+	<div class="mdui-toolbar">
+		<button type="button" class="mdui-btn mdui-btn-icon mdui-ripple pk-drawer-toggle" aria-label="打开导航"><svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" aria-hidden="true"><path d="M3 6h18v2H3zM3 11h18v2H3zM3 16h18v2H3z"/></svg></button>
+		<a class="mdui-typo-title pk-brand" href="/">Parker Engine</a>
+		<span class="pk-brand-sub">中文文档</span>
+		<div class="mdui-toolbar-spacer"></div>
+		<a class="mdui-btn mdui-btn-icon mdui-ripple" href="/docs/" aria-label="文档门户" mdui-tooltip="{content:'文档门户'}"><svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" aria-hidden="true"><path d="M6 2h11a3 3 0 0 1 3 3v14a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3V5a3 3 0 0 1 3-3zm0 2a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h1V4H6zm3 0v16h8a1 1 0 0 0 1-1V5a1 1 0 0 0-1-1H9z"/></svg></a>
+		<a class="mdui-btn mdui-btn-icon mdui-ripple" href="https://github.com/FNF-Pk-Dev/FNF_Parker-Engine-new" target="_blank" rel="noopener" aria-label="GitHub 仓库" mdui-tooltip="{content:'GitHub 仓库'}"><svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" aria-hidden="true"><path d="M12 .5A11.5 11.5 0 0 0 .5 12a11.5 11.5 0 0 0 7.86 10.92c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.53-1.34-1.29-1.7-1.29-1.7-1.05-.72.08-.71.08-.71 1.16.08 1.77 1.2 1.77 1.2 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.7 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.47.11-3.06 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.79 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.77.12 3.06.74.81 1.19 1.84 1.19 3.1 0 4.43-2.7 5.4-5.26 5.69.41.36.78 1.06.78 2.14v3.17c0 .31.2.67.8.56A11.5 11.5 0 0 0 23.5 12A11.5 11.5 0 0 0 12 .5z"/></svg></a>
+	</div>
+</header>
+<aside class="mdui-drawer pk-drawer" id="pk-drawer">
+	<div class="pk-drawer-scroll">
+		<a class="pk-drawer-hero mdui-ripple" href="/">
+			<span class="pk-drawer-hero-title">Parker Engine</span>
+			<span class="pk-drawer-hero-sub">v0.2.8 · 中文文档</span>
+		</a>
+		<div class="mdui-subheader pk-nav-group">快速开始</div>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="/docs/">
+			<div class="mdui-list-item-content"><span class="pk-nav-icon"><svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" aria-hidden="true"><path d="M12 3 2 12h3v9h6v-6h2v6h6v-9h3z"/></svg></span>文档总览</div>
+			<span class="pk-badge">总览</span>
+		</a>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="/docs/lua-tutorial/">
+			<div class="mdui-list-item-content">Lua 编码基础</div>
+			<span class="pk-badge">Lua</span>
+		</a>
+		<div class="mdui-subheader pk-nav-group">Lua 脚本</div>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="/docs/callbacks/">
+			<div class="mdui-list-item-content">回调模板</div>
+			<span class="pk-badge">回调</span>
+		</a>
+		<a class="mdui-list-item mdui-ripple pk-nav-item mdui-list-item-active" href="/docs/lua-psych/">
+			<div class="mdui-list-item-content">Psych 原版函数全解</div>
+			<span class="pk-badge">Lua</span>
+		</a>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="/docs/lua-es-extensions/">
+			<div class="mdui-list-item-content">ES 扩展（Parker 独有）</div>
+			<span class="pk-badge">ES</span>
+		</a>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="/docs/lua-this-proxy/">
+			<div class="mdui-list-item-content">this 代理</div>
+			<span class="pk-badge">Lua</span>
+		</a>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="/docs/modchart-functions/">
+			<div class="mdui-list-item-content">ES ModChart 特效</div>
+			<span class="pk-badge">特效</span>
+		</a>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="/docs/hscript-haxe/">
+			<div class="mdui-list-item-content">Lua 调用 Haxe</div>
+			<span class="pk-badge">Haxe</span>
+		</a>
+		<div class="mdui-subheader pk-nav-group">HScript</div>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="/docs/hscript/">
+			<div class="mdui-list-item-content">HScript 完整文档</div>
+			<span class="pk-badge">HScript</span>
+		</a>
+		<div class="mdui-subheader pk-nav-group">Python</div>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="/docs/python/">
+			<div class="mdui-list-item-content">Python 脚本</div>
+			<span class="pk-badge">Python</span>
+		</a>
+		<div class="mdui-subheader pk-nav-group">LScript</div>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="/docs/lscript/">
+			<div class="mdui-list-item-content">LScript (Luau)</div>
+			<span class="pk-badge">Luau</span>
+		</a>
+		<div class="mdui-subheader pk-nav-group">Modchart</div>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="/docs/modchart/">
+			<div class="mdui-list-item-content">Modchart 修饰器系统</div>
+			<span class="pk-badge">Modchart</span>
+		</a>
+		<div class="mdui-divider pk-nav-divider"></div>
+		<div class="mdui-subheader pk-nav-group">相关链接</div>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="https://github.com/FNF-Pk-Dev/FNF_Parker-Engine-new/releases" target="_blank" rel="noopener"><div class="mdui-list-item-content">下载 / Releases</div></a>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="https://github.com/FNF-Pk-Dev/FNF_Parker-Engine-new" target="_blank" rel="noopener"><div class="mdui-list-item-content">GitHub 仓库</div></a>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="/"><div class="mdui-list-item-content">返回首页</div></a>
+	</div>
+</aside>
+<main class="pk-main">
+<div class="mdui-container pk-container">
+<nav class="pk-breadcrumb" aria-label="面包屑">
+	<a href="/">首页</a><span class="pk-breadcrumb-sep">/</span><a href="/docs/">文档</a><span class="pk-breadcrumb-sep">/</span><span>Lua 脚本</span><span class="pk-breadcrumb-sep">/</span><span class="pk-breadcrumb-current">Psych 原版函数全解</span>
+</nav>
+<article class="mdui-typo mdui-card mdui-shadow-2 pk-doc"><h1 id="psych-原版-lua-函数全集">Psych 原版 Lua 函数全集</h1>
+<p>本页收录 Parker Engine 中 <code>psych/script/FunkinLua.hx</code>（Psych 原版 Lua 运行时）<strong>实际用 <code>set(...)</code> 注册过的全部 Lua 全局函数</strong>，共 <strong>234 个</strong>（含 13 个已弃用函数）。</p>
+<ul>
+<li>所有函数都注册在该脚本自己的 Lua 全局表里，脚本里直接按名字调用即可（例如 <code>makeLuaSprite('bg', 'stage/bg', 0, 0)</code>）。</li>
+<li>参数签名照抄源码，<code>?name:Type = default</code> 表示可选参数及默认值；Lua 侧不写类型，类型只是引擎侧声明。</li>
+<li>返回值一栏写的是「源码里真正 return 的东西」；源码没有 <code>return</code> 的函数就写「无返回」——即使它在别的 Psych 版本里有返回值。</li>
+<li><code>Function_Stop</code> / <code>Function_StopLua</code> / <code>Function_Continue</code> 是三个内置常量：回调里 <code>return Function_Stop</code> 会中断后续脚本的同名回调分发，<code>return Function_StopLua</code>（值 <code>##PSYCHLUA_FUNCTIONSTOPLUA</code>）只中断 Lua 脚本链。</li>
+<li>不在本页出现的函数，就是 Parker Engine 源码里<strong>确实没有</strong>的，不要凭 Psych 其他版本的记忆去调用。</li>
+<li>引擎相对 Psych 的增量（<code>ESCompat</code> 注册的「Engine Custom ES」方言）另见 <code>lua-es-extensions.md</code>；Lua 的 <code>this</code> 全局见 <code>lua-this-proxy.md</code>。</li>
+</ul>
+<hr>
+<h2 id="通用函数">通用函数</h2>
+<p>本类包含脚本管理、音频、存档与文件、字符串、随机数、输入查询等通用工具。<strong>本类共 71 个函数。</strong></p>
+<h3 id="getrunningscripts">getRunningScripts()</h3>
+<p>返回当前正在运行的全部 Lua 脚本文件名（完整路径）。</p>
+<p>参数：无。</p>
+<p>返回：<code>Array&lt;String&gt;</code>，脚本的 <code>scriptName</code> 列表。</p>
+<pre><code class="language-lua">for i, name in ipairs(getRunningScripts()) do
+    debugPrint(name)
+end
+</code></pre>
+<h3 id="pausescript">pauseScript()</h3>
+<p>暂停当前正在执行的这个 Lua 脚本（回调不再分发，<code>onUpdate</code> 不再运行）。</p>
+<p>参数：无。</p>
+<p>返回：<code>Bool</code>，暂停后的状态（恒为 <code>true</code>）。</p>
+<h3 id="resumescript">resumeScript()</h3>
+<p>恢复当前这个 Lua 脚本。</p>
+<p>参数：无。</p>
+<p>返回：<code>Bool</code>，恢复后的状态（恒为 <code>false</code>）。</p>
+<h3 id="setscriptpausedtagstring-pausedbool">setScriptPaused(tag:String, paused:Bool)</h3>
+<p>按脚本名暂停/恢复任意一个脚本。菜单态脚本之间只能互相查找，没有 <code>PlayState</code> 时也走同一套菜单脚本列表。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tag</code></td>
+<td><code>String</code></td>
+<td>目标脚本名：完整 <code>scriptName</code>，或文件名（不含路径与扩展名的匹配由 <code>GlobalScript.scriptMatchesTag()</code> 处理）</td>
+</tr>
+<tr>
+<td><code>paused</code></td>
+<td><code>Bool</code></td>
+<td><code>true</code> 暂停，<code>false</code> 恢复</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：<code>Bool</code>，是否找到并成功设置。</p>
+<h3 id="callonluasfuncnamestring-argsarraydynamic-ignorestops-false-ignoreself-true-exclusionsarraystring">callOnLuas(?funcName:String, ?args:Array&lt;Dynamic&gt;, ignoreStops = false, ignoreSelf = true, ?exclusions:Array&lt;String&gt;)</h3>
+<p>主动向全部 Lua 脚本广播一个回调。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>funcName</code></td>
+<td><code>String</code></td>
+<td>回调名，为 <code>nil</code> 时报 Lua 参数错误</td>
+</tr>
+<tr>
+<td><code>args</code></td>
+<td><code>Array</code></td>
+<td>传给回调的参数，默认为空表</td>
+</tr>
+<tr>
+<td><code>ignoreStops</code></td>
+<td><code>Bool</code></td>
+<td>收到 <code>Function_StopLua</code> 时是否继续分发，默认 <code>false</code></td>
+</tr>
+<tr>
+<td><code>ignoreSelf</code></td>
+<td><code>Bool</code></td>
+<td>是否把自己的脚本名加进排除表（即不回调自己），默认 <code>true</code></td>
+</tr>
+<tr>
+<td><code>exclusions</code></td>
+<td><code>Array&lt;String&gt;</code></td>
+<td>额外排除的脚本名列表</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：无返回。菜单态下只回调自身，不广播。</p>
+<h3 id="callscriptluafilestring-funcnamestring-argsarraydynamic">callScript(?luaFile:String, ?funcName:String, ?args:Array&lt;Dynamic&gt;)</h3>
+<p>调用另一个已运行的 Lua 脚本里的某个函数。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>luaFile</code></td>
+<td><code>String</code></td>
+<td>目标脚本路径（可省略 <code>.lua</code>）；会在 mod 目录、当前目录、preload 依次查找</td>
+</tr>
+<tr>
+<td><code>funcName</code></td>
+<td><code>String</code></td>
+<td>要调用的函数名</td>
+</tr>
+<tr>
+<td><code>args</code></td>
+<td><code>Array</code></td>
+<td>参数表，默认为空表</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：无返回。</p>
+<h3 id="getglobalfromscriptluafilestring-globalstring">getGlobalFromScript(?luaFile:String, ?global:String)</h3>
+<p>读取另一个脚本的全局变量。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>luaFile</code></td>
+<td><code>String</code></td>
+<td>目标脚本路径</td>
+</tr>
+<tr>
+<td><code>global</code></td>
+<td><code>String</code></td>
+<td>全局变量名</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：数值 / 字符串 / 布尔之一；类型不属于这三者时返回 <code>nil</code>（源码注释里明确写了 table 尚未支持）。</p>
+<h3 id="setglobalfromscriptluafilestring-globalstring-valdynamic">setGlobalFromScript(luaFile:String, global:String, val:Dynamic)</h3>
+<p>写入另一个脚本的全局变量。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>luaFile</code></td>
+<td><code>String</code></td>
+<td>目标脚本路径</td>
+</tr>
+<tr>
+<td><code>global</code></td>
+<td><code>String</code></td>
+<td>全局变量名</td>
+</tr>
+<tr>
+<td><code>val</code></td>
+<td><code>Dynamic</code></td>
+<td>要写入的值</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：无返回。</p>
+<h3 id="isrunningluafilestring">isRunning(luaFile:String)</h3>
+<p>判断某个 Lua 脚本是否正在运行。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>luaFile</code></td>
+<td><code>String</code></td>
+<td>脚本路径，可省略 <code>.lua</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：<code>Bool</code>。</p>
+<h3 id="addluascriptluafilestring-ignorealreadyrunningbool-false">addLuaScript(luaFile:String, ?ignoreAlreadyRunning:Bool = false)</h3>
+<p>运行时加载并运行一个新的 Lua 脚本。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>luaFile</code></td>
+<td><code>String</code></td>
+<td>脚本路径，可省略 <code>.lua</code></td>
+</tr>
+<tr>
+<td><code>ignoreAlreadyRunning</code></td>
+<td><code>Bool</code></td>
+<td><code>false</code>（默认）时若同一脚本已在运行则拒绝并打印提示；<code>true</code> 时跳过重复检查</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：无返回。脚本文件不存在时红字提示。</p>
+<h3 id="removeluascriptluafilestring-ignorealreadyrunningbool-false">removeLuaScript(luaFile:String, ?ignoreAlreadyRunning:Bool = false)</h3>
+<p>停止并移除一个正在运行的 Lua 脚本。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>luaFile</code></td>
+<td><code>String</code></td>
+<td>脚本路径，可省略 <code>.lua</code></td>
+</tr>
+<tr>
+<td><code>ignoreAlreadyRunning</code></td>
+<td><code>Bool</code></td>
+<td>传入 <code>true</code> 时跳过查找逻辑（几乎不用）</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：无返回。</p>
+<h3 id="precacheimagenamestring-librarystring-allowgpubool-true">precacheImage(name:String, ?library:String, ?allowGPU:Bool = true)</h3>
+<p>预加载一张图片，避免用到时才卡顿。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>name</code></td>
+<td><code>String</code></td>
+<td>图片路径（相对 <code>images/</code>，不带扩展名）</td>
+</tr>
+<tr>
+<td><code>library</code></td>
+<td><code>String</code></td>
+<td>资源库名（<code>shared</code> / <code>week2</code>…），默认当前库</td>
+</tr>
+<tr>
+<td><code>allowGPU</code></td>
+<td><code>Bool</code></td>
+<td>是否允许走 GPU 纹理路径，默认 <code>true</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：无返回。</p>
+<h3 id="precachesoundnamestring">precacheSound(name:String)</h3>
+<p>预加载一个音效。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>name</code></td>
+<td><code>String</code></td>
+<td>音效名（相对 <code>sounds/</code>）</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：无返回。</p>
+<h3 id="precachemusicnamestring">precacheMusic(name:String)</h3>
+<p>预加载一首音乐（相对 <code>music/</code>）。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>name</code></td>
+<td><code>String</code></td>
+<td>音乐名</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：无返回。</p>
+<h3 id="setvarvarnamestring-valuedynamic">setVar(varName:String, value:Dynamic)</h3>
+<p>把值写进脚本变量表（全局共享的 <code>variables</code>）。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>varName</code></td>
+<td><code>String</code></td>
+<td>变量名</td>
+</tr>
+<tr>
+<td><code>value</code></td>
+<td><code>Dynamic</code></td>
+<td>值</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：传入的 <code>value</code> 本身。</p>
+<h3 id="getvarvarnamestring">getVar(varName:String)</h3>
+<p>读脚本变量表里的值。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>varName</code></td>
+<td><code>String</code></td>
+<td>变量名</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：变量值；不存在时返回 <code>nil</code>。</p>
+<h3 id="luasoundexiststagstring">luaSoundExists(tag:String)</h3>
+<p>判断某个 tag 的 Lua 音效是否存在。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tag</code></td>
+<td><code>String</code></td>
+<td><code>playSound</code> 时传入的 tag</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：<code>Bool</code>。</p>
+<h3 id="playmusicsoundstring-volumefloat-1-loopbool-false">playMusic(sound:String, volume:Float = 1, loop:Bool = false)</h3>
+<p>播放音乐（会替换当前音乐轨）。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sound</code></td>
+<td><code>String</code></td>
+<td>音乐名（相对 <code>music/</code>）</td>
+</tr>
+<tr>
+<td><code>volume</code></td>
+<td><code>Float</code></td>
+<td>音量，默认 <code>1</code></td>
+</tr>
+<tr>
+<td><code>loop</code></td>
+<td><code>Bool</code></td>
+<td>是否循环，默认 <code>false</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：无返回。</p>
+<h3 id="playsoundsoundstring-volumefloat-1-tagstring-null">playSound(sound:String, volume:Float = 1, ?tag:String = null)</h3>
+<p>播放音效。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sound</code></td>
+<td><code>String</code></td>
+<td>音效名（相对 <code>sounds/</code>）</td>
+</tr>
+<tr>
+<td><code>volume</code></td>
+<td><code>Float</code></td>
+<td>音量，默认 <code>1</code></td>
+</tr>
+<tr>
+<td><code>tag</code></td>
+<td><code>String</code></td>
+<td>可选 tag；给了 tag 才能用 <code>stopSound</code> / <code>pauseSound</code> / <code>soundFadeOut</code> 等控制，播完会回调 <code>onSoundFinished(tag)</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：无返回。</p>
+<h3 id="stopsoundtagstring">stopSound(tag:String)</h3>
+<p>停止并移除某个 tag 的音效。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tag</code></td>
+<td><code>String</code></td>
+<td>音效 tag</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：无返回。</p>
+<h3 id="pausesoundtagstring">pauseSound(tag:String)</h3>
+<p>暂停某个 tag 的音效。</p>
+<p>参数同上。</p>
+<p>返回：无返回。</p>
+<h3 id="resumesoundtagstring">resumeSound(tag:String)</h3>
+<p>继续播放某个 tag 的音效。</p>
+<p>参数同上。</p>
+<p>返回：无返回。</p>
+<h3 id="soundfadeintagstring-durationfloat-fromvaluefloat-0-tovaluefloat-1">soundFadeIn(tag:String, duration:Float, fromValue:Float = 0, toValue:Float = 1)</h3>
+<p>音量淡入。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tag</code></td>
+<td><code>String</code></td>
+<td>音效 tag；传空字符串或 <code>nil</code> 时作用于当前音乐（<code>FlxG.sound.music</code>）</td>
+</tr>
+<tr>
+<td><code>duration</code></td>
+<td><code>Float</code></td>
+<td>淡入时长（秒）</td>
+</tr>
+<tr>
+<td><code>fromValue</code></td>
+<td><code>Float</code></td>
+<td>起始音量，默认 <code>0</code></td>
+</tr>
+<tr>
+<td><code>toValue</code></td>
+<td><code>Float</code></td>
+<td>目标音量，默认 <code>1</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：无返回。</p>
+<h3 id="soundfadeouttagstring-durationfloat-tovaluefloat-0">soundFadeOut(tag:String, duration:Float, toValue:Float = 0)</h3>
+<p>音量淡出。参数含义同 <code>soundFadeIn</code>（<code>tag</code> 为空时作用于当前音乐）。</p>
+<p>返回：无返回。</p>
+<h3 id="soundfadecanceltagstring">soundFadeCancel(tag:String)</h3>
+<p>取消正在进行的淡入/淡出。<code>tag</code> 为空时取消当前音乐的淡变。</p>
+<p>返回：无返回。</p>
+<h3 id="getsoundvolumetagstring">getSoundVolume(tag:String)</h3>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tag</code></td>
+<td><code>String</code></td>
+<td>音效 tag；空则读取当前音乐音量</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：<code>Float</code> 音量；tag 音乐都不存在时返回 <code>0</code>。</p>
+<h3 id="setsoundvolumetagstring-valuefloat">setSoundVolume(tag:String, value:Float)</h3>
+<p>设置音量，<code>tag</code> 为空时作用于当前音乐。</p>
+<p>返回：无返回。</p>
+<h3 id="getsoundtimetagstring">getSoundTime(tag:String)</h3>
+<p>读取音效当前播放位置（毫秒）。</p>
+<p>返回：<code>Float</code>；tag 不存在时返回 <code>0</code>。</p>
+<h3 id="setsoundtimetagstring-valuefloat">setSoundTime(tag:String, value:Float)</h3>
+<p>设置音效播放位置。内部会先 <code>pause</code>、改时间、若原本在播放再 <code>play</code>，避免爆音。</p>
+<p>返回：无返回。</p>
+<h3 id="debugprinttext1dynamic-text2dynamic-text3dynamic-text4dynamic-text5dynamic">debugPrint(text1:Dynamic = '', text2:Dynamic = '', text3:Dynamic = '', text4:Dynamic = '', text5:Dynamic = '')</h3>
+<p>在屏幕上打印调试文字（需要该脚本的 <code>luaDebugMode</code> 为 <code>true</code>）。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>text1</code>…<code>text5</code></td>
+<td><code>Dynamic</code></td>
+<td>最多 5 段文本，依次拼接输出；<code>nil</code> 会被当成空串</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：无返回。</p>
+<h3 id="close">close()</h3>
+<p>标记此脚本已关闭。当前回调返回后脚本会被停止（<code>call()</code> 末尾检测到 <code>closed</code> 就 <code>stop()</code>）。</p>
+<p>参数：无。</p>
+<p>返回：<code>Bool</code>，恒为 <code>true</code>。</p>
+<h3 id="changepresencedetailsstring-statenullstring-smallimagekeystring-hasstarttimestampbool-endtimestampfloat">changePresence(details:String, state:Null&lt;String&gt;, ?smallImageKey:String, ?hasStartTimestamp:Bool, ?endTimestamp:Float)</h3>
+<p>更新 Discord Rich Presence（仅桌面构建生效）。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>details</code></td>
+<td><code>String</code></td>
+<td>第一行文字</td>
+</tr>
+<tr>
+<td><code>state</code></td>
+<td><code>String</code></td>
+<td>第二行文字，可为 <code>nil</code></td>
+</tr>
+<tr>
+<td><code>smallImageKey</code></td>
+<td><code>String</code></td>
+<td>小图标 key</td>
+</tr>
+<tr>
+<td><code>hasStartTimestamp</code></td>
+<td><code>Bool</code></td>
+<td>是否显示计时</td>
+</tr>
+<tr>
+<td><code>endTimestamp</code></td>
+<td><code>Float</code></td>
+<td>计时终点（秒）</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：无返回。</p>
+<h3 id="vibrationmillisecondsint">vibration(milliseconds:Int)</h3>
+<p>让设备振动（仅 Android 生效）。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>milliseconds</code></td>
+<td><code>Int</code></td>
+<td>振动毫秒数</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：无返回。</p>
+<h3 id="initsavedatanamestring-folderstring-psychenginemods">initSaveData(name:String, ?folder:String = 'psychenginemods')</h3>
+<p>初始化一个存档文件（FlxSave）。重复初始化会打印提示。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>name</code></td>
+<td><code>String</code></td>
+<td>存档名</td>
+</tr>
+<tr>
+<td><code>folder</code></td>
+<td><code>String</code></td>
+<td>存档目录，默认 <code>psychenginemods</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：无返回。</p>
+<h3 id="flushsavedatanamestring">flushSaveData(name:String)</h3>
+<p>把存档写入磁盘。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>name</code></td>
+<td><code>String</code></td>
+<td>存档名</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：无返回。存档未初始化时红字提示。</p>
+<h3 id="getdatafromsavenamestring-fieldstring-defaultvaluedynamic-null">getDataFromSave(name:String, field:String, ?defaultValue:Dynamic = null)</h3>
+<p>读取存档里的一个字段。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>name</code></td>
+<td><code>String</code></td>
+<td>存档名</td>
+</tr>
+<tr>
+<td><code>field</code></td>
+<td><code>String</code></td>
+<td>字段名</td>
+</tr>
+<tr>
+<td><code>defaultValue</code></td>
+<td><code>Dynamic</code></td>
+<td>存档未初始化时返回的默认值</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：字段值；存档不存在时返回 <code>defaultValue</code>。</p>
+<h3 id="setdatafromsavenamestring-fieldstring-valuedynamic">setDataFromSave(name:String, field:String, value:Dynamic)</h3>
+<p>写入存档字段。</p>
+<p>返回：无返回。</p>
+<h3 id="checkfileexistsfilenamestring-absolutebool-false">checkFileExists(filename:String, ?absolute:Bool = false)</h3>
+<p>判断文件是否存在。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>filename</code></td>
+<td><code>String</code></td>
+<td>相对路径（会先查 mod 目录，再查 <code>assets/</code>）</td>
+</tr>
+<tr>
+<td><code>absolute</code></td>
+<td><code>Bool</code></td>
+<td><code>true</code> 时把 <code>filename</code> 当成绝对路径</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：<code>Bool</code>。</p>
+<h3 id="savefilepathstring-contentstring-absolutebool-false">saveFile(path:String, content:String, ?absolute:Bool = false)</h3>
+<p>写文件。相对路径写到 <code>mods/</code> 目录下。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>path</code></td>
+<td><code>String</code></td>
+<td>文件路径</td>
+</tr>
+<tr>
+<td><code>content</code></td>
+<td><code>String</code></td>
+<td>写入内容</td>
+</tr>
+<tr>
+<td><code>absolute</code></td>
+<td><code>Bool</code></td>
+<td><code>true</code> 时按绝对路径写入</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：<code>Bool</code>，成功 <code>true</code>，异常 <code>false</code>（并红字报错）。</p>
+<h3 id="deletefilepathstring-ignoremodfoldersbool-false">deleteFile(path:String, ?ignoreModFolders:Bool = false)</h3>
+<p>删除文件。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>path</code></td>
+<td><code>String</code></td>
+<td>文件路径</td>
+</tr>
+<tr>
+<td><code>ignoreModFolders</code></td>
+<td><code>Bool</code></td>
+<td><code>true</code> 时跳过 mod 目录查找，直接按资源路径删除</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：<code>Bool</code>。</p>
+<h3 id="gettextfromfilepathstring-ignoremodfoldersbool-false">getTextFromFile(path:String, ?ignoreModFolders:Bool = false)</h3>
+<p>把文本文件内容读成字符串。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>path</code></td>
+<td><code>String</code></td>
+<td>文件路径</td>
+</tr>
+<tr>
+<td><code>ignoreModFolders</code></td>
+<td><code>Bool</code></td>
+<td>是否跳过 mod 目录查找</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：<code>String</code> 文件内容。</p>
+<h3 id="stringstartswithstrstring-startstring">stringStartsWith(str:String, start:String)</h3>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>str</code></td>
+<td><code>String</code></td>
+<td>原字符串</td>
+</tr>
+<tr>
+<td><code>start</code></td>
+<td><code>String</code></td>
+<td>前缀</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：<code>Bool</code>。</p>
+<h3 id="stringendswithstrstring-endstring">stringEndsWith(str:String, end:String)</h3>
+<p>判断后缀。</p>
+<p>返回：<code>Bool</code>。</p>
+<h3 id="stringsplitstrstring-splitstring">stringSplit(str:String, split:String)</h3>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>str</code></td>
+<td><code>String</code></td>
+<td>原字符串</td>
+</tr>
+<tr>
+<td><code>split</code></td>
+<td><code>String</code></td>
+<td>分隔符</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：<code>Array&lt;String&gt;</code> 拆分结果。</p>
+<h3 id="stringtrimstrstring">stringTrim(str:String)</h3>
+<p>去掉首尾空白。</p>
+<p>返回：<code>String</code>。</p>
+<h3 id="directoryfilelistfolderstring">directoryFileList(folder:String)</h3>
+<p>列出目录下的文件与子目录名。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>folder</code></td>
+<td><code>String</code></td>
+<td>目录路径</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：<code>Array&lt;String&gt;</code>；目录不存在时为空表。</p>
+<h3 id="addrequirepathpathstring">addRequirePath(path:String)</h3>
+<p>给脚本的 <code>require()</code> 增加一个搜索路径。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>path</code></td>
+<td><code>String</code></td>
+<td>追加的路径</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：无返回。初始搜索路径是 <code>./</code>、<code>mods/</code>、<code>scripts/</code>、<code>data/</code>。</p>
+<h3 id="clearrequirecachemodnamestring">clearRequireCache(?modname:String)</h3>
+<p>清空 <code>require()</code> 的模块缓存。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>modname</code></td>
+<td><code>String</code></td>
+<td>只清这一个模块；省略则全清</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：无返回。</p>
+<h3 id="getcolorfromhexcolorstring">getColorFromHex(color:String)</h3>
+<p>把十六进制颜色字符串转成整数颜色值。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>color</code></td>
+<td><code>String</code></td>
+<td>如 <code>'FF0000'</code>、<code>'0xFFFF0000'</code>；不带 <code>0x</code> 时自动补 <code>0xff</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：<code>Int</code> 颜色值。</p>
+<h3 id="getrandomintminint-maxint-flxmathmax_value_int-excludestring">getRandomInt(min:Int, max:Int = FlxMath.MAX_VALUE_INT, exclude:String = '')</h3>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>min</code></td>
+<td><code>Int</code></td>
+<td>最小值</td>
+</tr>
+<tr>
+<td><code>max</code></td>
+<td><code>Int</code></td>
+<td>最大值，默认极大值</td>
+</tr>
+<tr>
+<td><code>exclude</code></td>
+<td><code>String</code></td>
+<td>逗号分隔的排除值，如 <code>'1,3,5'</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：<code>Int</code> 随机整数。</p>
+<h3 id="getrandomfloatminfloat-maxfloat-1-excludestring">getRandomFloat(min:Float, max:Float = 1, exclude:String = '')</h3>
+<p>参数含义同 <code>getRandomInt</code>，<code>exclude</code> 为逗号分隔的浮点数。</p>
+<p>返回：<code>Float</code> 随机浮点数。</p>
+<h3 id="getrandomboolchancefloat-50">getRandomBool(chance:Float = 50)</h3>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>chance</code></td>
+<td><code>Float</code></td>
+<td>返回 <code>true</code> 的百分比，默认 <code>50</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：<code>Bool</code>。</p>
+<h3 id="keyboardjustpressednamestring">keyboardJustPressed(name:String)</h3>
+<p>直接查询 Flixel 键盘状态：按下瞬间。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>name</code></td>
+<td><code>String</code></td>
+<td>Flixel 按键字段名，如 <code>'SPACE'</code>、<code>'A'</code>、<code>'LEFT'</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：<code>Bool</code>。</p>
+<h3 id="keyboardpressednamestring">keyboardPressed(name:String)</h3>
+<p>直接查询 Flixel 键盘状态：按住。</p>
+<p>返回：<code>Bool</code>。</p>
+<h3 id="keyboardreleasednamestring">keyboardReleased(name:String)</h3>
+<p>直接查询 Flixel 键盘状态：松开瞬间。</p>
+<p>返回：<code>Bool</code>。</p>
+<h3 id="anygamepadjustpressednamestring">anyGamepadJustPressed(name:String)</h3>
+<p>任意手柄上的某个按键是否刚刚按下。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>name</code></td>
+<td><code>String</code></td>
+<td>手柄按键名，如 <code>'A'</code>、<code>'DPAD_UP'</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：<code>Bool</code>。</p>
+<h3 id="anygamepadpressednamestring">anyGamepadPressed(name:String)</h3>
+<p>任意手柄上的某个按键是否按住。</p>
+<p>返回：<code>Bool</code>。</p>
+<h3 id="anygamepadreleasednamestring">anyGamepadReleased(name:String)</h3>
+<p>任意手柄上的某个按键是否刚松开。</p>
+<p>返回：<code>Bool</code>。</p>
+<h3 id="gamepadanalogxidint-leftstickbool-true">gamepadAnalogX(id:Int, ?leftStick:Bool = true)</h3>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td><code>Int</code></td>
+<td>手柄 ID</td>
+</tr>
+<tr>
+<td><code>leftStick</code></td>
+<td><code>Bool</code></td>
+<td><code>true</code> 读左摇杆，<code>false</code> 读右摇杆</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：<code>Float</code> X 轴值；手柄不存在时返回 <code>0.0</code>。</p>
+<h3 id="gamepadanalogyidint-leftstickbool-true">gamepadAnalogY(id:Int, ?leftStick:Bool = true)</h3>
+<p>同上，返回 Y 轴值；手柄不存在时返回 <code>0.0</code>。</p>
+<h3 id="gamepadjustpressedidint-namestring">gamepadJustPressed(id:Int, name:String)</h3>
+<p>指定手柄的某个按键是否刚按下。</p>
+<p>返回：<code>Bool</code>；手柄不存在时返回 <code>false</code>。</p>
+<h3 id="gamepadpressedidint-namestring">gamepadPressed(id:Int, name:String)</h3>
+<p>指定手柄的某个按键是否按住。返回 <code>Bool</code>。</p>
+<h3 id="gamepadreleasedidint-namestring">gamepadReleased(id:Int, name:String)</h3>
+<p>指定手柄的某个按键是否刚松开。返回 <code>Bool</code>。</p>
+<h3 id="keyjustpressednamestring">keyJustPressed(name:String)</h3>
+<p>按<strong>游戏内映射</strong>（玩家按键绑定）查询「刚按下」。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>name</code></td>
+<td><code>String</code></td>
+<td>只支持 <code>'left'</code>、<code>'down'</code>、<code>'up'</code>、<code>'right'</code>、<code>'accept'</code>、<code>'back'</code>、<code>'pause'</code>、<code>'reset'</code>、<code>'space'</code>；其他名字恒为 <code>false</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：<code>Bool</code>。</p>
+<h3 id="keypressednamestring">keyPressed(name:String)</h3>
+<p>按游戏内映射查询「按住」。只支持 <code>'left'</code>、<code>'down'</code>、<code>'up'</code>、<code>'right'</code>、<code>'space'</code>。</p>
+<p>返回：<code>Bool</code>。</p>
+<h3 id="keyreleasednamestring">keyReleased(name:String)</h3>
+<p>按游戏内映射查询「刚松开」。只支持 <code>'left'</code>、<code>'down'</code>、<code>'up'</code>、<code>'right'</code>、<code>'space'</code>。</p>
+<p>返回：<code>Bool</code>。</p>
+<h3 id="mouseclickedbuttonstring">mouseClicked(button:String)</h3>
+<p>鼠标按键是否刚点击。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>button</code></td>
+<td><code>String</code></td>
+<td><code>'left'</code>（默认，也匹配其他未列出的值）、<code>'middle'</code>、<code>'right'</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：<code>Bool</code>。</p>
+<h3 id="mousepressedbuttonstring">mousePressed(button:String)</h3>
+<p>鼠标按键是否按住。<code>button</code> 同 <code>mouseClicked</code>。</p>
+<p>返回：<code>Bool</code>。</p>
+<h3 id="mousereleasedbuttonstring">mouseReleased(button:String)</h3>
+<p>鼠标按键是否刚松开。<code>button</code> 同 <code>mouseClicked</code>。</p>
+<p>返回：<code>Bool</code>。</p>
+<h3 id="getmousexcamerastring">getMouseX(camera:String)</h3>
+<p>鼠标在指定相机坐标系里的 X 位置。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>camera</code></td>
+<td><code>String</code></td>
+<td><code>'camGame'</code>（默认）、<code>'camHUD'</code>/<code>'hud'</code>、<code>'camOther'</code>/<code>'other'</code>、<code>'camVideo'</code>/<code>'video'</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：<code>Float</code>。</p>
+<h3 id="getmouseycamerastring">getMouseY(camera:String)</h3>
+<p>同上，返回 Y 位置。</p>
+<p>返回：<code>Float</code>。</p>
+<hr>
+<h2 id="游戏控制函数">游戏控制函数</h2>
+<p>本类控制歌曲流程、分数血量、判定、摄像机、角色位置、modchart 数值以及对话/视频。<strong>本类共 50 个函数。</strong></p>
+<h3 id="opencustomsubstatenamestring-pausegamebool-false">openCustomSubstate(name:String, pauseGame:Bool = false)</h3>
+<p>打开一个名为 <code>name</code> 的自定义子状态（<code>CustomSubstate</code>），并触发 <code>onCustomSubstateCreate(name)</code> 等回调。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>name</code></td>
+<td><code>String</code></td>
+<td>子状态名，回调里会作为参数传回</td>
+</tr>
+<tr>
+<td><code>pauseGame</code></td>
+<td><code>Bool</code></td>
+<td><code>true</code> 时暂停 <code>PlayState</code> 与音乐</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：无返回。</p>
+<h3 id="closecustomsubstate">closeCustomSubstate()</h3>
+<p>关闭自定义子状态。</p>
+<p>参数：无。</p>
+<p>返回：<code>Bool</code>，确实关闭了返回 <code>true</code>，没有打开的子状态返回 <code>false</code>。</p>
+<h3 id="loadsongnamestring-null-difficultynumint-1">loadSong(?name:String = null, ?difficultyNum:Int = -1)</h3>
+<p>在游戏中重新加载一首歌（会走 <code>LoadingState</code> 切场景）。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>name</code></td>
+<td><code>String</code></td>
+<td>歌曲名；<code>nil</code> 或空串时用当前歌曲</td>
+</tr>
+<tr>
+<td><code>difficultyNum</code></td>
+<td><code>Int</code></td>
+<td>难度序号；<code>-1</code> 时用当前难度</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：无返回。</p>
+<h3 id="addscorevalueint-0">addScore(value:Int = 0)</h3>
+<p>给当前得分加上 <code>value</code>（可为负），随后重算评级。</p>
+<p>返回：无返回。</p>
+<h3 id="addmissesvalueint-0">addMisses(value:Int = 0)</h3>
+<p>给丢失数加上 <code>value</code>，随后重算评级。返回：无返回。</p>
+<h3 id="addhitsvalueint-0">addHits(value:Int = 0)</h3>
+<p>给命中数加上 <code>value</code>，随后重算评级。返回：无返回。</p>
+<h3 id="setscorevalueint-0">setScore(value:Int = 0)</h3>
+<p>直接设置得分，随后重算评级。返回：无返回。</p>
+<h3 id="setmissesvalueint-0">setMisses(value:Int = 0)</h3>
+<p>直接设置丢失数，随后重算评级。返回：无返回。</p>
+<h3 id="sethitsvalueint-0">setHits(value:Int = 0)</h3>
+<p>直接设置命中数，随后重算评级。返回：无返回。</p>
+<h3 id="getscore">getScore()</h3>
+<p>返回：<code>Int</code> 当前得分。</p>
+<h3 id="getmisses">getMisses()</h3>
+<p>返回：<code>Int</code> 当前丢失数。</p>
+<h3 id="gethits">getHits()</h3>
+<p>返回：<code>Int</code> 当前命中数。</p>
+<h3 id="sethealthvaluefloat-0">setHealth(value:Float = 0)</h3>
+<p>直接设置血量（<code>0</code>～<code>2</code>）。返回：无返回。</p>
+<h3 id="addhealthvaluefloat-0">addHealth(value:Float = 0)</h3>
+<p>增减血量。返回：无返回。</p>
+<h3 id="gethealth">getHealth()</h3>
+<p>返回：<code>Float</code> 当前血量。</p>
+<h3 id="addcharactertolistnamestring-typestring">addCharacterToList(name:String, type:String)</h3>
+<p>把某个角色预加入角色加载列表，避免出场时卡顿。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>name</code></td>
+<td><code>String</code></td>
+<td>角色名（对应 <code>characters/&lt;name&gt;.json</code>）</td>
+</tr>
+<tr>
+<td><code>type</code></td>
+<td><code>String</code></td>
+<td><code>'dad'</code> 为对手，<code>'gf'</code> / <code>'girlfriend'</code> 为女友，其他值一律当作玩家（BF）</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：无返回。</p>
+<h3 id="triggereventnamestring-arg1dynamic-arg2dynamic">triggerEvent(name:String, arg1:Dynamic, arg2:Dynamic)</h3>
+<p>手动触发一个歌曲事件（等同在谱面里放该事件）。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>name</code></td>
+<td><code>String</code></td>
+<td>事件名</td>
+</tr>
+<tr>
+<td><code>arg1</code></td>
+<td><code>Dynamic</code></td>
+<td>第一个值（会转成 <code>String</code>）</td>
+</tr>
+<tr>
+<td><code>arg2</code></td>
+<td><code>Dynamic</code></td>
+<td>第二个值（会转成 <code>String</code>）</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：<code>Bool</code>，触发成功 <code>true</code>；菜单态下没有事件系统，打印提示并返回 <code>false</code>。</p>
+<h3 id="startcountdown">startCountdown()</h3>
+<p>开始倒计时（用于对话/视频结束后接回歌曲）。</p>
+<p>参数：无。</p>
+<p>返回：<code>Bool</code>，恒为 <code>true</code>。</p>
+<h3 id="addtouchpaddpadstring-fullstring">addTouchPad(Dpad:String, Full:String)</h3>
+<p>添加屏幕虚拟按键（<strong>仅 Android 构建注册</strong>）。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Dpad</code></td>
+<td><code>String</code></td>
+<td>D-Pad 模式枚举名</td>
+</tr>
+<tr>
+<td><code>Full</code></td>
+<td><code>String</code></td>
+<td>动作键模式枚举名</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：<code>Bool</code>，恒为 <code>true</code>。</p>
+<h3 id="setpercentmodnamestring-valfloat-playerint-1">setPercent(modName:String, val:Float, player:Int = -1)</h3>
+<p>设置 modchart 数值（百分比形式）。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>modName</code></td>
+<td><code>String</code></td>
+<td>修饰器名，如 <code>'scroll'</code>、<code>'alpha'</code></td>
+</tr>
+<tr>
+<td><code>val</code></td>
+<td><code>Float</code></td>
+<td>目标值，默认含义是 0～1 的百分比</td>
+</tr>
+<tr>
+<td><code>player</code></td>
+<td><code>Int</code></td>
+<td><code>0</code> 玩家、<code>1</code> 对手、<code>-1</code> 两者，默认 <code>-1</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：无返回。</p>
+<h3 id="addblankmodmodnamestring-defaultvalfloat-0-playerint-1">addBlankMod(modName:String, defaultVal:Float = 0, player:Int = -1)</h3>
+<p>注册一个空的 SubModifier 修饰器，之后才能用 <code>queueEase</code> 等做补间。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>modName</code></td>
+<td><code>String</code></td>
+<td>修饰器名</td>
+</tr>
+<tr>
+<td><code>defaultVal</code></td>
+<td><code>Float</code></td>
+<td>初始值</td>
+</tr>
+<tr>
+<td><code>player</code></td>
+<td><code>Int</code></td>
+<td>玩家/对手，默认 <code>-1</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：无返回。</p>
+<h3 id="setvaluemodnamestring-valfloat-playerint-1">setValue(modName:String, val:Float, player:Int = -1)</h3>
+<p>以<strong>原始值</strong>语义设置修饰器（与 <code>setPercent</code> 的百分比语义对应）。</p>
+<p>参数同 <code>setPercent</code>。返回：无返回。</p>
+<h3 id="getpercentmodnamestring-playerint">getPercent(modName:String, player:Int)</h3>
+<p>读取修饰器当前百分比值。</p>
+<p>返回：<code>Float</code>。</p>
+<h3 id="getvaluemodnamestring-playerint">getValue(modName:String, player:Int)</h3>
+<p>读取修饰器当前原始值。返回：<code>Float</code>。</p>
+<h3 id="queuesetstepfloat-modnamestring-targetfloat-playerint-1">queueSet(step:Float, modName:String, target:Float, player:Int = -1)</h3>
+<p>在第 <code>step</code> 步把修饰器设为目标值（瞬时）。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>step</code></td>
+<td><code>Float</code></td>
+<td>目标步数</td>
+</tr>
+<tr>
+<td><code>modName</code></td>
+<td><code>String</code></td>
+<td>修饰器名</td>
+</tr>
+<tr>
+<td><code>target</code></td>
+<td><code>Float</code></td>
+<td>目标值</td>
+</tr>
+<tr>
+<td><code>player</code></td>
+<td><code>Int</code></td>
+<td>播放者，默认 <code>-1</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：无返回。</p>
+<h3 id="queuesetpstepfloat-modnamestring-percfloat-playerint-1">queueSetP(step:Float, modName:String, perc:Float, player:Int = -1)</h3>
+<p>同 <code>queueSet</code>，但 <code>perc</code> 是百分比值。返回：无返回。</p>
+<h3 id="queueeasestepfloat-endstepfloat-modnamestring-percentfloat-stylestring-linear-playerint-1-startvalfloat">queueEase(step:Float, endStep:Float, modName:String, percent:Float, style:String = 'linear', player:Int = -1, ?startVal:Float)</h3>
+<p>在 <code>step</code> 到 <code>endStep</code> 之间做缓动。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>step</code></td>
+<td><code>Float</code></td>
+<td>起始步</td>
+</tr>
+<tr>
+<td><code>endStep</code></td>
+<td><code>Float</code></td>
+<td>结束步</td>
+</tr>
+<tr>
+<td><code>modName</code></td>
+<td><code>String</code></td>
+<td>修饰器名</td>
+</tr>
+<tr>
+<td><code>percent</code></td>
+<td><code>Float</code></td>
+<td>目标值</td>
+</tr>
+<tr>
+<td><code>style</code></td>
+<td><code>String</code></td>
+<td>缓动名，默认 <code>'linear'</code></td>
+</tr>
+<tr>
+<td><code>player</code></td>
+<td><code>Int</code></td>
+<td>播放者，默认 <code>-1</code></td>
+</tr>
+<tr>
+<td><code>startVal</code></td>
+<td><code>Float</code></td>
+<td>可选起始值，省缺则用当前值</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：无返回。</p>
+<h3 id="queueeasepstepfloat-endstepfloat-modnamestring-percentfloat-stylestring-linear-playerint-1-startvalfloat">queueEaseP(step:Float, endStep:Float, modName:String, percent:Float, style:String = 'linear', player:Int = -1, ?startVal:Float)</h3>
+<p>同 <code>queueEase</code>，但按百分比语义。返回：无返回。</p>
+<h3 id="endsong">endSong()</h3>
+<p>立即结束歌曲（会先 <code>KillNotes()</code>）。</p>
+<p>参数：无。</p>
+<p>返回：<code>Bool</code>，恒为 <code>true</code>。</p>
+<h3 id="restartsongskiptransitionbool-false">restartSong(?skipTransition:Bool = false)</h3>
+<p>重开当前歌曲。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>skipTransition</code></td>
+<td><code>Bool</code></td>
+<td>是否跳过转场动画</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：<code>Bool</code>，恒为 <code>true</code>。</p>
+<h3 id="exitsongskiptransitionbool-false">exitSong(?skipTransition:Bool = false)</h3>
+<p>退出歌曲回到选歌界面（剧情模式回 <code>StoryMenuState</code>，否则回 <code>FreeplayState</code>）。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>skipTransition</code></td>
+<td><code>Bool</code></td>
+<td>是否跳过转场动画</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：<code>Bool</code>，恒为 <code>true</code>。</p>
+<h3 id="getsongposition">getSongPosition()</h3>
+<p>返回：<code>Float</code>，<code>Conductor.songPosition</code> 当前歌曲位置（毫秒）。</p>
+<h3 id="getcharacterxtypestring">getCharacterX(type:String)</h3>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>type</code></td>
+<td><code>String</code></td>
+<td><code>'dad'</code> / <code>'opponent'</code>、<code>'gf'</code> / <code>'girlfriend'</code>，其他值一律当作玩家</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：<code>Float</code>，对应角色组的 X。</p>
+<h3 id="setcharacterxtypestring-valuefloat">setCharacterX(type:String, value:Float)</h3>
+<p>设置角色组 X。<code>type</code> 规则同上。返回：无返回。</p>
+<h3 id="getcharacterytypestring">getCharacterY(type:String)</h3>
+<p>返回：<code>Float</code>，对应角色组的 Y。</p>
+<h3 id="setcharacterytypestring-valuefloat">setCharacterY(type:String, value:Float)</h3>
+<p>设置角色组 Y。返回：无返回。</p>
+<h3 id="camerasettargettargetstring">cameraSetTarget(target:String)</h3>
+<p>切换摄像机跟随对象。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>target</code></td>
+<td><code>String</code></td>
+<td>传 <code>'dad'</code> 跟对手，其他值跟玩家</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：<code>Bool</code>，<code>true</code> 表示跟的是对手。</p>
+<h3 id="camerashakecamerastring-intensityfloat-durationfloat">cameraShake(camera:String, intensity:Float, duration:Float)</h3>
+<p>屏幕震动。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>camera</code></td>
+<td><code>String</code></td>
+<td>相机名，规则见 <code>getMouseX</code></td>
+</tr>
+<tr>
+<td><code>intensity</code></td>
+<td><code>Float</code></td>
+<td>强度，原版示例用 <code>0.05</code></td>
+</tr>
+<tr>
+<td><code>duration</code></td>
+<td><code>Float</code></td>
+<td>持续秒数</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：无返回。</p>
+<h3 id="cameraflashcamerastring-colorstring-durationfloat-forcedbool">cameraFlash(camera:String, color:String, duration:Float, forced:Bool)</h3>
+<p>屏幕闪白。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>camera</code></td>
+<td><code>String</code></td>
+<td>相机名</td>
+</tr>
+<tr>
+<td><code>color</code></td>
+<td><code>String</code></td>
+<td>颜色十六进制串，如 <code>'FFFFFF'</code></td>
+</tr>
+<tr>
+<td><code>duration</code></td>
+<td><code>Float</code></td>
+<td>持续秒数</td>
+</tr>
+<tr>
+<td><code>forced</code></td>
+<td><code>Bool</code></td>
+<td>上一次闪光未播完时是否重开</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：无返回。</p>
+<h3 id="camerafadecamerastring-colorstring-durationfloat-forcedbool">cameraFade(camera:String, color:String, duration:Float, forced:Bool)</h3>
+<p>屏幕渐隐到指定颜色。参数含义同 <code>cameraFlash</code>。返回：无返回。</p>
+<h3 id="setratingpercentvaluefloat">setRatingPercent(value:Float)</h3>
+<p>设置评级百分比（<code>0</code>～<code>1</code>）。返回：无返回。</p>
+<h3 id="setratingnamevaluestring">setRatingName(value:String)</h3>
+<p>设置评级名称（如 <code>'Sick!!'</code>）。返回：无返回。</p>
+<h3 id="setratingfcvaluestring">setRatingFC(value:String)</h3>
+<p>设置 FC 标签（如 <code>'SFC'</code>）。返回：无返回。</p>
+<h3 id="characterdancecharacterstring">characterDance(character:String)</h3>
+<p>让某个角色跳一次 idle 舞。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>character</code></td>
+<td><code>String</code></td>
+<td><code>'dad'</code>、<code>'gf'</code> / <code>'girlfriend'</code>，其他值一律当作玩家</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：无返回。</p>
+<h3 id="sethealthbarcolorslefthexstring-righthexstring-righthex2string">setHealthBarColors(leftHex:String, rightHex:String, ?rightHex2:String)</h3>
+<p>设置血条左右颜色。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>leftHex</code></td>
+<td><code>String</code></td>
+<td>左侧颜色十六进制串</td>
+</tr>
+<tr>
+<td><code>rightHex</code></td>
+<td><code>String</code></td>
+<td>右侧颜色十六进制串</td>
+</tr>
+<tr>
+<td><code>rightHex2</code></td>
+<td><code>String</code></td>
+<td><strong>Parker 扩展重载</strong>：给了第三个参数时按 <code>setHealthBarColors(barTag, leftHex, rightHex)</code> 解释，作用于 <code>makeHealthBar</code> 创建的自定义血条（详见 <code>lua-es-extensions.md</code>）</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：无返回。菜单态且未给第三参数时直接返回，不做任何事。</p>
+<h3 id="settimebarcolorslefthexstring-righthexstring">setTimeBarColors(leftHex:String, rightHex:String)</h3>
+<p>设置时间条颜色。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>leftHex</code></td>
+<td><code>String</code></td>
+<td>左色</td>
+</tr>
+<tr>
+<td><code>rightHex</code></td>
+<td><code>String</code></td>
+<td>右色（注意源码里左右是反着 <code>createFilledBar(right, left)</code> 传的）</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：无返回。</p>
+<h3 id="startdialoguedialoguefilestring-musicstring-null">startDialogue(dialogueFile:String, music:String = null)</h3>
+<p>开始一段对话。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>dialogueFile</code></td>
+<td><code>String</code></td>
+<td>对话 JSON 文件名，读取 <code>data/&lt;格式化歌名&gt;/&lt;文件名&gt;</code></td>
+</tr>
+<tr>
+<td><code>music</code></td>
+<td><code>String</code></td>
+<td>可选背景音乐名（<code>music/</code> 下的 ogg）</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：<code>Bool</code>，成功解析并开始返回 <code>true</code>；文件缺失或格式错误返回 <code>false</code>（此时若正在收尾就 <code>endSong()</code>，否则 <code>startCountdown()</code>）。触发的回调是 <code>onNextDialogue</code> / <code>onSkipDialogue</code>。</p>
+<h3 id="startvideovideofilestring-formidsongbool-false">startVideo(videoFile:String, ?forMidSong:Bool = false)</h3>
+<p>播放一段视频。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>videoFile</code></td>
+<td><code>String</code></td>
+<td>视频文件名（<code>videos/</code> 下的 mp4）</td>
+</tr>
+<tr>
+<td><code>forMidSong</code></td>
+<td><code>Bool</code></td>
+<td><code>true</code> 表示歌中途播放（会解除 <code>inCutscene</code> 并允许暂停）</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：<code>Bool</code>，文件存在并开始播放返回 <code>true</code>，文件不存在返回 <code>false</code>。若平台没编译 <code>VIDEOS_ALLOWED</code>，直接 <code>endSong()</code> 或 <code>startCountdown()</code> 并返回 <code>true</code>。</p>
+<h3 id="camfollowposxfloat-0-yfloat-0">camFollowPos(x:Float = 0, y:Float = 0)</h3>
+<p><strong>只在菜单脚本（<code>LuaSState</code>）里注册。</strong> 把菜单相机滚动到让内容坐标 <code>(x, y)</code> 落在屏幕中心（菜单相机默认滚动了半屏，所以内容原点 <code>(0, 0)</code> 就是屏幕中心）。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>x</code></td>
+<td><code>Float</code></td>
+<td>目标内容 X</td>
+</tr>
+<tr>
+<td><code>y</code></td>
+<td><code>Float</code></td>
+<td>目标内容 Y</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：无返回。</p>
+<h3 id="camfollowxfloat-0-yfloat-0">camFollow(x:Float = 0, y:Float = 0)</h3>
+<p><strong>只在菜单脚本里注册。</strong> 与 <code>camFollowPos</code> 行为完全一致（源码里是两个同体函数）。</p>
+<p>返回：无返回。</p>
+<hr>
+<h2 id="对象-精灵-文本函数">对象 / 精灵 / 文本函数</h2>
+<p>本类包含属性读写、对象创建/动画/图层、精灵、Lua 纯文本与 Lua 视频精灵。<strong>本类共 66 个函数。</strong></p>
+<h3 id="loadgraphicvariablestring-imagestring-gridxint-0-gridyint-0">loadGraphic(variable:String, image:String, ?gridX:Int = 0, ?gridY:Int = 0)</h3>
+<p>给已有精灵换贴图。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>variable</code></td>
+<td><code>String</code></td>
+<td>目标对象路径，支持 <code>'a.b.c'</code> 逐层取值</td>
+</tr>
+<tr>
+<td><code>image</code></td>
+<td><code>String</code></td>
+<td>图片路径（相对 <code>images/</code>）</td>
+</tr>
+<tr>
+<td><code>gridX</code></td>
+<td><code>Int</code></td>
+<td>网格宽；非 0 即启用动画帧网格</td>
+</tr>
+<tr>
+<td><code>gridY</code></td>
+<td><code>Int</code></td>
+<td>网格高</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：无返回。</p>
+<h3 id="loadframesvariablestring-imagestring-spritetypestring-sparrow">loadFrames(variable:String, image:String, spriteType:String = "sparrow")</h3>
+<p>给已有精灵换整套帧。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>variable</code></td>
+<td><code>String</code></td>
+<td>目标对象路径</td>
+</tr>
+<tr>
+<td><code>image</code></td>
+<td><code>String</code></td>
+<td>图集名</td>
+</tr>
+<tr>
+<td><code>spriteType</code></td>
+<td><code>String</code></td>
+<td><code>'sparrow'</code>（默认）、<code>'packer'</code> / <code>'packeratlas'</code> / <code>'pac'</code>、<code>'texture'</code> / <code>'textureatlas'</code> / <code>'tex'</code>（Animate Atlas）、<code>'texture_noaa'</code>、<code>'tex_noaa'</code>（不带抗锯齿）</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：无返回。</p>
+<h3 id="getpropertyvariablestring">getProperty(variable:String)</h3>
+<p>读取对象属性（支持 <code>'boyfriend.x'</code> 这类点号路径，也支持 <code>'arr[3]'</code> 下标写法）。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>variable</code></td>
+<td><code>String</code></td>
+<td>属性路径</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：属性值（<code>Dynamic</code>）。</p>
+<h3 id="setpropertyvariablestring-valuedynamic">setProperty(variable:String, value:Dynamic)</h3>
+<p>写入对象属性。参数同上，另加要写入的 <code>value</code>。</p>
+<p>返回：<code>Bool</code>，恒为 <code>true</code>。</p>
+<h3 id="getpropertyfromgroupobjstring-indexint-variabledynamic">getPropertyFromGroup(obj:String, index:Int, variable:Dynamic)</h3>
+<p>读取组/数组里第 <code>index</code> 个成员的属性。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>obj</code></td>
+<td><code>String</code></td>
+<td>组名（<code>FlxTypedGroup</code> 或数组），支持点号路径</td>
+</tr>
+<tr>
+<td><code>index</code></td>
+<td><code>Int</code></td>
+<td>成员下标</td>
+</tr>
+<tr>
+<td><code>variable</code></td>
+<td><code>Dynamic</code></td>
+<td>属性名；传 <code>Int</code> 时按数组下标处理</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：属性值；找不到成员时红字提示并返回 <code>null</code>。</p>
+<h3 id="setpropertyfromgroupobjstring-indexint-variabledynamic-valuedynamic">setPropertyFromGroup(obj:String, index:Int, variable:Dynamic, value:Dynamic)</h3>
+<p>写入组成员属性。参数同上，另加 <code>value</code>。</p>
+<p>返回：无返回。</p>
+<h3 id="removefromgroupobjstring-indexint-dontdestroybool-false">removeFromGroup(obj:String, index:Int, dontDestroy:Bool = false)</h3>
+<p>从组里移除成员。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>obj</code></td>
+<td><code>String</code></td>
+<td>组名</td>
+</tr>
+<tr>
+<td><code>index</code></td>
+<td><code>Int</code></td>
+<td>下标</td>
+</tr>
+<tr>
+<td><code>dontDestroy</code></td>
+<td><code>Bool</code></td>
+<td><code>false</code>（默认）时先 <code>kill()</code> 并 <code>destroy()</code>，<code>true</code> 时只移除</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：无返回。</p>
+<h3 id="getpropertyfromclassclassvarstring-variablestring">getPropertyFromClass(classVar:String, variable:String)</h3>
+<p>读取某个类（或实例）的静态属性，支持点号路径。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>classVar</code></td>
+<td><code>String</code></td>
+<td>类名，如 <code>'ClientPrefs'</code>、<code>'PlayState'</code></td>
+</tr>
+<tr>
+<td><code>variable</code></td>
+<td><code>String</code></td>
+<td>属性路径</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：属性值。</p>
+<h3 id="setpropertyfromclassclassvarstring-variablestring-valuedynamic">setPropertyFromClass(classVar:String, variable:String, value:Dynamic)</h3>
+<p>写入类属性。返回：<code>Bool</code>，恒为 <code>true</code>。</p>
+<h3 id="callmethodfunctorunstring-argsarraydynamic-null">callMethod(funcToRun:String, ?args:Array&lt;Dynamic&gt; = null)</h3>
+<p>调用 <code>PlayState</code> 上的方法。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>funcToRun</code></td>
+<td><code>String</code></td>
+<td>方法名，支持点号逐层取值</td>
+</tr>
+<tr>
+<td><code>args</code></td>
+<td><code>Array</code></td>
+<td>参数表；参数可用 <code>instanceArg()</code> 包装成对象/类引用（见 <code>createInstance</code>）</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：被调用方法的返回值（<code>null</code> 表示找不到方法）。</p>
+<h3 id="callmethodfromclassclassnamestring-functorunstring-argsarraydynamic-null">callMethodFromClass(className:String, funcToRun:String, ?args:Array&lt;Dynamic&gt; = null)</h3>
+<p>调用某个类上的静态方法。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>className</code></td>
+<td><code>String</code></td>
+<td>类名</td>
+</tr>
+<tr>
+<td><code>funcToRun</code></td>
+<td><code>String</code></td>
+<td>方法名</td>
+</tr>
+<tr>
+<td><code>args</code></td>
+<td><code>Array</code></td>
+<td>参数表</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：被调用方法的返回值。</p>
+<h3 id="createinstancevariabletosavestring-classnamestring-argsarraydynamic-null">createInstance(variableToSave:String, className:String, ?args:Array&lt;Dynamic&gt; = null)</h3>
+<p>创建一个 Haxe 类的实例并存进变量表。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>variableToSave</code></td>
+<td><code>String</code></td>
+<td>存放实例的变量名（点号会被去掉）</td>
+</tr>
+<tr>
+<td><code>className</code></td>
+<td><code>String</code></td>
+<td>类名</td>
+</tr>
+<tr>
+<td><code>args</code></td>
+<td><code>Array</code></td>
+<td>构造参数</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：<code>Bool</code>，创建成功 <code>true</code>。变量名已存在、类不存在或构造失败都会红字提示并返回 <code>false</code>。</p>
+<h3 id="addinstanceobjectnamestring-infrontbool-false">addInstance(objectName:String, ?inFront:Bool = false)</h3>
+<p>把 <code>createInstance</code> 创建的实例加进场景。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>objectName</code></td>
+<td><code>String</code></td>
+<td>变量名</td>
+</tr>
+<tr>
+<td><code>inFront</code></td>
+<td><code>Bool</code></td>
+<td><code>true</code> 直接 <code>add</code> 到最前；<code>false</code> 插到角色组之前（死亡时插到 <code>GameOverSubstate</code> 的 BF 之前）</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：无返回。变量不存在时红字提示。</p>
+<h3 id="instancearginstancenamestring-classnamestring-null">instanceArg(instanceName:String, ?className:String = null)</h3>
+<p>生成一个「实例/类引用」字符串，供 <code>callMethod</code> / <code>callMethodFromClass</code> 的参数传递对象。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>instanceName</code></td>
+<td><code>String</code></td>
+<td>变量名或属性路径</td>
+</tr>
+<tr>
+<td><code>className</code></td>
+<td><code>String</code></td>
+<td>指明要解析成这个类而不是实例</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：<code>String</code>，形如 <code>##PSYCHLUA_STRINGTOOBJ::name::Class</code> 的占位串。</p>
+<h3 id="getobjectorderobjstring">getObjectOrder(obj:String)</h3>
+<p>读取对象在场景里的绘制顺序。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>obj</code></td>
+<td><code>String</code></td>
+<td>对象路径</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：<code>Int</code> 下标；对象不存在时红字提示并返回 <code>-1</code>。</p>
+<h3 id="setobjectorderobjstring-positionint">setObjectOrder(obj:String, position:Int)</h3>
+<p>把对象移动到指定绘制顺序。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>obj</code></td>
+<td><code>String</code></td>
+<td>对象路径</td>
+</tr>
+<tr>
+<td><code>position</code></td>
+<td><code>Int</code></td>
+<td>目标下标</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：无返回。</p>
+<h3 id="getmidpointxvariablestring">getMidpointX(variable:String)</h3>
+<p>读取对象中点（含缩放/偏移）的 X。</p>
+<p>返回：<code>Float</code>；对象不存在时返回 <code>0</code>。</p>
+<h3 id="getmidpointyvariablestring">getMidpointY(variable:String)</h3>
+<p>同上，返回 Y。</p>
+<h3 id="getgraphicmidpointxvariablestring">getGraphicMidpointX(variable:String)</h3>
+<p>读取对象图形中点的 X。返回：<code>Float</code>，找不到返回 <code>0</code>。</p>
+<h3 id="getgraphicmidpointyvariablestring">getGraphicMidpointY(variable:String)</h3>
+<p>同上，返回 Y。</p>
+<h3 id="getscreenpositionxvariablestring">getScreenPositionX(variable:String)</h3>
+<p>读取对象在屏幕上的 X。返回：<code>Float</code>，找不到返回 <code>0</code>。</p>
+<h3 id="getscreenpositionyvariablestring">getScreenPositionY(variable:String)</h3>
+<p>同上，返回 Y。</p>
+<h3 id="makeluaspritetagstring-imagestring-xfloat-yfloat-sfxnullfloat-sfynullfloat-p7dynamic">makeLuaSprite(tag:String, image:String, x:Float, y:Float, ?sfX:Null&lt;Float&gt;, ?sfY:Null&lt;Float&gt;, ?p7:Dynamic)</h3>
+<p>创建一个 Lua 精灵（<strong>必须再 <code>addLuaSprite</code> 才会显示</strong>）。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tag</code></td>
+<td><code>String</code></td>
+<td>精灵 tag（点号会被去掉），同名会先销毁旧的</td>
+</tr>
+<tr>
+<td><code>image</code></td>
+<td><code>String</code></td>
+<td>图片路径，可为 <code>nil</code> 创建空白精灵</td>
+</tr>
+<tr>
+<td><code>x</code> / <code>y</code></td>
+<td><code>Float</code></td>
+<td>位置</td>
+</tr>
+<tr>
+<td><code>sfX</code> / <code>sfY</code></td>
+<td><code>Float</code></td>
+<td><strong>Parker 扩展</strong>：仅菜单态生效，设置 <code>scrollFactor</code>（默认 <code>1</code>）</td>
+</tr>
+<tr>
+<td><code>p7</code></td>
+<td><code>Dynamic</code></td>
+<td>预留参数，源码中未使用</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：无返回。<strong>Parker 行为</strong>：若 <code>images/&lt;image&gt;.xml</code> 存在，会自动按 Sparrow 图集加载（原版 Psych 只当单图）。</p>
+<h3 id="makeanimatedluaspritetagstring-imagestring-xfloat-yfloat-spritetypestring-sparrow">makeAnimatedLuaSprite(tag:String, image:String, x:Float, y:Float, ?spriteType:String = "sparrow")</h3>
+<p>创建带帧动画的 Lua 精灵。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tag</code></td>
+<td><code>String</code></td>
+<td>tag</td>
+</tr>
+<tr>
+<td><code>image</code></td>
+<td><code>String</code></td>
+<td>图集名</td>
+</tr>
+<tr>
+<td><code>x</code> / <code>y</code></td>
+<td><code>Float</code></td>
+<td>位置</td>
+</tr>
+<tr>
+<td><code>spriteType</code></td>
+<td><code>String</code></td>
+<td>同 <code>loadFrames</code> 的取值</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：无返回。</p>
+<h3 id="makegraphicobjstring-widthint-heightint-colorstring">makeGraphic(obj:String, width:Int, height:Int, color:String)</h3>
+<p>把对象填充成纯色矩形。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>obj</code></td>
+<td><code>String</code></td>
+<td>目标对象路径（先查 Lua 精灵，再查场景对象）</td>
+</tr>
+<tr>
+<td><code>width</code> / <code>height</code></td>
+<td><code>Int</code></td>
+<td>尺寸</td>
+</tr>
+<tr>
+<td><code>color</code></td>
+<td><code>String</code></td>
+<td>十六进制颜色串</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：无返回。</p>
+<h3 id="addanimationbyprefixobjstring-namestring-prefixstring-framerateint-24-loopbool-true">addAnimationByPrefix(obj:String, name:String, prefix:String, framerate:Int = 24, loop:Bool = true)</h3>
+<p>按前缀添加动画；若对象当前没有动画，会立刻播放新加的这个。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>obj</code></td>
+<td><code>String</code></td>
+<td>目标对象</td>
+</tr>
+<tr>
+<td><code>name</code></td>
+<td><code>String</code></td>
+<td>动画名</td>
+</tr>
+<tr>
+<td><code>prefix</code></td>
+<td><code>String</code></td>
+<td>帧名前缀</td>
+</tr>
+<tr>
+<td><code>framerate</code></td>
+<td><code>Int</code></td>
+<td>帧率，默认 <code>24</code></td>
+</tr>
+<tr>
+<td><code>loop</code></td>
+<td><code>Bool</code></td>
+<td>是否循环，默认 <code>true</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：无返回。</p>
+<h3 id="addanimationobjstring-namestring-framesarrayint-framerateint-24-loopbool-true">addAnimation(obj:String, name:String, frames:Array&lt;Int&gt;, framerate:Int = 24, loop:Bool = true)</h3>
+<p>按帧下标数组添加动画。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>frames</code></td>
+<td><code>Array&lt;Int&gt;</code></td>
+<td>帧下标列表</td>
+</tr>
+</tbody>
+</table></div>
+<p>其余参数同 <code>addAnimationByPrefix</code>。返回：无返回。</p>
+<h3 id="addanimationbyindicesobjstring-namestring-prefixstring-indicesstring-framerateint-24">addAnimationByIndices(obj:String, name:String, prefix:String, indices:String, framerate:Int = 24)</h3>
+<p>按 <code>indices</code> 里逗号分隔的帧号，从指定前缀里挑帧组成动画（不循环）。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>indices</code></td>
+<td><code>String</code></td>
+<td>逗号分隔的帧号，如 <code>'0,2,4'</code>；会先 <code>trim()</code></td>
+</tr>
+<tr>
+<td>其他</td>
+<td>—</td>
+<td>同上</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：<code>Bool</code>，找到并添加成功 <code>true</code>。</p>
+<h3 id="addanimationbyindicesloopobjstring-namestring-prefixstring-indicesstring-framerateint-24">addAnimationByIndicesLoop(obj:String, name:String, prefix:String, indices:String, framerate:Int = 24)</h3>
+<p>同 <code>addAnimationByIndices</code>，但循环播放。</p>
+<p>返回：<code>Bool</code>。</p>
+<h3 id="playanimobjstring-namestring-forcedbool-false-reversebool-false-startframeint-0">playAnim(obj:String, name:String, forced:Bool = false, ?reverse:Bool = false, ?startFrame:Int = 0)</h3>
+<p>播放动画，同时兼容精灵、角色与 Lua 精灵。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>obj</code></td>
+<td><code>String</code></td>
+<td>目标对象</td>
+</tr>
+<tr>
+<td><code>name</code></td>
+<td><code>String</code></td>
+<td>动画名；对手里没有这个动画则什么都不做</td>
+</tr>
+<tr>
+<td><code>forced</code></td>
+<td><code>Bool</code></td>
+<td>强制重播，默认 <code>false</code></td>
+</tr>
+<tr>
+<td><code>reverse</code></td>
+<td><code>Bool</code></td>
+<td>倒放</td>
+</tr>
+<tr>
+<td><code>startFrame</code></td>
+<td><code>Int</code></td>
+<td>起始帧</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：<code>Bool</code>，找到对象返回 <code>true</code>，找不到返回 <code>false</code>。若目标是 <code>Character</code> 会走 <code>Character.playAnim()</code>（带角色偏移与 sing 时长逻辑）；若是 Lua 精灵会应用 <code>addOffset</code> 记录的动画偏移。</p>
+<h3 id="addoffsetobjstring-animstring-xfloat-yfloat">addOffset(obj:String, anim:String, x:Float, y:Float)</h3>
+<p>给某个动画设置偏移。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>obj</code></td>
+<td><code>String</code></td>
+<td>目标（Lua 精灵或角色）</td>
+</tr>
+<tr>
+<td><code>anim</code></td>
+<td><code>String</code></td>
+<td>动画名</td>
+</tr>
+<tr>
+<td><code>x</code> / <code>y</code></td>
+<td><code>Float</code></td>
+<td>偏移量</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：<code>Bool</code>，成功 <code>true</code>。</p>
+<h3 id="setscrollfactorobjstring-scrollxfloat-scrollyfloat">setScrollFactor(obj:String, scrollX:Float, scrollY:Float)</h3>
+<p>设置滚动视差系数。</p>
+<p>返回：无返回。</p>
+<h3 id="addluaspritetagstring-frontbool-false">addLuaSprite(tag:String, front:Bool = false)</h3>
+<p>把 <code>makeLuaSprite</code> 创建的精灵加进场景（只会加一次）。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tag</code></td>
+<td><code>String</code></td>
+<td>精灵 tag</td>
+</tr>
+<tr>
+<td><code>front</code></td>
+<td><code>Bool</code></td>
+<td><code>true</code> 加到最前；<code>false</code> 插到 GF/BF/DAD 三个角色组中最靠前的位置之前（死亡时插到 <code>GameOverSubstate</code> 的 BF 前）</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：无返回。</p>
+<h3 id="setgraphicsizeobjstring-xint-yint-0-updatehitboxbool-true">setGraphicSize(obj:String, x:Int, y:Int = 0, updateHitbox:Bool = true)</h3>
+<p>设置图形尺寸。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>x</code></td>
+<td><code>Int</code></td>
+<td>宽；传 <code>0</code> 表示按高度等比</td>
+</tr>
+<tr>
+<td><code>y</code></td>
+<td><code>Int</code></td>
+<td>高；默认 <code>0</code></td>
+</tr>
+<tr>
+<td><code>updateHitbox</code></td>
+<td><code>Bool</code></td>
+<td>是否同步碰撞箱，默认 <code>true</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：无返回。对象不存在时红字提示。</p>
+<h3 id="scaleobjectobjstring-xfloat-yfloat-updatehitboxbool-true">scaleObject(obj:String, x:Float, y:Float, updateHitbox:Bool = true)</h3>
+<p>设置缩放倍率。</p>
+<p>返回：无返回。对象不存在时红字提示。</p>
+<h3 id="updatehitboxobjstring">updateHitbox(obj:String)</h3>
+<p>刷新碰撞箱。返回：无返回。</p>
+<h3 id="updatehitboxfromgroupgroupstring-indexint">updateHitboxFromGroup(group:String, index:Int)</h3>
+<p>刷新组内某个成员的碰撞箱。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>group</code></td>
+<td><code>String</code></td>
+<td>组名</td>
+</tr>
+<tr>
+<td><code>index</code></td>
+<td><code>Int</code></td>
+<td>下标</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：无返回。</p>
+<h3 id="removeluaspritetagstring-destroybool-true">removeLuaSprite(tag:String, destroy:Bool = true)</h3>
+<p>移除 Lua 精灵。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tag</code></td>
+<td><code>String</code></td>
+<td>精灵 tag</td>
+</tr>
+<tr>
+<td><code>destroy</code></td>
+<td><code>Bool</code></td>
+<td><code>true</code>（默认）时 <code>kill()</code> + <code>destroy()</code> 并从注册表删除；<code>false</code> 只从场景移除、保留对象</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：无返回。tag 不存在时直接返回。</p>
+<h3 id="luaspriteexiststagstring">luaSpriteExists(tag:String)</h3>
+<p>返回：<code>Bool</code>，Lua 精灵注册表里是否有该 tag。</p>
+<h3 id="luatextexiststagstring">luaTextExists(tag:String)</h3>
+<p>返回：<code>Bool</code>，Lua 文本注册表里是否有该 tag。</p>
+<h3 id="setobjectcameraobjstring-camerastring">setObjectCamera(obj:String, camera:String = '')</h3>
+<p>设置对象只由某台相机渲染。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>obj</code></td>
+<td><code>String</code></td>
+<td>对象路径</td>
+</tr>
+<tr>
+<td><code>camera</code></td>
+<td><code>String</code></td>
+<td>相机名（同 <code>getMouseX</code>），默认 <code>camGame</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：<code>Bool</code>，成功 <code>true</code>。对象不存在时红字提示并返回 <code>false</code>。</p>
+<h3 id="setblendmodeobjstring-blendstring">setBlendMode(obj:String, blend:String = '')</h3>
+<p>设置混合模式。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>obj</code></td>
+<td><code>String</code></td>
+<td>对象路径</td>
+</tr>
+<tr>
+<td><code>blend</code></td>
+<td><code>String</code></td>
+<td><code>'add'</code>、<code>'alpha'</code>、<code>'darken'</code>、<code>'difference'</code>、<code>'erase'</code>、<code>'hardlight'</code>、<code>'invert'</code>、<code>'layer'</code>、<code>'lighten'</code>、<code>'multiply'</code>、<code>'overlay'</code>、<code>'screen'</code>、<code>'shader'</code>、<code>'subtract'</code>；其他值一律 <code>normal</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：<code>Bool</code>，成功 <code>true</code>。</p>
+<h3 id="screencenterobjstring-posstring-xy">screenCenter(obj:String, pos:String = 'xy')</h3>
+<p>把对象居中到屏幕。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>obj</code></td>
+<td><code>String</code></td>
+<td>对象路径</td>
+</tr>
+<tr>
+<td><code>pos</code></td>
+<td><code>String</code></td>
+<td><code>'x'</code>、<code>'y'</code>、其他值（含默认 <code>'xy'</code>）表示同时居中</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：无返回。</p>
+<h3 id="objectsoverlapobj1string-obj2string">objectsOverlap(obj1:String, obj2:String)</h3>
+<p>检测两个对象是否重叠。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>obj1</code> / <code>obj2</code></td>
+<td><code>String</code></td>
+<td>对象路径（先查 Lua 对象，再查场景对象）</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：<code>Bool</code>；任一对象为 <code>null</code> 时返回 <code>false</code>。</p>
+<h3 id="getpixelcolorobjstring-xint-yint">getPixelColor(obj:String, x:Int, y:Int)</h3>
+<p>取对象某像素的颜色。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>obj</code></td>
+<td><code>String</code></td>
+<td>对象路径</td>
+</tr>
+<tr>
+<td><code>x</code> / <code>y</code></td>
+<td><code>Int</code></td>
+<td>像素坐标</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：<code>Int</code> 颜色值（源调用 <code>getPixel32</code> 但没 return，实际取的是 <code>spr.pixels.getPixel32(x, y)</code>）；对象不存在返回 <code>0</code>。</p>
+<h3 id="makeluavideospritetagstring-pathstring-null-xfloat-0-yfloat-0-destroyonuse-true">makeLuaVideoSprite(tag:String, ?path:String = null, ?x:Float = 0, ?y:Float = 0, ?destroyOnUse = true)</h3>
+<p>创建 Lua 视频精灵（只能在歌曲中创建）。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tag</code></td>
+<td><code>String</code></td>
+<td>tag</td>
+</tr>
+<tr>
+<td><code>path</code></td>
+<td><code>String</code></td>
+<td>视频文件（<code>videos/</code> 下的 mp4），可为空</td>
+</tr>
+<tr>
+<td><code>x</code> / <code>y</code></td>
+<td><code>Float</code></td>
+<td>位置（在 <code>onFormat</code> 回调里才会写入）</td>
+</tr>
+<tr>
+<td><code>destroyOnUse</code></td>
+<td><code>Bool</code></td>
+<td>播放结束后是否自动销毁</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：无返回。会自动触发 <code>onVideoFormat(tag)</code> / <code>onVideoStart(tag)</code> / <code>onVideoFinished(tag)</code>。</p>
+<h3 id="playvideotagstring">playVideo(tag:String)</h3>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tag</code></td>
+<td><code>String</code></td>
+<td>视频 tag</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：无返回（tag 不存在时不做事）。</p>
+<h3 id="stopvideotagstring">stopVideo(tag:String)</h3>
+<p>停止视频播放。返回：无返回。</p>
+<h3 id="endvideotagstring">EndVideo(tag:String)</h3>
+<p>销毁视频精灵。返回：无返回。</p>
+<h3 id="resumevideotagstring">resumeVideo(tag:String)</h3>
+<p>继续播放。返回：无返回。</p>
+<h3 id="pausevideotagstring">pauseVideo(tag:String)</h3>
+<p>暂停播放。返回：无返回。</p>
+<h3 id="makeluatexttagstring-textstring-widthint-xfloat-yfloat">makeLuaText(tag:String, text:String, width:Int, x:Float, y:Float)</h3>
+<p>创建 Lua 文本（默认字体 <code>vcr.ttf</code>、字号 16、白色、居中、黑色描边 2、宽度会 <code>fieldWidth</code>）。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tag</code></td>
+<td><code>String</code></td>
+<td>tag，点号会被去掉，同名先销毁旧文本</td>
+</tr>
+<tr>
+<td><code>text</code></td>
+<td><code>String</code></td>
+<td>初始内容</td>
+</tr>
+<tr>
+<td><code>width</code></td>
+<td><code>Int</code></td>
+<td>文本域宽度</td>
+</tr>
+<tr>
+<td><code>x</code> / <code>y</code></td>
+<td><code>Float</code></td>
+<td>位置</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：无返回。</p>
+<h3 id="settextstringtagstring-textstring">setTextString(tag:String, text:String)</h3>
+<p>设置文本内容。返回：<code>Bool</code>，成功 <code>true</code>。</p>
+<h3 id="settextsizetagstring-sizeint">setTextSize(tag:String, size:Int)</h3>
+<p>设置字号。返回：<code>Bool</code>。</p>
+<h3 id="settextwidthtagstring-widthfloat">setTextWidth(tag:String, width:Float)</h3>
+<p>设置文本域宽度（<code>fieldWidth</code>）。返回：<code>Bool</code>。</p>
+<h3 id="settextbordertagstring-sizedynamic-colordynamic">setTextBorder(tag:String, size:Dynamic, color:Dynamic)</h3>
+<p>设置描边。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tag</code></td>
+<td><code>String</code></td>
+<td>文本 tag</td>
+</tr>
+<tr>
+<td><code>size</code></td>
+<td><code>Dynamic</code></td>
+<td>描边宽度；<strong>若这里传的是字符串而 <code>color</code> 不是字符串，两者会自动交换</strong>（兼容 Engine Custom ES 的 <code>setTextBorder(tag, color, size)</code> 调用顺序）</td>
+</tr>
+<tr>
+<td><code>color</code></td>
+<td><code>Dynamic</code></td>
+<td>描边颜色，十六进制串</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：<code>Bool</code>。</p>
+<h3 id="settextcolortagstring-colorstring">setTextColor(tag:String, color:String)</h3>
+<p>设置文字颜色。返回：<code>Bool</code>。</p>
+<h3 id="settextfonttagstring-newfontstring">setTextFont(tag:String, newFont:String)</h3>
+<p>设置字体（走 <code>Paths.fontName</code>，所以传字体文件名，如 <code>'vcr.ttf'</code>）。返回：<code>Bool</code>。</p>
+<h3 id="settextitalictagstring-italicbool">setTextItalic(tag:String, italic:Bool)</h3>
+<p>设置斜体。返回：<code>Bool</code>。</p>
+<h3 id="settextalignmenttagstring-alignmentstring-left">setTextAlignment(tag:String, alignment:String = 'left')</h3>
+<p>设置对齐。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>alignment</code></td>
+<td><code>String</code></td>
+<td><code>'right'</code>、<code>'center'</code>，其他值（含默认 <code>'left'</code>）为左对齐</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：<code>Bool</code>。</p>
+<h3 id="gettextstringtagstring">getTextString(tag:String)</h3>
+<p>返回：<code>String</code> 文本内容；找不到返回 <code>null</code>。</p>
+<h3 id="gettextsizetagstring">getTextSize(tag:String)</h3>
+<p>返回：<code>Int</code> 字号；找不到返回 <code>-1</code>。</p>
+<h3 id="gettextfonttagstring">getTextFont(tag:String)</h3>
+<p>返回：<code>String</code> 字体名；找不到返回 <code>null</code>。</p>
+<h3 id="gettextwidthtagstring">getTextWidth(tag:String)</h3>
+<p>返回：<code>Float</code> 文本域宽度；找不到返回 <code>0</code>。</p>
+<h3 id="addluatexttagstring">addLuaText(tag:String)</h3>
+<p>把 Lua 文本加进场景（只会加一次）。返回：无返回。</p>
+<h3 id="removeluatexttagstring-destroybool-true">removeLuaText(tag:String, destroy:Bool = true)</h3>
+<p>移除 Lua 文本。参数与 <code>removeLuaSprite</code> 一致。</p>
+<p>返回：无返回。</p>
+<hr>
+<h2 id="补间与计时器函数">补间与计时器函数</h2>
+<p><strong>本类共 16 个函数。</strong> 缓动名（<code>ease</code> 参数）可取：<code>linear</code>、<code>quadIn/Out/InOut</code>、<code>quartIn/Out/InOut</code>、<code>quintIn/Out/InOut</code>、<code>sineIn/Out/InOut</code>、<code>expoIn/Out/InOut</code>、<code>circIn/Out/InOut</code>、<code>cubeIn/Out/InOut</code>、<code>backIn/Out/InOut</code>、<code>elasticIn/Out/InOut</code>、<code>bounceIn/Out/InOut</code>、<code>smoothStepIn/InOut/Out</code>、<code>smootherStepIn/InOut/Out</code>；无法识别时一律按 <code>linear</code>。</p>
+<h3 id="starttweentagstring-varsstring-valuesany-null-durationfloat-optionsany-null">startTween(tag:String, vars:String, values:Any = null, duration:Float, options:Any = null)</h3>
+<p>给任意对象的任意属性做补间（最通用的 tween 入口）。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tag</code></td>
+<td><code>String</code></td>
+<td>补间 tag，用于 <code>cancelTween</code>；同名会先取消旧的</td>
+</tr>
+<tr>
+<td><code>vars</code></td>
+<td><code>String</code></td>
+<td>目标对象路径，如 <code>'bg'</code>、<code>'boyfriend'</code></td>
+</tr>
+<tr>
+<td><code>values</code></td>
+<td><code>Table</code></td>
+<td>属性表，如 <code>{x = 100, alpha = 0.5}</code></td>
+</tr>
+<tr>
+<td><code>duration</code></td>
+<td><code>Float</code></td>
+<td>时长（秒）</td>
+</tr>
+<tr>
+<td><code>options</code></td>
+<td><code>Table</code></td>
+<td>可选表：<code>type</code>（<code>'backward'</code>/<code>'loop'</code>/<code>'pingpong'</code>/<code>'persist'</code>，其他为 <code>oneshot</code>）、<code>ease</code>、<code>startDelay</code>、<code>loopDelay</code>、<code>onUpdate</code>（字符串回调名）、<code>onStart</code>、<code>onComplete</code>（都会以 <code>(tag, vars)</code> 调用）</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：无返回。<code>values</code> 为空时红字提示「No values on 2nd argument!」。</p>
+<h3 id="dotweenxtagstring-varsstring-valuedynamic-durationfloat-easestring">doTweenX(tag:String, vars:String, value:Dynamic, duration:Float, ease:String)</h3>
+<p>把对象 X 补间到 <code>value</code>，完成后触发 <code>onTweenCompleted(tag)</code>。</p>
+<p>参数含义同上。返回：无返回。</p>
+<h3 id="dotweenytagstring-varsstring-valuedynamic-durationfloat-easestring">doTweenY(tag:String, vars:String, value:Dynamic, duration:Float, ease:String)</h3>
+<p>同上，补间 Y。返回：无返回。</p>
+<h3 id="dotweenangletagstring-varsstring-valuedynamic-durationfloat-easestring">doTweenAngle(tag:String, vars:String, value:Dynamic, duration:Float, ease:String)</h3>
+<p>补间 <code>angle</code>。返回：无返回。</p>
+<h3 id="dotweenalphatagstring-varsstring-valuedynamic-durationfloat-easestring">doTweenAlpha(tag:String, vars:String, value:Dynamic, duration:Float, ease:String)</h3>
+<p>补间 <code>alpha</code>。返回：无返回。</p>
+<h3 id="dotweenzoomtagstring-varsstring-valuedynamic-durationfloat-easestring">doTweenZoom(tag:String, vars:String, value:Dynamic, duration:Float, ease:String)</h3>
+<p>补间相机 <code>zoom</code>。返回：无返回。</p>
+<h3 id="dotweennumtagstring-value1dynamic-value2dynamic-durationfloat-easestring">doTweenNum(tag:String, value1:Dynamic, value2:Dynamic, duration:Float, ease:String)</h3>
+<p>在 <code>value1</code> 与 <code>value2</code> 之间补间一个纯数字，每次更新触发 <code>onTweenUpdateNum(tag, num)</code>。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>value1</code></td>
+<td><code>Dynamic</code></td>
+<td>起始值</td>
+</tr>
+<tr>
+<td><code>value2</code></td>
+<td><code>Dynamic</code></td>
+<td>结束值</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：无返回。</p>
+<h3 id="dotweencolortagstring-varsstring-targetcolorstring-durationfloat-easestring">doTweenColor(tag:String, vars:String, targetColor:String, duration:Float, ease:String)</h3>
+<p>把对象 <code>color</code> 补间到目标颜色。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>targetColor</code></td>
+<td><code>String</code></td>
+<td>目标颜色；不带 <code>0x</code> 前缀时会自动补 <code>0xff</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：无返回。完成后同样触发 <code>onTweenCompleted(tag)</code>。</p>
+<h3 id="notetweenxtagstring-noteint-valuedynamic-durationfloat-easestring">noteTweenX(tag:String, note:Int, value:Dynamic, duration:Float, ease:String)</h3>
+<p>把第 <code>note</code> 个 strum（音符条）补间到 X。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>note</code></td>
+<td><code>Int</code></td>
+<td>strum 下标；负数取 0，超出长度按 <code>% strumLineNotes.length</code> 取模</td>
+</tr>
+<tr>
+<td><code>value</code></td>
+<td><code>Dynamic</code></td>
+<td>目标 X</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：无返回。仅歌曲中可用，菜单态会红字提示。</p>
+<h3 id="notetweenytagstring-noteint-valuedynamic-durationfloat-easestring">noteTweenY(tag:String, note:Int, value:Dynamic, duration:Float, ease:String)</h3>
+<p>同上，补间 Y。返回：无返回。</p>
+<h3 id="notetweenangletagstring-noteint-valuedynamic-durationfloat-easestring">noteTweenAngle(tag:String, note:Int, value:Dynamic, duration:Float, ease:String)</h3>
+<p>同上，补间 <code>angle</code>。返回：无返回。</p>
+<h3 id="notetweendirectiontagstring-noteint-valuedynamic-durationfloat-easestring">noteTweenDirection(tag:String, note:Int, value:Dynamic, duration:Float, ease:String)</h3>
+<p>同上，补间 <code>direction</code>（音符条上下方向）。返回：无返回。</p>
+<h3 id="notetweenalphatagstring-noteint-valuedynamic-durationfloat-easestring">noteTweenAlpha(tag:String, note:Int, value:Dynamic, duration:Float, ease:String)</h3>
+<p>同上，补间 <code>alpha</code>。返回：无返回。</p>
+<h3 id="canceltweentagstring">cancelTween(tag:String)</h3>
+<p>取消并销毁某个 tag 的补间。它同时会清掉 <code>startTween</code> 存在 <code>MusicBeatState</code> 变量表里 <code>tween_&lt;tag&gt;</code> 下的那条。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tag</code></td>
+<td><code>String</code></td>
+<td>补间 tag</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：无返回。</p>
+<h3 id="runtimertagstring-timefloat-1-loopsint-1">runTimer(tag:String, time:Float = 1, loops:Int = 1)</h3>
+<p>启动一个计时器（会先取消同名计时器）。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tag</code></td>
+<td><code>String</code></td>
+<td>计时器 tag</td>
+</tr>
+<tr>
+<td><code>time</code></td>
+<td><code>Float</code></td>
+<td>间隔秒数，默认 <code>1</code></td>
+</tr>
+<tr>
+<td><code>loops</code></td>
+<td><code>Int</code></td>
+<td>循环次数，默认 <code>1</code>；<code>0</code> 表示无限循环</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：无返回。每次触发都会回调 <code>onTimerCompleted(tag, loops, loopsLeft)</code>。</p>
+<h3 id="canceltimertagstring">cancelTimer(tag:String)</h3>
+<p>取消并销毁某个 tag 的计时器。返回：无返回。</p>
+<hr>
+<h2 id="shader-函数">Shader 函数</h2>
+<p><strong>本类共 16 个函数。</strong> 全部依赖 <code>ClientPrefs.shaders</code> 为真；在 <code>flash</code> 平台或未启用 <code>MODS_ALLOWED</code>/<code>sys</code> 的构建里，读写函数会红字提示并返回 <code>null</code>（不支持），设置函数直接不做事。着色器文件放在 <code>shaders/&lt;名字&gt;.frag</code> 与 <code>.vert</code>（当前 mod 目录优先，其次全局 mod，最后 <code>assets/preload/shaders/</code>）。</p>
+<h3 id="initluashadernamestring">initLuaShader(name:String)</h3>
+<p>加载一套 <code>shaders/&lt;name&gt;.frag</code> + <code>.vert</code>。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>name</code></td>
+<td><code>String</code></td>
+<td>着色器名（不带扩展名）</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：<code>Bool</code>，加载成功或已经加载过返回 <code>true</code>。菜单态下不工作（内部要求有 <code>PlayState</code>）。</p>
+<h3 id="setspriteshaderobjstring-shaderstring">setSpriteShader(obj:String, shader:String)</h3>
+<p>把已加载的着色器挂到对象上。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>obj</code></td>
+<td><code>String</code></td>
+<td>对象路径</td>
+</tr>
+<tr>
+<td><code>shader</code></td>
+<td><code>String</code></td>
+<td>着色器名；未加载会自动尝试 <code>initLuaShader</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：<code>Bool</code>，成功 <code>true</code>。菜单态或没有 <code>PlayState</code> 时红字提示并返回 <code>false</code>。</p>
+<h3 id="removespriteshaderobjstring">removeSpriteShader(obj:String)</h3>
+<p>摘掉对象的着色器。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>obj</code></td>
+<td><code>String</code></td>
+<td>对象路径</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：<code>Bool</code>，找到对象返回 <code>true</code>。</p>
+<h3 id="getshaderboolobjstring-propstring">getShaderBool(obj:String, prop:String)</h3>
+<p>读着色器里的 <code>bool</code> uniform。<code>obj</code> 是<strong>挂载了着色器的对象路径</strong>（不是着色器名）。</p>
+<p>返回：<code>Bool</code>；对象或着色器不存在返回 <code>null</code>。</p>
+<h3 id="getshaderboolarrayobjstring-propstring">getShaderBoolArray(obj:String, prop:String)</h3>
+<p>读 <code>bool</code> 数组 uniform。返回：数组或 <code>null</code>。</p>
+<h3 id="getshaderintobjstring-propstring">getShaderInt(obj:String, prop:String)</h3>
+<p>读 <code>int</code> uniform。返回：<code>Int</code> 或 <code>null</code>。</p>
+<h3 id="getshaderintarrayobjstring-propstring">getShaderIntArray(obj:String, prop:String)</h3>
+<p>读 <code>int</code> 数组 uniform。返回：数组或 <code>null</code>。</p>
+<h3 id="getshaderfloatobjstring-propstring">getShaderFloat(obj:String, prop:String)</h3>
+<p>读 <code>float</code> uniform。返回：<code>Float</code> 或 <code>null</code>。</p>
+<h3 id="getshaderfloatarrayobjstring-propstring">getShaderFloatArray(obj:String, prop:String)</h3>
+<p>读 <code>float</code> 数组 uniform。返回：数组或 <code>null</code>。</p>
+<h3 id="setshaderboolobjstring-propstring-valuebool">setShaderBool(obj:String, prop:String, value:Bool)</h3>
+<p>写 <code>bool</code> uniform。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>obj</code></td>
+<td><code>String</code></td>
+<td>已挂着色器的对象路径</td>
+</tr>
+<tr>
+<td><code>prop</code></td>
+<td><code>String</code></td>
+<td>uniform 名</td>
+</tr>
+<tr>
+<td><code>value</code></td>
+<td><code>Bool</code></td>
+<td>值</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：无返回。</p>
+<h3 id="setshaderboolarrayobjstring-propstring-valuesdynamic">setShaderBoolArray(obj:String, prop:String, values:Dynamic)</h3>
+<p>写 <code>bool</code> 数组 uniform（<code>values</code> 为数组）。返回：无返回。</p>
+<h3 id="setshaderintobjstring-propstring-valueint">setShaderInt(obj:String, prop:String, value:Int)</h3>
+<p>写 <code>int</code> uniform。返回：无返回。</p>
+<h3 id="setshaderintarrayobjstring-propstring-valuesdynamic">setShaderIntArray(obj:String, prop:String, values:Dynamic)</h3>
+<p>写 <code>int</code> 数组 uniform。返回：无返回。</p>
+<h3 id="setshaderfloatobjstring-propstring-valuefloat">setShaderFloat(obj:String, prop:String, value:Float)</h3>
+<p>写 <code>float</code> uniform。返回：无返回。</p>
+<h3 id="setshaderfloatarrayobjstring-propstring-valuesdynamic">setShaderFloatArray(obj:String, prop:String, values:Dynamic)</h3>
+<p>写 <code>float</code> 数组 uniform。返回：无返回。</p>
+<h3 id="setshadersampler2dobjstring-propstring-bitmapdatapathstring">setShaderSampler2D(obj:String, prop:String, bitmapdataPath:String)</h3>
+<p>给采样器 uniform 绑定一张图片。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>obj</code></td>
+<td><code>String</code></td>
+<td>已挂着色器的对象路径</td>
+</tr>
+<tr>
+<td><code>prop</code></td>
+<td><code>String</code></td>
+<td>采样器 uniform 名</td>
+</tr>
+<tr>
+<td><code>bitmapdataPath</code></td>
+<td><code>String</code></td>
+<td>图片路径（走 <code>Paths.image</code>）</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：无返回。图片不存在（或 bitmap 为 <code>null</code>）时静默跳过。</p>
+<hr>
+<h2 id="hscript-与-haxe">HScript 与 Haxe</h2>
+<p><strong>本类共 2 个函数。</strong> 它们把 HScript 解释器接进 Lua 脚本；构建里没开 <code>hscript</code> 时只会打印「HScript isn't supported on this platform!」。</p>
+<h3 id="runhaxecodecodetorunstring">runHaxeCode(codeToRun:String)</h3>
+<p>在当前脚本里执行一段 HScript 代码。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>codeToRun</code></td>
+<td><code>String</code></td>
+<td>HScript 源码</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：<code>Bool</code> / <code>Int</code> / <code>Float</code> / <code>String</code> / <code>Array</code> 之一；返回值不属于这几种类型时返回 <code>null</code>。出错会在脚本调试文字里红字报出。</p>
+<h3 id="addhaxelibrarylibnamestring-libpackagestring">addHaxeLibrary(libName:String, ?libPackage:String = '')</h3>
+<p>把一个 Haxe 类导入 HScript 的变量表。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>libName</code></td>
+<td><code>String</code></td>
+<td>类名</td>
+</tr>
+<tr>
+<td><code>libPackage</code></td>
+<td><code>String</code></td>
+<td>包名，为空时按无包处理</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：无返回。</p>
+<hr>
+<h2 id="回调模板">回调模板</h2>
+<p>脚本里按<strong>名字</strong>定义这些函数即可，引擎会在对应时机调用。它们不是 <code>set()</code> 注册的 Lua 函数，所以没有参数表和返回值；这里列出的是引擎<strong>真正分发过</strong>的回调及其参数（表中一行写了多个名字的表示它们共享同一行说明）。返回值约定见本页开头的常量说明。<strong>共 54 个回调名。</strong></p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>回调</th>
+<th>参数</th>
+<th>触发时机</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>onCreate()</code></td>
+<td>无</td>
+<td>脚本创建完成、所有函数注册好、脚本体执行完之后（游戏脚本在 <code>FunkinLua</code> 构造末尾，菜单脚本在 <code>LuaSState.create()</code> 里、相机布局就位后）</td>
+</tr>
+<tr>
+<td><code>onCreatePost()</code></td>
+<td>无</td>
+<td><code>PlayState.create()</code> 的 <code>super.create()</code> 之后</td>
+</tr>
+<tr>
+<td><code>onLoad()</code></td>
+<td>无</td>
+<td>歌曲脚本创建后（<code>PlayState.create()</code>），菜单脚本在 <code>LuaSState</code> 构造时</td>
+</tr>
+<tr>
+<td><code>onUpdate(elapsed:Float)</code></td>
+<td><code>elapsed</code> 帧间隔秒数</td>
+<td>每帧</td>
+</tr>
+<tr>
+<td><code>onUpdatePost(elapsed:Float)</code></td>
+<td>同上</td>
+<td>每帧，<code>super.update()</code> 之后</td>
+</tr>
+<tr>
+<td><code>onStepHit()</code></td>
+<td>无（读 <code>curStep</code>）</td>
+<td>每步</td>
+</tr>
+<tr>
+<td><code>onBeatHit()</code></td>
+<td>无（读 <code>curBeat</code>）</td>
+<td>每拍</td>
+</tr>
+<tr>
+<td><code>onSectionHit()</code></td>
+<td>无（读 <code>curSection</code>）</td>
+<td>每个小节</td>
+</tr>
+<tr>
+<td><code>onStartCountdown()</code></td>
+<td>无</td>
+<td>倒计时开始前</td>
+</tr>
+<tr>
+<td><code>onCountdownStarted()</code></td>
+<td>无</td>
+<td>倒计时开始</td>
+</tr>
+<tr>
+<td><code>onCountdownTick(swagCounter:Int)</code></td>
+<td>当前倒计时序号</td>
+<td>倒计时每一 tick</td>
+</tr>
+<tr>
+<td><code>onSongStart()</code></td>
+<td>无</td>
+<td>歌曲正式开始（倒计时结束后）</td>
+</tr>
+<tr>
+<td><code>onEndSong()</code></td>
+<td>无</td>
+<td>歌曲结束</td>
+</tr>
+<tr>
+<td><code>onGameOver()</code></td>
+<td>无</td>
+<td>触发 Game Over</td>
+</tr>
+<tr>
+<td><code>onGameOverStart()</code></td>
+<td>无</td>
+<td><code>GameOverSubstate</code> 创建时</td>
+</tr>
+<tr>
+<td><code>onGameOverConfirm(isRetry:Bool)</code></td>
+<td><code>true</code> 为重试</td>
+<td>玩家在 Game Over 界面确认/放弃</td>
+</tr>
+<tr>
+<td><code>onPause()</code></td>
+<td>无</td>
+<td>暂停时（<code>callOnScriptAll</code>，Lua 也收到）</td>
+</tr>
+<tr>
+<td><code>onResume()</code></td>
+<td>无</td>
+<td>取消暂停时</td>
+</tr>
+<tr>
+<td><code>onDestroy()</code></td>
+<td>无</td>
+<td>脚本被停止/场景销毁（<code>PlayState.destroy()</code> 与 <code>LuaSState.destroy()</code> 直接调用）</td>
+</tr>
+<tr>
+<td><code>onDestroyPost()</code></td>
+<td>无</td>
+<td><code>onDestroy()</code> 未返回 <code>Function_Stop</code> 时（仅菜单脚本）</td>
+</tr>
+<tr>
+<td><code>onEvent(eventName:String, value1:String, value2:String)</code></td>
+<td>事件名与两个值</td>
+<td>歌曲事件触发</td>
+</tr>
+<tr>
+<td><code>onEventSet(curStep:Int)</code></td>
+<td>当前步数</td>
+<td>每一步（菜单脚本也派发，用于 ES 的 <code>stepEvent()</code>）</td>
+</tr>
+<tr>
+<td><code>eventEarlyTrigger(eventName:String, value1:String, value2:String, strumTime:Float)</code></td>
+<td>事件与目标时间</td>
+<td>事件提前触发判定；<strong>返回一个数值</strong>即可提前触发，返回 <code>Function_Continue</code> 表示不处理</td>
+</tr>
+<tr>
+<td><code>onSpawnNote(index:Int, noteData:Int, noteType:String, isSustainNote:Bool)</code></td>
+<td>音符下标/方向/类型/是否长按</td>
+<td>音符生成时</td>
+</tr>
+<tr>
+<td><code>goodNoteHit(index:Int, noteData:Int, noteType:String, isSustainNote:Bool)</code></td>
+<td>同上</td>
+<td>玩家命中音符</td>
+</tr>
+<tr>
+<td><code>opponentNoteHit(index:Int, noteData:Int, noteType:String, isSustainNote:Bool)</code></td>
+<td>同上</td>
+<td>对手命中音符</td>
+</tr>
+<tr>
+<td><code>noteMiss(index:Int, noteData:Int, noteType:String, isSustainNote:Bool)</code></td>
+<td>同上</td>
+<td>漏接音符</td>
+</tr>
+<tr>
+<td><code>noteMissPress(direction:Int)</code></td>
+<td>按下的方向</td>
+<td>空按（无音符可打）</td>
+</tr>
+<tr>
+<td><code>onGhostTap(key:Int)</code></td>
+<td>按键方向</td>
+<td>幽灵点击（受 <code>ghostTapping</code> 影响）</td>
+</tr>
+<tr>
+<td><code>onKeyPress(key:Int)</code> / <code>onKeyRelease(key:Int)</code></td>
+<td>按键方向</td>
+<td>按下/松开音符键</td>
+</tr>
+<tr>
+<td><code>onUpdateScore(miss:Bool)</code></td>
+<td>是否算漏接</td>
+<td>分数变化时</td>
+</tr>
+<tr>
+<td><code>onRecalculateRating()</code></td>
+<td>无</td>
+<td>重算评级时（<code>ignoreStops = false</code>，可以被中断）</td>
+</tr>
+<tr>
+<td><code>onMoveCamera(target:String)</code></td>
+<td><code>'boyfriend'</code> / <code>'dad'</code> / <code>'gf'</code></td>
+<td>摄像机切换跟随目标</td>
+</tr>
+<tr>
+<td><code>onNextDialogue(dialogueCount:Int)</code></td>
+<td>对话序号</td>
+<td>进入下一句对话</td>
+</tr>
+<tr>
+<td><code>onSkipDialogue(dialogueCount:Int)</code></td>
+<td>对话序号</td>
+<td>跳过对话</td>
+</tr>
+<tr>
+<td><code>onCustomSubstateCreate(name:String)</code></td>
+<td>子状态名</td>
+<td><code>openCustomSubstate</code> 创建后</td>
+</tr>
+<tr>
+<td><code>onCustomSubstateCreatePost(name:String)</code></td>
+<td>子状态名</td>
+<td>子状态 <code>super.create()</code> 之后</td>
+</tr>
+<tr>
+<td><code>onCustomSubstateUpdate(name:String, elapsed:Float)</code></td>
+<td>子状态名、帧间隔</td>
+<td>子状态每帧</td>
+</tr>
+<tr>
+<td><code>onCustomSubstateUpdatePost(name:String, elapsed:Float)</code></td>
+<td>同上</td>
+<td>子状态 <code>super.update()</code> 之后</td>
+</tr>
+<tr>
+<td><code>onCustomSubstateDestroy(name:String)</code></td>
+<td>子状态名</td>
+<td>子状态销毁</td>
+</tr>
+<tr>
+<td><code>preModifierRegister()</code> / <code>postModifierRegister()</code></td>
+<td>无</td>
+<td>modchart 修饰器注册前后</td>
+</tr>
+<tr>
+<td><code>generateModchart()</code></td>
+<td>无</td>
+<td>倒计时开始时生成 modchart</td>
+</tr>
+<tr>
+<td><code>onUpdateOptions(elapsed:Float)</code></td>
+<td>帧间隔</td>
+<td><strong>仅菜单脚本</strong>（<code>LuaSState.update</code>）每帧</td>
+</tr>
+<tr>
+<td><code>onTweenCompleted(tag:String)</code></td>
+<td>补间 tag</td>
+<td><code>doTweenX/Y/Angle/Alpha/Zoom/Color</code> 完成</td>
+</tr>
+<tr>
+<td><code>onTweenUpdateNum(tag:String, num:Dynamic)</code></td>
+<td>补间 tag、当前数值</td>
+<td><code>doTweenNum</code> 每次更新</td>
+</tr>
+<tr>
+<td><code>onTimerCompleted(tag:String, loops:Int, loopsLeft:Int)</code></td>
+<td>计时器 tag、总次数、剩余次数</td>
+<td><code>runTimer</code> 触发</td>
+</tr>
+<tr>
+<td><code>onSoundFinished(tag:String)</code></td>
+<td>音效 tag</td>
+<td>带 tag 的 <code>playSound</code> 播完</td>
+</tr>
+<tr>
+<td><code>onVideoFormat(tag:String)</code> / <code>onVideoStart(tag:String)</code> / <code>onVideoFinished(tag:String)</code></td>
+<td>视频 tag</td>
+<td><code>makeLuaVideoSprite</code> 的格式化/开始/结束</td>
+</tr>
+<tr>
+<td><code>onPlayAnim(tag:String, anim:String)</code></td>
+<td>角色 tag（<code>'boyfriend'</code>/<code>'dad'</code>/<code>'gf'</code> 或 <code>makeChar</code> 的 tag）、动画名</td>
+<td><strong>Parker 扩展</strong>：<code>ESCompat.tick()</code> 在每帧 <code>onUpdate</code> 前检测到角色换了动画时派发</td>
+</tr>
+<tr>
+<td><code>onTyping(tag:String)</code></td>
+<td>文本 tag</td>
+<td><strong>Parker 扩展</strong>：<code>setTextSpeed</code> 打字机的每个字符</td>
+</tr>
+</tbody>
+</table></div>
+<div class="pk-callout pk-callout-note"><div class="pk-callout-title">注意</div><div class="pk-callout-body"><p><code>popUpScore</code> 与 <code>SkinNoteSplash</code> 在本分支里只走 <code>callOnScripts()</code>，<strong>不会</strong>分发给 Lua 脚本，所以此处不列出。</p>
+</div></div>
+<hr>
+<h2 id="弃用函数">弃用函数</h2>
+<p><strong>本类共 13 个函数。</strong> 它们仍在注册表里可用（仅为向后兼容），但每次调用都会在脚本调试文字里打印 <code>xxx is deprecated! Use yyy instead</code>；把脚本全局 <code>luaDeprecatedWarnings</code> 设为 <code>false</code> 可以关掉这些提示。</p>
+<h3 id="objectplayanimationobjstring-namestring-forcedbool-false-startframeint-0">objectPlayAnimation(obj:String, name:String, forced:Bool = false, ?startFrame:Int = 0)</h3>
+<p>未使用的旧版播动画入口。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>obj</code></td>
+<td><code>String</code></td>
+<td>目标对象路径</td>
+</tr>
+<tr>
+<td><code>name</code></td>
+<td><code>String</code></td>
+<td>动画名</td>
+</tr>
+<tr>
+<td><code>forced</code></td>
+<td><code>Bool</code></td>
+<td>强制重播</td>
+</tr>
+<tr>
+<td><code>startFrame</code></td>
+<td><code>Int</code></td>
+<td>起始帧</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：<code>Bool</code>，找到对象 <code>true</code>。<strong>替代写法：<code>playAnim(obj, name, forced)</code></strong>——注意旧版不会走 <code>Character.playAnim()</code>，对角色来说行为比新版更粗。</p>
+<h3 id="characterplayanimcharacterstring-animstring-forcedbool-false">characterPlayAnim(character:String, anim:String, ?forced:Bool = false)</h3>
+<p>未使用的旧版角色播动画入口。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>character</code></td>
+<td><code>String</code></td>
+<td><code>'dad'</code>、<code>'gf'</code> / <code>'girlfriend'</code>，其他值一律当作玩家</td>
+</tr>
+<tr>
+<td><code>anim</code></td>
+<td><code>String</code></td>
+<td>动画名；角色偏移表里没有这个动画就什么都不做</td>
+</tr>
+<tr>
+<td><code>forced</code></td>
+<td><code>Bool</code></td>
+<td>强制重播</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：无返回。<strong>替代写法：<code>playAnim(character, anim, forced)</code></strong>。</p>
+<h3 id="luaspritemakegraphictagstring-widthint-heightint-colorstring">luaSpriteMakeGraphic(tag:String, width:Int, height:Int, color:String)</h3>
+<p>给 Lua 精灵填充纯色矩形。</p>
+<p>返回：无返回。<strong>替代写法：<code>makeGraphic(tag, width, height, color)</code></strong>；区别是旧版只认 Lua 精灵注册表里的 tag。</p>
+<h3 id="luaspriteaddanimationbyprefixtagstring-namestring-prefixstring-framerateint-24-loopbool-true">luaSpriteAddAnimationByPrefix(tag:String, name:String, prefix:String, framerate:Int = 24, loop:Bool = true)</h3>
+<p>给 Lua 精灵按前缀加动画。</p>
+<p>返回：无返回。<strong>替代写法：<code>addAnimationByPrefix(tag, name, prefix, framerate, loop)</code></strong>。</p>
+<h3 id="luaspriteaddanimationbyindicestagstring-namestring-prefixstring-indicesstring-framerateint-24">luaSpriteAddAnimationByIndices(tag:String, name:String, prefix:String, indices:String, framerate:Int = 24)</h3>
+<p>给 Lua 精灵按帧号列表加动画（不循环）。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>indices</code></td>
+<td><code>String</code></td>
+<td>逗号分隔的帧号</td>
+</tr>
+</tbody>
+</table></div>
+<p>返回：无返回。<strong>替代写法：<code>addAnimationByIndices(tag, name, prefix, indices, framerate)</code></strong>。</p>
+<h3 id="luaspriteplayanimationtagstring-namestring-forcedbool-false">luaSpritePlayAnimation(tag:String, name:String, forced:Bool = false)</h3>
+<p>播放 Lua 精灵的动画。</p>
+<p>返回：无返回。<strong>替代写法：<code>playAnim(tag, name, forced)</code></strong>。</p>
+<h3 id="setluaspritecameratagstring-camerastring">setLuaSpriteCamera(tag:String, camera:String = '')</h3>
+<p>让 Lua 精灵只由某台相机渲染。</p>
+<p>返回：<code>Bool</code>，找到精灵 <code>true</code>。<strong>替代写法：<code>setObjectCamera(tag, camera)</code></strong>。</p>
+<h3 id="setluaspritescrollfactortagstring-scrollxfloat-scrollyfloat">setLuaSpriteScrollFactor(tag:String, scrollX:Float, scrollY:Float)</h3>
+<p>设置 Lua 精灵的滚动视差。</p>
+<p>返回：<code>Bool</code>，找到精灵 <code>true</code>。<strong>替代写法：<code>setScrollFactor(tag, scrollX, scrollY)</code></strong>。</p>
+<h3 id="scaleluaspritetagstring-xfloat-yfloat">scaleLuaSprite(tag:String, x:Float, y:Float)</h3>
+<p>缩放 Lua 精灵并刷新碰撞箱。</p>
+<p>返回：<code>Bool</code>，找到精灵 <code>true</code>。<strong>替代写法：<code>scaleObject(tag, x, y, true)</code></strong>。</p>
+<h3 id="getpropertyluaspritetagstring-variablestring">getPropertyLuaSprite(tag:String, variable:String)</h3>
+<p>读 Lua 精灵的属性，<code>variable</code> 支持点号路径。</p>
+<p>返回：属性值；tag 不存在返回 <code>null</code>。<strong>替代写法：<code>getProperty(tag + '.' + variable)</code></strong>。</p>
+<h3 id="setpropertyluaspritetagstring-variablestring-valuedynamic">setPropertyLuaSprite(tag:String, variable:String, value:Dynamic)</h3>
+<p>写 Lua 精灵的属性。</p>
+<p>返回：<code>Bool</code>，成功 <code>true</code>。<strong>替代写法：<code>setProperty(tag + '.' + variable, value)</code></strong>。</p>
+<h3 id="musicfadeindurationfloat-fromvaluefloat-0-tovaluefloat-1">musicFadeIn(duration:Float, fromValue:Float = 0, toValue:Float = 1)</h3>
+<p>当前音乐的淡入。</p>
+<p>返回：无返回。<strong>替代写法：<code>soundFadeIn('', duration, fromValue, toValue)</code></strong>。</p>
+<h3 id="musicfadeoutdurationfloat-tovaluefloat-0">musicFadeOut(duration:Float, toValue:Float = 0)</h3>
+<p>当前音乐的淡出。</p>
+<p>返回：无返回。<strong>替代写法：<code>soundFadeOut('', duration, toValue)</code></strong>。</p>
+<blockquote>
+<p>源码里还有四处被 <code>/* */</code> 整段注释掉的注册，<strong>运行时根本不存在</strong>，不要调用：<code>getGlobals</code>、<code>getPropertyAdvanced</code>、<code>setPropertyAdvanced</code>、<code>makeLuaGifSprite</code>。</p>
+</blockquote></article>
+<nav class="pk-pager" aria-label="翻页">
+	<a class="mdui-btn mdui-btn-raised mdui-ripple pk-pager-btn pk-pager-prev" href="/docs/callbacks/"><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M14.7 5.3 8 12l6.7 6.7 1.4-1.4L10.8 12l5.3-5.3z"/></svg><span class="pk-pager-text"><span class="pk-pager-label">上一页</span><span class="pk-pager-title">回调模板</span></span></a>
+	<a class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme pk-pager-btn pk-pager-next" href="/docs/lua-es-extensions/"><span class="pk-pager-text"><span class="pk-pager-label">下一页</span><span class="pk-pager-title">ES 扩展（Parker 独有）</span></span><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M9.3 5.3 7.9 6.7 13.2 12l-5.3 5.3 1.4 1.4L16 12z"/></svg></a>
+</nav>
+</div>
+</main>
+<footer class="pk-footer">
+	<div class="mdui-container">
+		<div class="pk-footer-inner">
+			<span>Parker Engine v0.2.8 · 中文文档</span>
+			<span class="pk-footer-links">
+				<a href="https://github.com/FNF-Pk-Dev/FNF_Parker-Engine-new" target="_blank" rel="noopener">GitHub 仓库</a>
+				<a href="https://github.com/FNF-Pk-Dev/FNF_Parker-Engine-new/releases" target="_blank" rel="noopener">下载</a>
+				<a href="/docs/">文档门户</a>
+			</span>
+		</div>
+		<div class="pk-footer-note">
+			基于 <a href="https://github.com/ShadowMario/FNF-PsychEngine" target="_blank" rel="noopener">Psych Engine</a> 分支开发 · 本站静态托管于 GitHub Pages
+		</div>
+	</div>
+</footer>
+<script src="/assets/mdui/js/mdui.min.js"></script>
+<script src="/assets/site.js"></script>
+</body>
+</html>

@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#e91e63">
+<meta name="description" content="通过 pyscript 在 Parker 中运行 .py 脚本：加载方式、可用 API 与回调约定。">
+<title>Python 脚本 - Parker Engine 中文文档</title>
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="stylesheet" href="/assets/mdui/css/mdui.min.css">
+<link rel="stylesheet" href="/assets/site.css">
+</head>
+<body class="mdui-theme-primary-pink mdui-theme-accent-cyan mdui-theme-layout-dark mdui-appbar-with-toolbar">
+<header class="mdui-appbar mdui-appbar-fixed mdui-color-theme">
+	<div class="mdui-toolbar">
+		<button type="button" class="mdui-btn mdui-btn-icon mdui-ripple pk-drawer-toggle" aria-label="打开导航"><svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" aria-hidden="true"><path d="M3 6h18v2H3zM3 11h18v2H3zM3 16h18v2H3z"/></svg></button>
+		<a class="mdui-typo-title pk-brand" href="/">Parker Engine</a>
+		<span class="pk-brand-sub">中文文档</span>
+		<div class="mdui-toolbar-spacer"></div>
+		<a class="mdui-btn mdui-btn-icon mdui-ripple" href="/docs/" aria-label="文档门户" mdui-tooltip="{content:'文档门户'}"><svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" aria-hidden="true"><path d="M6 2h11a3 3 0 0 1 3 3v14a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3V5a3 3 0 0 1 3-3zm0 2a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h1V4H6zm3 0v16h8a1 1 0 0 0 1-1V5a1 1 0 0 0-1-1H9z"/></svg></a>
+		<a class="mdui-btn mdui-btn-icon mdui-ripple" href="https://github.com/FNF-Pk-Dev/FNF_Parker-Engine-new" target="_blank" rel="noopener" aria-label="GitHub 仓库" mdui-tooltip="{content:'GitHub 仓库'}"><svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" aria-hidden="true"><path d="M12 .5A11.5 11.5 0 0 0 .5 12a11.5 11.5 0 0 0 7.86 10.92c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.53-1.34-1.29-1.7-1.29-1.7-1.05-.72.08-.71.08-.71 1.16.08 1.77 1.2 1.77 1.2 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.7 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.47.11-3.06 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.79 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.77.12 3.06.74.81 1.19 1.84 1.19 3.1 0 4.43-2.7 5.4-5.26 5.69.41.36.78 1.06.78 2.14v3.17c0 .31.2.67.8.56A11.5 11.5 0 0 0 23.5 12A11.5 11.5 0 0 0 12 .5z"/></svg></a>
+	</div>
+</header>
+<aside class="mdui-drawer pk-drawer" id="pk-drawer">
+	<div class="pk-drawer-scroll">
+		<a class="pk-drawer-hero mdui-ripple" href="/">
+			<span class="pk-drawer-hero-title">Parker Engine</span>
+			<span class="pk-drawer-hero-sub">v0.2.8 · 中文文档</span>
+		</a>
+		<div class="mdui-subheader pk-nav-group">快速开始</div>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="/docs/">
+			<div class="mdui-list-item-content"><span class="pk-nav-icon"><svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" aria-hidden="true"><path d="M12 3 2 12h3v9h6v-6h2v6h6v-9h3z"/></svg></span>文档总览</div>
+			<span class="pk-badge">总览</span>
+		</a>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="/docs/lua-tutorial/">
+			<div class="mdui-list-item-content">Lua 编码基础</div>
+			<span class="pk-badge">Lua</span>
+		</a>
+		<div class="mdui-subheader pk-nav-group">Lua 脚本</div>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="/docs/callbacks/">
+			<div class="mdui-list-item-content">回调模板</div>
+			<span class="pk-badge">回调</span>
+		</a>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="/docs/lua-psych/">
+			<div class="mdui-list-item-content">Psych 原版函数全解</div>
+			<span class="pk-badge">Lua</span>
+		</a>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="/docs/lua-es-extensions/">
+			<div class="mdui-list-item-content">ES 扩展（Parker 独有）</div>
+			<span class="pk-badge">ES</span>
+		</a>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="/docs/lua-this-proxy/">
+			<div class="mdui-list-item-content">this 代理</div>
+			<span class="pk-badge">Lua</span>
+		</a>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="/docs/modchart-functions/">
+			<div class="mdui-list-item-content">ES ModChart 特效</div>
+			<span class="pk-badge">特效</span>
+		</a>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="/docs/hscript-haxe/">
+			<div class="mdui-list-item-content">Lua 调用 Haxe</div>
+			<span class="pk-badge">Haxe</span>
+		</a>
+		<div class="mdui-subheader pk-nav-group">HScript</div>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="/docs/hscript/">
+			<div class="mdui-list-item-content">HScript 完整文档</div>
+			<span class="pk-badge">HScript</span>
+		</a>
+		<div class="mdui-subheader pk-nav-group">Python</div>
+		<a class="mdui-list-item mdui-ripple pk-nav-item mdui-list-item-active" href="/docs/python/">
+			<div class="mdui-list-item-content">Python 脚本</div>
+			<span class="pk-badge">Python</span>
+		</a>
+		<div class="mdui-subheader pk-nav-group">LScript</div>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="/docs/lscript/">
+			<div class="mdui-list-item-content">LScript (Luau)</div>
+			<span class="pk-badge">Luau</span>
+		</a>
+		<div class="mdui-subheader pk-nav-group">Modchart</div>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="/docs/modchart/">
+			<div class="mdui-list-item-content">Modchart 修饰器系统</div>
+			<span class="pk-badge">Modchart</span>
+		</a>
+		<div class="mdui-divider pk-nav-divider"></div>
+		<div class="mdui-subheader pk-nav-group">相关链接</div>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="https://github.com/FNF-Pk-Dev/FNF_Parker-Engine-new/releases" target="_blank" rel="noopener"><div class="mdui-list-item-content">下载 / Releases</div></a>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="https://github.com/FNF-Pk-Dev/FNF_Parker-Engine-new" target="_blank" rel="noopener"><div class="mdui-list-item-content">GitHub 仓库</div></a>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="/"><div class="mdui-list-item-content">返回首页</div></a>
+	</div>
+</aside>
+<main class="pk-main">
+<div class="mdui-container pk-container">
+<nav class="pk-breadcrumb" aria-label="面包屑">
+	<a href="/">首页</a><span class="pk-breadcrumb-sep">/</span><a href="/docs/">文档</a><span class="pk-breadcrumb-sep">/</span><span>Python</span><span class="pk-breadcrumb-sep">/</span><span class="pk-breadcrumb-current">Python 脚本</span>
+</nav>
+<article class="mdui-typo mdui-card mdui-shadow-2 pk-doc"><h1 id="python-脚本-api">Python 脚本 API</h1>
+<blockquote>
+<p><strong>适用版本：Parker Engine 0.2.8</strong>（<code>Project.xml</code>）。运行层是 <code>pyscript</code> haxelib（<code>PScript</code> + <code>pyscript.core.Interpreter</code>，一个用 Haxe 写的 Python 解释器子集），包装类是 <code>script/FunkinPython.hx</code>。</p>
+<p><strong>本文以源码为准。</strong> 下面每条 API、每个回调名都是从 <code>FunkinPython</code> / <code>PlayState</code> 源码里读出来的；<code>pyscript</code> 的行为以本地 haxelib 源码为准。凡是「有代码但没接线」的都标注为<strong>未生效</strong>。</p>
+</blockquote>
+<hr>
+<h2 id="0-结论先行python-支持度总览">0. 结论先行：Python 支持度总览</h2>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>维度</th>
+<th>结论</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>是否可用</td>
+<td><strong>可用</strong>，但只在 <code>#if PYTHON_ALLOWED</code>（<code>Project.xml</code>：<code>desktop \|\| android</code>）的构建里</td>
+</tr>
+<tr>
+<td>扩展名</td>
+<td><code>.py</code> 唯一</td>
+</tr>
+<tr>
+<td>自动发现位置</td>
+<td>5 处：<code>scripts/</code>（受 <code>#if LUA_ALLOWED</code> 限制）、<code>data/&lt;格式化歌名&gt;/</code>、<code>stages/&lt;舞台&gt;.py</code>、<code>custom_notetypes/&lt;类型&gt;.py</code>、<code>custom_events/&lt;事件&gt;.py</code></td>
+</tr>
+<tr>
+<td>引擎回调</td>
+<td>与 HScript <strong>同一套</strong>（<code>PlayState.callOnScripts()</code> 会把事件同时派发给 <code>callOnPScripts()</code>），但只限 PlayState 里派发的那些；脚本状态（<code>states/*.lua</code> 那一类）不支持 Python</td>
+</tr>
+<tr>
+<td>状态覆盖</td>
+<td><strong>不支持</strong>。<code>FNFGame.switchState()</code> 只认 <code>.hx/.hscript/.hsc/.hxs</code>、<code>.lua</code>、<code>.lscript</code>，没有 <code>.py</code></td>
+</tr>
+<tr>
+<td>暴露的全局</td>
+<td><strong>65 个</strong>（含 4 个仅对局的，见 §3），另外 <code>onAddSScript()</code> 还会注入 20 个对局变量（§3.8）</td>
+</tr>
+<tr>
+<td><code>this</code> 绑定</td>
+<td><strong>没有</strong>。Python 没有 <code>this</code>；父对象要自己用 <code>script.parent</code>（有时序限制，见 §7）或 <code>game</code></td>
+</tr>
+<tr>
+<td>生命周期</td>
+<td>顶层代码 → <code>onCreate</code> → PlayState 各回调 → <code>onDestroy</code></td>
+</tr>
+<tr>
+<td>返回值</td>
+<td>支持返回 <code>Function_Stop</code> / <code>Function_Continue</code> / <code>Function_Halt</code> 常量；语义与 HScript 相同（见 §5）</td>
+</tr>
+<tr>
+<td>暂停/恢复</td>
+<td>支持 <code>pauseScript()</code> / <code>resumeScript()</code> / <code>setScriptPaused(tag, paused)</code></td>
+</tr>
+<tr>
+<td>错误显示</td>
+<td>有：走 <code>PlayState.addTextToDebug()</code>（因此同样依赖 <code>LUA_ALLOWED</code>），打印不存在的回调不会报错（静默跳过）</td>
+</tr>
+<tr>
+<td>与 HScript 的差距</td>
+<td>没有 <code>this</code>、没有 <code>state</code>、没有 <code>newShader</code>、没有 <code>FlxColor</code>、没有 <code>FlxBar</code> / <code>ModManager</code> / <code>Modifier</code> / <code>CoolUtil</code> / <code>MusicBeatState</code> / <code>BGSprite</code> / <code>Alphabet</code> 等一大批类、没有 <code>HScriptUtil</code> 那批补充 API、没有自定义状态</td>
+</tr>
+</tbody>
+</table></div>
+<p>一句话总结：<strong>Python 在本引擎里是「能跑、能收全部游戏回调、但 API 面只有 HScript 一半」的第二梯队脚本语言</strong>。写复杂功能的建议仍然是 HScript 或 Lua；Python 适合轻量逻辑，或者从其它提供 Python 脚本支持的引擎迁过来的脚本。</p>
+<hr>
+<h2 id="1-加载方式与自动发现">1. 加载方式与自动发现</h2>
+<p><code>PlayState.initPScript(filePath)</code> 是唯一的入口：</p>
+<pre><code class="language-haxe">function initPScript(filePath:String)
+{
+    var script:FunkinPython = new FunkinPython(filePath); // ① 读文件、建解释器、注入全局
+    pscriptArray.push(script);                           // ② 进入 Python 脚本数组
+    onAddSScript();                                      // ③ 注入 curStep/camHUD/boyfriend/... （见 §3.8）
+    script.execute();                                    // ④ 跑顶层代码，然后调用 onCreate
+    script.setParent(this);                              // ⑤ 之后才把 parent 设成 PlayState
+    return script;
+}
+</code></pre>
+<p><code>.py</code> 的自动发现位置（<code>Paths.modFolders()</code> 模组优先，然后 <code>assets/preload/...</code> 内置）：</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>位置</th>
+<th>触发时机</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>scripts/*.py</code>（模组 → 全局模组 → <code>mods/scripts/</code> → <code>assets/preload/scripts/</code>，<strong>不递归</strong>，只看目录第一层）</td>
+<td><code>PlayState.create()</code> → <code>loadGlobalScripts()</code></td>
+<td><strong>整段代码在 <code>#if LUA_ALLOWED</code> 里</strong>：构建没开 <code>LUA_ALLOWED</code> 时这些 Python 脚本不会被加载</td>
+</tr>
+<tr>
+<td><code>data/&lt;格式化歌名&gt;/*.py</code></td>
+<td><code>startSong()</code> → <code>loadSongScripts(SONG.song)</code></td>
+<td>不在 <code>#if LUA_ALLOWED</code> 内，但同样<strong>不递归子目录</strong>（用 <code>FileSystem.readDirectory</code>）</td>
+</tr>
+<tr>
+<td><code>stages/&lt;舞台名&gt;.py</code></td>
+<td><code>PlayState.create()</code></td>
+<td>走 <code>startPyOnFolder()</code>；舞台名来自谱面 <code>stage</code> 字段</td>
+</tr>
+<tr>
+<td><code>custom_notetypes/&lt;音符类型&gt;.py</code></td>
+<td><code>startSong()</code></td>
+<td>谱面里出现该音符类型时加载；先查模组再查 <code>assets/preload</code></td>
+</tr>
+<tr>
+<td><code>custom_events/&lt;事件名&gt;.py</code></td>
+<td><code>startSong()</code></td>
+<td>谱面里出现该事件时加载；先查模组再查 <code>assets/preload</code></td>
+</tr>
+</tbody>
+</table></div>
+<p><code>PlayState</code> 还提供一个公开方法，模组脚本可以调用它动态加载：</p>
+<pre><code class="language-haxe">PlayState.instance.startPyOnFolder('data/mysong/extra.py');  // 已加载过同名则返回 false
+</code></pre>
+<p><strong>没有</strong> 的位置：<code>characters/*.py</code>（角色脚本只认 HScript）、<code>states/*.py</code>（状态覆盖不认 Python）、<code>global.py</code>（开机全局脚本不支持，只有 <code>global.hx</code> 那套）。</p>
+<p><code>scriptName</code> 就是传给 <code>FunkinPython</code> 的路径（<code>scriptName = script</code>），用于 <code>setScriptPaused(tag, ...)</code> 匹配 —— <code>GlobalScript.scriptMatchesTag()</code> 会同时接受完整路径和纯文件名。</p>
+<hr>
+<h2 id="2-包装类-funkinpython-的工作方式">2. 包装类 <code>FunkinPython</code> 的工作方式</h2>
+<pre><code class="language-haxe">class FunkinPython extends FlxBasic
+{
+    public var PyScript:PScript;
+    public var scriptName(default, null):String;
+    public static final defaultVars:Map&lt;String, Dynamic&gt; = new Map&lt;String, Dynamic&gt;();
+    public var foreground:FlxTypedGroup&lt;FlxBasic&gt;;
+}
+</code></pre>
+<ul>
+<li><strong>构造</strong>：如果路径存在就读文件内容，否则把传入字符串当成内联代码（<code>new FunkinPython('print("hi")')</code> 在 Haxe 侧可用）。</li>
+<li><strong>颜色语法改写</strong>：<code>applyColorWorkarounds()</code> 会把 <code>FlxColor.fromRGB(</code> → <code>FlxColor().setRGB(</code>、<code>fromRGBFloat</code> / <code>fromHSV</code> / <code>fromHSB</code> / <code>fromCMYK</code> 同理。<strong>注意 <code>FlxColor</code> 本身没有注册成 Python 全局</strong>（见 §3），所以这套改写买不到什么。</li>
+<li><strong><code>defaultVars</code></strong>：静态表，构造时会逐个 <code>set</code>。引擎里<strong>从不填写它</strong>——<code>PlayState.setDefaultPScripts()</code> 存在但没有任何调用者。想给所有后续 Python 脚本预置变量，需要自己调用（例如从 HScript 里 <code>Type.resolveClass('script.FunkinPython').defaultVars.set(...)</code>）。</li>
+<li><strong><code>execute()</code></strong>：<code>PyScript.execute()</code> 跑顶层代码，然后 <code>call('onCreate')</code>。</li>
+<li><strong><code>set</code> / <code>get</code></strong>：<code>PyScript.setVar()</code> / <code>getVar()</code>，可在 Haxe 侧读写脚本变量。</li>
+<li><strong><code>setClass(cls)</code></strong>：按类名（不含包名）注册一个 Haxe 类给脚本用，引擎内部没用它。</li>
+<li><strong><code>stop()</code></strong>：<code>closed = true</code> 且 <code>PyScript.interpreter = null</code>；此后所有 <code>call</code>/<code>set</code>/<code>get</code> 直接返回/忽略。</li>
+<li><strong><code>setParent(obj)</code></strong>：设置 <code>PyScript.parent</code>，也就是脚本里能读到的 <code>script.parent</code>。</li>
+<li><strong><code>foreground</code></strong>：与 HScript 一样，每个脚本一个「前景组」，注册成全局 <code>foreground</code>，但<strong>引擎不会把它 add 到场景</strong>，脚本要自己 <code>game.add(foreground)</code>。</li>
+</ul>
+<p><code>#if PYTHON_ALLOWED</code> 未定义时（如 HTML5 构建）：构造函数只做一件事——往调试文本打一条黄色提示 <code>PYTHON support is disabled. Script functionality is limited.</code>，其它方法全部空实现。（顺带一提：该 <code>#else</code> 分支里用到的 <code>haxe.io.Path</code> 只在 <code>#if PYTHON_ALLOWED</code> 块中被 <code>import</code>，这条分支能否通过编译没有验证。）</p>
+<hr>
+<h2 id="3-暴露的-python-全局完整列表">3. 暴露的 Python 全局（完整列表）</h2>
+<p>以下全部来自 <code>FunkinPython.setupPythonEnvironment()</code>（<code>FunkinPython.hx</code>）。<strong>共 65 条</strong>（<code>#if sys</code> 的三条在 desktop/android 上都在；把 <code>sys</code> 相关的三条去掉是 62 条）。</p>
+<h3 id="31-返回值常量">3.1 返回值常量</h3>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>名字</th>
+<th>值</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Function_Stop</code></td>
+<td><code>'FUNC_STOP'</code></td>
+<td>与 HScript/Lua 同一个常量（来自 <code>GlobalScript</code>）</td>
+</tr>
+<tr>
+<td><code>Function_Continue</code></td>
+<td><code>'FUNC_CONT'</code></td>
+<td>默认返回值</td>
+</tr>
+<tr>
+<td><code>Function_Halt</code></td>
+<td><code>'FUNC_HALT'</code></td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="32-flixel-openfl">3.2 Flixel / OpenFL</h3>
+<p><code>FlxG</code>、<code>FlxSprite</code>、<code>FlxGraphic</code>、<code>FlxBasic</code>、<code>FlxObject</code>、<code>FlxCamera</code>、<code>FlxSpriteGroup</code>、<code>FlxTypedGroup</code>、<code>FlxTween</code>、<code>FlxEase</code>、<code>FlxTimer</code>、<code>FlxSound</code>、<code>FlxText</code>、<code>FlxTextFormat</code>、<code>FlxShader</code>、<code>FlxRuntimeShader</code>、<code>ShaderFilter</code>、<code>FlxAxes</code>（对象，含 <code>X</code>/<code>Y</code>/<code>XY</code>）、<code>BlendMode</code>（对象，含 <code>ADD</code>/<code>MULTIPLY</code>/<code>SCREEN</code>/<code>INVERT</code>…）、<code>Lib</code>、<code>Capabilities</code>。</p>
+<ul>
+<li><strong><code>FlxAxes</code> / <code>BlendMode</code> 注入的是匿名对象</strong>（源码里写的是 <code>{"X": FlxAxes.X, ...}</code> / <code>{"ADD": BlendMode.ADD, ...}</code>），不是 Haxe 枚举类。底层值分别是 Int（<code>X=1</code>、<code>Y=16</code>、<code>XY=17</code>）和 String（<code>ADD="add"</code>、<code>MULTIPLY="multiply"</code>…），所以就算对象属性能不能读通，也可以直接用底层值：<code>spr.blend = "add"</code>、背景滚动写 <code>17</code>。</li>
+<li><strong>没有</strong> <code>FlxBar</code>、<code>FlxBackdrop</code>、<code>FlxTiledSprite</code>、<code>FlxFlicker</code>、<code>FlxSpriteUtil</code>、<code>FlxMath</code>、<code>FlxPoint</code>、<code>FlxKey</code>、<code>FlxColor</code>、<code>FlxCameraFollowStyle</code>、<code>FlxTextBorderStyle</code>、<code>FlxBarFillDirection</code>。</li>
+</ul>
+<h3 id="33-视频">3.3 视频</h3>
+<p><code>FlxVideo</code>、<code>FlxVideoSprite</code>、<code>PsychVideoSprite</code>、<code>ParkerVideoSprite</code>（=<code>PsychVideoSprite</code> 的别名）、<code>Handle</code>（hxvlc 的句柄工具）。</p>
+<h3 id="34-标准库-互操作">3.4 标准库 / 互操作</h3>
+<p><code>Std</code>、<code>Type</code>、<code>Reflect</code>、<code>Math</code>、<code>StringTools</code>、<code>Json</code>（对象，含 <code>parse</code> / <code>stringify</code>）；<code>#if sys</code> 下还有 <code>FileSystem</code>、<code>File</code>、<code>Sys</code>。</p>
+<ul>
+<li><code>Type.resolveClass()</code> + <code>Type.createInstance()</code> 是<strong>在 Python 里拿到未注册类的主要办法</strong>（例如 <code>Type.resolveClass("flixel.ui.FlxBar")</code>）。</li>
+<li>Python 本身自带内置函数（<code>print</code>、<code>len</code>、<code>str</code>、<code>int</code>、<code>float</code>、<code>bool</code>、<code>list</code>、<code>dict</code>、<code>range</code>、<code>sum</code>、<code>max</code>、<code>min</code>、<code>abs</code>、<code>round</code>、<code>pow</code>、<code>type</code>、<code>isinstance</code>、<code>chr</code>、<code>ord</code>、<code>hex</code>、<code>oct</code>、<code>bin</code>、<code>super</code>），由解释器直接提供。</li>
+<li><code>print</code> 的输出经 <code>PyScript.onPrint</code> → <code>PlayState.addTextToDebug('脚本名:行号: 内容', 白色)</code>，也就是<strong>打在游戏屏幕左上角</strong>（依赖 <code>LUA_ALLOWED</code>）。</li>
+</ul>
+<h3 id="35-引擎类">3.5 引擎类</h3>
+<p><code>PlayState</code>、<code>game</code>、<code>Paths</code>、<code>ClientPrefs</code>、<code>WeekData</code>、<code>Highscore</code>、<code>StageData</code>、<code>Song</code>、<code>Section</code>、<code>Conductor</code>、<code>Note</code>、<code>StrumNote</code>、<code>NoteSplash</code>、<code>Character</code>、<code>Boyfriend</code>。</p>
+<ul>
+<li><strong><code>game</code></strong>：<code>PlayState.instance</code> 的<strong>构造时快照</strong>（可能为 <code>null</code>，例如在没有对局的状态下创建脚本——实际加载路径都在对局里，所以正常可用）。</li>
+<li><strong>没有</strong> <code>CoolUtil</code>、<code>MusicBeatState</code>、<code>HScript</code>、<code>FunkinLua</code>、<code>GameOverSubstate</code>、<code>ModManager</code>、<code>Modifier</code>、<code>BGSprite</code>、<code>Alphabet</code>、<code>HealthIcon</code>、<code>AttachedSprite</code>、<code>AttachedText</code>、<code>BackgroundDancer</code>。</li>
+</ul>
+<h3 id="36-容器与状态操作">3.6 容器与状态操作</h3>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>名字</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>add</code></td>
+<td>构造函数里先绑成 <code>FlxG.state.add</code>，随后 <code>initPScript()</code> 调用的 <code>onAddSScript()</code> 会用 <code>setOnScripts("add", ...)</code> 把它<strong>覆盖成与 HScript 相同的「智能插入」版</strong>：<code>add(obj, ?front)</code>，<code>front = true</code> 加到最上层，否则插到 <code>dadGroup</code>/<code>boyfriendGroup</code>/<code>gfGroup</code> 之前</td>
+</tr>
+<tr>
+<td><code>remove</code></td>
+<td><code>FlxG.state.remove</code></td>
+</tr>
+<tr>
+<td><code>insert</code></td>
+<td><code>FlxG.state.insert(position, obj)</code></td>
+</tr>
+<tr>
+<td><code>members</code></td>
+<td><code>FlxG.state.members</code> 数组</td>
+</tr>
+<tr>
+<td><code>foreground</code></td>
+<td>本脚本的前景组（需自己 <code>game.add(foreground)</code>）</td>
+</tr>
+<tr>
+<td><code>pauseScript()</code></td>
+<td>暂停自己</td>
+</tr>
+<tr>
+<td><code>resumeScript()</code></td>
+<td>恢复自己</td>
+</tr>
+<tr>
+<td><code>setScriptPaused(tag, paused)</code></td>
+<td>按脚本名/文件名暂停任意脚本</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="37-只在歌曲中注册的flxgstate-is-playstate-playstateinstance-null">3.7 只在歌曲中注册的（<code>FlxG.state is PlayState &amp;&amp; PlayState.instance != null</code>）</h3>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>名字</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>modManager</code></td>
+<td><code>PlayState.modManager</code> 快照。<strong>坑</strong>：<code>modManager</code> 在 <code>PlayState.create()</code> 里晚于 <code>globals scripts/</code> 的加载，所以 <code>scripts/*.py</code> 拿到的可能是 <code>null</code>；<code>data/&lt;song&gt;/*.py</code> 在 <code>startSong()</code> 里加载，正常可用。另外引擎<strong>从不</strong>调用 <code>setDefaultPScripts()</code>，所以 <code>null</code> 不会被补上</td>
+</tr>
+<tr>
+<td><code>global</code></td>
+<td><code>PlayState.variables</code> 共享变量表</td>
+</tr>
+<tr>
+<td><code>setGlobalFunc(name, func)</code></td>
+<td>往共享表里放函数</td>
+</tr>
+<tr>
+<td><code>callGlobalFunc(name, ?args)</code></td>
+<td>调用共享表里的函数（多参数要打包成数组/结构传）</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="38-onaddsscript-注入的对局变量">3.8 <code>onAddSScript()</code> 注入的对局变量</h3>
+<p>脚本加载器（<code>initPScript()</code>）在建好脚本后立刻调用 <code>PlayState.onAddSScript()</code>，它会把这些值逐个 <code>set</code> 进 Python 环境（<code>setOnScripts()</code> → <code>setOnPScripts()</code>）。<strong>共 20 个变量 + 1 个被覆盖的函数</strong>：</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>变量</th>
+<th>类型</th>
+<th>更新时机</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>curStep</code> / <code>curBeat</code></td>
+<td><code>Int</code></td>
+<td><strong>仅加载那一刻</strong>（和 HScript 一样不会随歌曲更新，用回调参数或 <code>game.curStep</code>）</td>
+</tr>
+<tr>
+<td><code>curSection</code></td>
+<td><code>Int</code></td>
+<td>加载时 + 每次 <code>sectionHit()</code></td>
+</tr>
+<tr>
+<td><code>bpm</code></td>
+<td><code>Float</code></td>
+<td>仅加载那一刻</td>
+</tr>
+<tr>
+<td><code>camGame</code> / <code>camHUD</code> / <code>camOther</code></td>
+<td><code>FlxCamera</code></td>
+<td>加载时</td>
+</tr>
+<tr>
+<td><code>camFollow</code></td>
+<td><code>FlxPoint</code></td>
+<td>加载时</td>
+</tr>
+<tr>
+<td><code>camFollowPos</code></td>
+<td><code>FlxObject</code></td>
+<td>加载时</td>
+</tr>
+<tr>
+<td><code>boyfriend</code> / <code>dad</code> / <code>gf</code></td>
+<td><code>Boyfriend</code> / <code>Character</code> / <code>Character</code></td>
+<td>加载时（换角色后可能过期，稳妥写法 <code>game.boyfriend</code>）</td>
+</tr>
+<tr>
+<td><code>boyfriendGroup</code> / <code>dadGroup</code> / <code>gfGroup</code></td>
+<td><code>FlxSpriteGroup</code></td>
+<td>加载时</td>
+</tr>
+<tr>
+<td><code>notes</code></td>
+<td><code>FlxTypedGroup&lt;Note&gt;</code></td>
+<td>加载时</td>
+</tr>
+<tr>
+<td><code>strumLineNotes</code></td>
+<td><code>FlxTypedGroup&lt;StrumNote&gt;</code></td>
+<td>加载时</td>
+</tr>
+<tr>
+<td><code>playerStrums</code> / <code>opponentStrums</code></td>
+<td><code>FlxTypedGroup&lt;StrumNote&gt;</code></td>
+<td>加载时</td>
+</tr>
+<tr>
+<td><code>unspawnNotes</code></td>
+<td><code>Array&lt;Note&gt;</code></td>
+<td>加载时（数组引用稳定）</td>
+</tr>
+<tr>
+<td><code>add</code></td>
+<td>函数</td>
+<td>被覆盖成智能插入版 <code>add(obj, ?front)</code>，见 §3.6</td>
+</tr>
+</tbody>
+</table></div>
+<hr>
+<h2 id="4-回调支持度">4. 回调支持度</h2>
+<p>Python 的回调派发与 HScript <strong>完全同一条链</strong>：</p>
+<pre><code>callOnScripts(event, args) → callOnHScripts(...) → callOnLScripts(...) → callOnPScripts(...) → FunkinPython.call(event, args) → PyScript.callFunc(event, args)
+</code></pre>
+<p>所以 <strong><code>hscript.md</code> §2.2 里那张表</strong>（<code>onCreatePost</code>、<code>onLoad</code>、<code>onStartCountdown</code>、<code>preModifierRegister</code>、<code>postModifierRegister</code>、<code>generateModchart</code>、<code>onCountdownTick</code>、<code>onSongStart</code>、<code>onUpdate</code>、<code>onUpdatePost</code>、<code>onStepHit</code>、<code>onBeatHit</code>、<code>onSectionHit</code>、<code>onUpdateScore</code>、<code>onSpawnNote</code>、<code>goodNoteHit</code>、<code>opponentNoteHit</code>、<code>noteMiss</code>、<code>noteMissPress</code>、<code>popUpScore</code>、<code>SkinNoteSplash</code>、<code>onEvent</code>、<code>onMoveCamera</code>、<code>onPause</code>、<code>onResume</code>、<code>onGameOver</code>、<code>onRecalculateRating</code>、<code>onEndSong</code>、<code>eventEarlyTrigger</code>）<strong>对 Python 一样成立，参数也完全一样</strong>。</p>
+<p>差异只有三点：</p>
+<ol>
+<li><strong><code>onCreate</code></strong>：不是 <code>callOnScripts</code> 派发的，而是 <code>FunkinPython.execute()</code> 在跑完顶层代码后直接 <code>call('onCreate')</code>。</li>
+<li><strong><code>onDestroy</code></strong>：由 <code>PlayState.destroy()</code> 里的 <code>py.call('onDestroy')</code> 直接调用。</li>
+<li><strong>脚本状态（<code>states/&lt;名字&gt;.lua</code> / <code>.lscript</code> / <code>.hx</code>）不存在 Python 版本</strong>：<code>FNFGame.switchState()</code> 不查 <code>.py</code>，<code>LuaSState</code> / <code>LScriptSState</code> / <code>OScriptState</code> 也只分别管自己的语言。</li>
+</ol>
+<p>Lua 专属、Python 收不到的：<code>onKeyPress</code>、<code>onKeyRelease</code>、<code>onGhostTap</code>、<code>onCountdownStarted</code>、<code>onCustomSubstate*</code>、<code>onGameOverStart</code>、<code>onGameOverConfirm</code>、<code>onNextDialogue</code>、<code>onSkipDialogue</code>、<code>onUpdateOptions</code>、<code>onEventSet</code>。</p>
+<p><strong>没定义的回调不会报错</strong>：<code>PScript.callFunc()</code> 找不到函数时直接 <code>return "FUNC_CONT"</code>（即 <code>Function_Continue</code>），连警告都不打。所以回调写错名字是静默失效的——这是排查 Python 脚本时的头号坑。</p>
+<h3 id="参数怎么传">参数怎么传</h3>
+<p>参数是<strong>按位置</strong>塞进函数形参的：</p>
+<pre><code class="language-python">def onStepHit(step):        # step ← callOnPScripts 的第 1 个参数（Int）
+    pass
+
+def onUpdate(elapsed):      # elapsed ← Float
+    pass
+
+def onEvent(name, v1, v2):  # 三个参数按顺序
+    pass
+</code></pre>
+<p>形参名随便起；<strong>形参比实参多 → 多出来的为 <code>None</code>；形参比实参少 → 多余的实参被丢弃</strong>（不会报错）。</p>
+<hr>
+<h2 id="5-返回值与暂停">5. 返回值与暂停</h2>
+<ul>
+<li>Python 函数返回什么，<code>callOnPScripts()</code> 就看到什么。没写 <code>return</code> → <code>null</code> → 引擎按 <code>Function_Continue</code> 处理。</li>
+<li>三个常量已经注册好，所以可以：</li>
+</ul>
+<p><code>python
+  def onPause():
+      return Function_Stop      # 等价于 'FUNC_STOP'，可以阻止暂停菜单打开</code></p>
+<ul>
+<li>语义与 HScript 完全一致（<code>PlayState.callOnHScripts</code> / <code>callOnPScripts</code> 是同一套逻辑）：<strong><code>ignoreStops</code> 默认是 <code>True</code>，所以 <code>Function_Stop</code> 一般不会中断其它脚本</strong>，只会把整条链的聚合返回值变成 <code>'FUNC_STOP'</code>。真正会读它的调用点是 <code>openPauseMenu()</code> 的 <code>onPause</code>（以及 <code>doDeathCheck()</code> 的 <code>onGameOver</code>，但那里用的是 <code>||</code> 条件，单独一个 Stop 拦不住）。</li>
+<li><code>eventEarlyTrigger</code> 的返回值会被 <code>cast</code> 成 Float 当作「提前毫秒数」——这个回调<strong>不要返回字符串常量</strong>。</li>
+<li>暂停：<code>pauseScript()</code> / <code>resumeScript()</code> 作用于自己，<code>setScriptPaused(tag, paused)</code> 可以按名字控制别人。被暂停的脚本留在数组里、状态不丢，只是不再收回调。</li>
+</ul>
+<hr>
+<h2 id="6-示例">6. 示例</h2>
+<h3 id="61-最小可跑脚本">6.1 最小可跑脚本</h3>
+<pre><code class="language-python"># mods/&lt;模组&gt;/scripts/hello_python.py
+# 顶层代码在加载时执行一次，然后才轮到 onCreate
+
+greeting = &quot;Hello from Python!&quot;
+
+def onCreate():
+    # game 是 PlayState.instance；add(txt, True) / add(txt) 见上文「容器与状态操作」
+    txt = FlxText(0, 0, 0, greeting, 24)
+    txt.screenCenter()
+    game.add(txt, True)
+
+def onStepHit(step):
+    if step % 8 == 0:
+        game.camHUD.alpha = 0.85
+    else:
+        game.camHUD.alpha = 1.0
+
+def onUpdate(elapsed):
+    # elapsed 是每帧秒数
+    if game.health &lt; 0.2:
+        game.camHUD.alpha = 0.9
+    else:
+        game.camHUD.alpha = 1.0
+
+def onDestroy():
+    return Function_Continue
+</code></pre>
+<h3 id="62-用共享变量表跨回调存状态">6.2 用共享变量表跨回调存状态</h3>
+<p>解释器的 Python 语义是子集，跨回调保存状态最稳的做法是<strong>在容器里原地改</strong>，或直接用引擎的共享表 <code>global</code>：</p>
+<pre><code class="language-python">stats = {&quot;hits&quot;: 0}
+
+def goodNoteHit(note):
+    stats[&quot;hits&quot;] = stats[&quot;hits&quot;] + 1
+    if stats[&quot;hits&quot;] % 50 == 0:
+        print(&quot;50 combo!&quot;)
+
+def noteMiss(daNote):
+    stats[&quot;hits&quot;] = 0
+</code></pre>
+<h3 id="63-在-python-里用未注册的引擎类">6.3 在 Python 里用未注册的引擎类</h3>
+<pre><code class="language-python">FlxBar = Type.resolveClass(&quot;flixel.ui.FlxBar&quot;)
+bar = Type.createInstance(FlxBar, [0, 0, None, 400, 20])
+game.add(bar)
+</code></pre>
+<h3 id="64-舞台-音符类型-事件脚本">6.4 舞台 / 音符类型 / 事件脚本</h3>
+<pre><code class="language-python"># mods/&lt;模组&gt;/stages/myStage.py           —— 加载舞台时执行
+# mods/&lt;模组&gt;/custom_notetypes/myType.py  —— 谱面里出现该音符类型时执行
+# mods/&lt;模组&gt;/custom_events/myEvent.py    —— 谱面里出现该事件时执行
+
+def onEvent(name, value1, value2):
+    if name == &quot;My Event&quot;:
+        game.camHUD.alpha = 0.5        # 颜色值请直接写整型，例如 0xFFFFFFFF
+</code></pre>
+<hr>
+<h2 id="7-限制与坑都是源码事实">7. 限制与坑（都是源码事实）</h2>
+<ol>
+<li><strong>没有 <code>this</code></strong>。HScript 的默认 API 里有 <code>hscript.set('this', ...)</code>，<code>FunkinPython</code> 里完全没有对应项。父对象只能通过 <code>script.parent</code> 拿 —— 而它<strong>在脚本体和 <code>onCreate</code> 里还是 <code>None</code></strong>，因为 <code>initPScript()</code> 的顺序是先 <code>execute()</code> 再 <code>setParent(this)</code>。之后的回调里 <code>script.parent</code> 才是 <code>PlayState</code>。</li>
+<li><strong>父对象优先用 <code>game</code></strong>。<code>game</code> 在构造时就赋值好了（可能为 <code>None</code>，在有对局的加载路径下不会是）。</li>
+<li><strong><code>modManager</code> 可能是 <code>None</code></strong>：见 §3.7。<code>scripts/*.py</code> 的加载早于 <code>modManager</code> 创建；<code>setDefaultPScripts()</code> 引擎从不调用，所以不会像 HScript 那样被补写。</li>
+<li><strong>没有 <code>FlxColor</code></strong>。<code>applyColorWorkarounds()</code> 会把 <code>FlxColor.fromRGB(r,g,b)</code> 改写成 <code>FlxColor().setRGB(r,g,b)</code>，但 <code>FlxColor</code> 从未注册，<code>PScript.registerHaxeClass()</code> 也没有被引擎调用（类注册表是空的）。<strong>颜色直接写整型 <code>0xFFFFFFFF</code></strong>，或用 <code>Type.resolveClass("flixel.util.FlxColor")</code> 自己拿。</li>
+<li><strong><code>add()</code> 在「脚本体」和「回调」里不是同一个函数</strong>：构造时绑的是 <code>FlxG.state.add</code>（歌曲里就是 <code>PlayState.add</code>，直接追加到末尾），<code>onAddSScript()</code> 跑完之后才换成与 HScript 相同的智能插入版 <code>add(obj, ?front)</code>。所以顶层代码里的 <code>add(spr)</code> 和 <code>onCreate</code> 之后的 <code>add(spr)</code> 落点可能不同；<code>insert</code> / <code>remove</code> / <code>members</code> 则一直是构造时的 <code>FlxG.state.*</code> 快照。</li>
+<li><strong><code>print</code> / 错误信息依赖 <code>LUA_ALLOWED</code></strong>：<code>PyScript.onError</code> 和 <code>onPrint</code> 都调用 <code>PlayState.instance.addTextToDebug(...)</code>，这个方法整体在 <code>#if LUA_ALLOWED</code> 里，而且<strong>没有 null 检查</strong>——在没有 PlayState 的时候（理论上会从 <code>states/</code> 之外的路径创建脚本）会二次崩溃。</li>
+<li><strong>回调名写错 = 静默失效</strong>，不会报错（<code>callFunc</code> 对不存在的函数返回 <code>FUNC_CONT</code>）。</li>
+<li><strong><code>scripts/*.py</code> 需要 <code>LUA_ALLOWED</code></strong>：<code>loadGlobalScripts()</code> 的整个函数体包在 <code>#if LUA_ALLOWED</code> 里。<code>data/&lt;song&gt;/*.py</code>、舞台、音符类型、事件脚本不受影响。</li>
+<li><strong><code>data/&lt;song&gt;/</code> 与 <code>scripts/</code> 的 <code>.py</code> 查找不递归子目录</strong>（HScript 那两条路径是递归的，Python 不是）。</li>
+<li><strong>Python 没有状态覆盖</strong>：<code>states/globals/&lt;Name&gt;.hx</code> 那套机制没有 Python 版本。</li>
+<li><strong><code>stop()</code> 之后脚本变成空壳</strong>：<code>PyScript.interpreter = null</code>，所有 <code>call</code> 都返回 <code>Function_Continue</code>。</li>
+<li><strong>解释器是自研的 Python 子集</strong>（<code>pyscript.core.Interpreter</code>），不是 CPython。装饰器、生成器、<code>with</code>、异常链这类进阶语法的支持情况需要逐条验证——<strong>先在游戏里试跑，再写进你的模组</strong>，不要照搬 CPython 的写法。</li>
+<li><strong><code>pyscript</code> 仓库自带的 <code>example/</code> 针对的是旧 API</strong>：它 <code>import pyscript.Interpreter</code>，但当前 <code>pyscript/PyScript.hx</code> 里根本没有 <code>Interpreter</code> 类，也没有 <code>parent</code> 这个全局。那些示例（包括 <code>parent.add(spr)</code> 的写法）在本引擎里<strong>不成立</strong>，请用 <code>game.add(spr)</code> / <code>script.parent</code>。</li>
+</ol>
+<hr>
+<h2 id="8-三种脚本语言对照">8. 三种脚本语言对照</h2>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th></th>
+<th>HScript</th>
+<th>Python</th>
+<th>Lua（Psych 方言）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>扩展名</td>
+<td><code>.hx</code> / <code>.hscript</code> / <code>.hsc</code> / <code>.hxs</code></td>
+<td><code>.py</code></td>
+<td><code>.lua</code></td>
+</tr>
+<tr>
+<td>默认全局 API</td>
+<td>72 个（+25 个对局注入）</td>
+<td>65 个（+20 个对局注入）</td>
+<td>Psych 的 <code>_G</code> 大礼包（另见 Lua 文档）</td>
+</tr>
+<tr>
+<td><code>this</code></td>
+<td>有（脚本创建时的 <code>FlxG.state</code>）</td>
+<td>无</td>
+<td>通过 <code>setProxy()</code> 给 <code>this</code> 一个活的代理</td>
+</tr>
+<tr>
+<td>状态覆盖</td>
+<td>有（<code>states/globals/</code>，回调未接线）</td>
+<td>无</td>
+<td>有（<code>states/&lt;Name&gt;.lua</code>，回调最全）</td>
+</tr>
+<tr>
+<td>角色脚本</td>
+<td>有（<code>characters/&lt;name&gt;.hx</code>）</td>
+<td>无</td>
+<td>无</td>
+</tr>
+<tr>
+<td>暂停/恢复</td>
+<td>有</td>
+<td>有</td>
+<td>有</td>
+</tr>
+<tr>
+<td>错误显示</td>
+<td>屏幕 + 原生弹窗</td>
+<td>屏幕（<code>print</code>/错误都走 <code>addTextToDebug</code>）</td>
+<td>屏幕</td>
+</tr>
+</tbody>
+</table></div></article>
+<nav class="pk-pager" aria-label="翻页">
+	<a class="mdui-btn mdui-btn-raised mdui-ripple pk-pager-btn pk-pager-prev" href="/docs/hscript/"><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M14.7 5.3 8 12l6.7 6.7 1.4-1.4L10.8 12l5.3-5.3z"/></svg><span class="pk-pager-text"><span class="pk-pager-label">上一页</span><span class="pk-pager-title">HScript 完整文档</span></span></a>
+	<a class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme pk-pager-btn pk-pager-next" href="/docs/lscript/"><span class="pk-pager-text"><span class="pk-pager-label">下一页</span><span class="pk-pager-title">LScript (Luau)</span></span><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M9.3 5.3 7.9 6.7 13.2 12l-5.3 5.3 1.4 1.4L16 12z"/></svg></a>
+</nav>
+</div>
+</main>
+<footer class="pk-footer">
+	<div class="mdui-container">
+		<div class="pk-footer-inner">
+			<span>Parker Engine v0.2.8 · 中文文档</span>
+			<span class="pk-footer-links">
+				<a href="https://github.com/FNF-Pk-Dev/FNF_Parker-Engine-new" target="_blank" rel="noopener">GitHub 仓库</a>
+				<a href="https://github.com/FNF-Pk-Dev/FNF_Parker-Engine-new/releases" target="_blank" rel="noopener">下载</a>
+				<a href="/docs/">文档门户</a>
+			</span>
+		</div>
+		<div class="pk-footer-note">
+			基于 <a href="https://github.com/ShadowMario/FNF-PsychEngine" target="_blank" rel="noopener">Psych Engine</a> 分支开发 · 本站静态托管于 GitHub Pages
+		</div>
+	</div>
+</footer>
+<script src="/assets/mdui/js/mdui.min.js"></script>
+<script src="/assets/site.js"></script>
+</body>
+</html>

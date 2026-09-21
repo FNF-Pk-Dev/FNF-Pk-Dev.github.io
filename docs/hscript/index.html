@@ -1,0 +1,1345 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#e91e63">
+<meta name="description" content="Parker 的 HScript 引擎、暴露的 API 表面与脚本回调，以及它与源码的对应关系。">
+<title>HScript 完整文档 - Parker Engine 中文文档</title>
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="stylesheet" href="/assets/mdui/css/mdui.min.css">
+<link rel="stylesheet" href="/assets/site.css">
+</head>
+<body class="mdui-theme-primary-pink mdui-theme-accent-cyan mdui-theme-layout-dark mdui-appbar-with-toolbar">
+<header class="mdui-appbar mdui-appbar-fixed mdui-color-theme">
+	<div class="mdui-toolbar">
+		<button type="button" class="mdui-btn mdui-btn-icon mdui-ripple pk-drawer-toggle" aria-label="打开导航"><svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" aria-hidden="true"><path d="M3 6h18v2H3zM3 11h18v2H3zM3 16h18v2H3z"/></svg></button>
+		<a class="mdui-typo-title pk-brand" href="/">Parker Engine</a>
+		<span class="pk-brand-sub">中文文档</span>
+		<div class="mdui-toolbar-spacer"></div>
+		<a class="mdui-btn mdui-btn-icon mdui-ripple" href="/docs/" aria-label="文档门户" mdui-tooltip="{content:'文档门户'}"><svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" aria-hidden="true"><path d="M6 2h11a3 3 0 0 1 3 3v14a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3V5a3 3 0 0 1 3-3zm0 2a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h1V4H6zm3 0v16h8a1 1 0 0 0 1-1V5a1 1 0 0 0-1-1H9z"/></svg></a>
+		<a class="mdui-btn mdui-btn-icon mdui-ripple" href="https://github.com/FNF-Pk-Dev/FNF_Parker-Engine-new" target="_blank" rel="noopener" aria-label="GitHub 仓库" mdui-tooltip="{content:'GitHub 仓库'}"><svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" aria-hidden="true"><path d="M12 .5A11.5 11.5 0 0 0 .5 12a11.5 11.5 0 0 0 7.86 10.92c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.53-1.34-1.29-1.7-1.29-1.7-1.05-.72.08-.71.08-.71 1.16.08 1.77 1.2 1.77 1.2 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.7 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.47.11-3.06 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.79 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.77.12 3.06.74.81 1.19 1.84 1.19 3.1 0 4.43-2.7 5.4-5.26 5.69.41.36.78 1.06.78 2.14v3.17c0 .31.2.67.8.56A11.5 11.5 0 0 0 23.5 12A11.5 11.5 0 0 0 12 .5z"/></svg></a>
+	</div>
+</header>
+<aside class="mdui-drawer pk-drawer" id="pk-drawer">
+	<div class="pk-drawer-scroll">
+		<a class="pk-drawer-hero mdui-ripple" href="/">
+			<span class="pk-drawer-hero-title">Parker Engine</span>
+			<span class="pk-drawer-hero-sub">v0.2.8 · 中文文档</span>
+		</a>
+		<div class="mdui-subheader pk-nav-group">快速开始</div>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="/docs/">
+			<div class="mdui-list-item-content"><span class="pk-nav-icon"><svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" aria-hidden="true"><path d="M12 3 2 12h3v9h6v-6h2v6h6v-9h3z"/></svg></span>文档总览</div>
+			<span class="pk-badge">总览</span>
+		</a>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="/docs/lua-tutorial/">
+			<div class="mdui-list-item-content">Lua 编码基础</div>
+			<span class="pk-badge">Lua</span>
+		</a>
+		<div class="mdui-subheader pk-nav-group">Lua 脚本</div>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="/docs/callbacks/">
+			<div class="mdui-list-item-content">回调模板</div>
+			<span class="pk-badge">回调</span>
+		</a>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="/docs/lua-psych/">
+			<div class="mdui-list-item-content">Psych 原版函数全解</div>
+			<span class="pk-badge">Lua</span>
+		</a>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="/docs/lua-es-extensions/">
+			<div class="mdui-list-item-content">ES 扩展（Parker 独有）</div>
+			<span class="pk-badge">ES</span>
+		</a>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="/docs/lua-this-proxy/">
+			<div class="mdui-list-item-content">this 代理</div>
+			<span class="pk-badge">Lua</span>
+		</a>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="/docs/modchart-functions/">
+			<div class="mdui-list-item-content">ES ModChart 特效</div>
+			<span class="pk-badge">特效</span>
+		</a>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="/docs/hscript-haxe/">
+			<div class="mdui-list-item-content">Lua 调用 Haxe</div>
+			<span class="pk-badge">Haxe</span>
+		</a>
+		<div class="mdui-subheader pk-nav-group">HScript</div>
+		<a class="mdui-list-item mdui-ripple pk-nav-item mdui-list-item-active" href="/docs/hscript/">
+			<div class="mdui-list-item-content">HScript 完整文档</div>
+			<span class="pk-badge">HScript</span>
+		</a>
+		<div class="mdui-subheader pk-nav-group">Python</div>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="/docs/python/">
+			<div class="mdui-list-item-content">Python 脚本</div>
+			<span class="pk-badge">Python</span>
+		</a>
+		<div class="mdui-subheader pk-nav-group">LScript</div>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="/docs/lscript/">
+			<div class="mdui-list-item-content">LScript (Luau)</div>
+			<span class="pk-badge">Luau</span>
+		</a>
+		<div class="mdui-subheader pk-nav-group">Modchart</div>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="/docs/modchart/">
+			<div class="mdui-list-item-content">Modchart 修饰器系统</div>
+			<span class="pk-badge">Modchart</span>
+		</a>
+		<div class="mdui-divider pk-nav-divider"></div>
+		<div class="mdui-subheader pk-nav-group">相关链接</div>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="https://github.com/FNF-Pk-Dev/FNF_Parker-Engine-new/releases" target="_blank" rel="noopener"><div class="mdui-list-item-content">下载 / Releases</div></a>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="https://github.com/FNF-Pk-Dev/FNF_Parker-Engine-new" target="_blank" rel="noopener"><div class="mdui-list-item-content">GitHub 仓库</div></a>
+		<a class="mdui-list-item mdui-ripple pk-nav-item" href="/"><div class="mdui-list-item-content">返回首页</div></a>
+	</div>
+</aside>
+<main class="pk-main">
+<div class="mdui-container pk-container">
+<nav class="pk-breadcrumb" aria-label="面包屑">
+	<a href="/">首页</a><span class="pk-breadcrumb-sep">/</span><a href="/docs/">文档</a><span class="pk-breadcrumb-sep">/</span><span>HScript</span><span class="pk-breadcrumb-sep">/</span><span class="pk-breadcrumb-current">HScript 完整文档</span>
+</nav>
+<article class="mdui-typo mdui-card mdui-shadow-2 pk-doc"><h1 id="hscript-脚本-api">HScript 脚本 API</h1>
+<blockquote>
+<p><strong>适用版本：Parker Engine 0.2.8</strong>（<code>Project.xml</code> 里的 <code>&lt;app version&gt;</code>）。参考工具链：Haxe 4.3.7、HaxeFlixel 5.8.0、<code>hscript-iris</code> 1.1.3。</p>
+<p><strong>本文以源码为准。</strong> 每一条 API、回调、路径都是从引擎源码里读出来的；源码里没有的行为本文不会写。凡是「源码里有、但当前版本实际跑不到」的东西，都会明确标注为<strong>未生效</strong>。</p>
+</blockquote>
+<p>HScript 是 Parker Engine 的一等公民：它不是一个外挂层，而是引擎自己的解释器（<code>script/FunkinHScript.hx</code> 里同时放着 <code>HScript</code>、<code>Script</code>、<code>IFunkinScript</code>、<code>ScriptType</code> 和 <code>InterpPro</code>，<code>script/hscript/HScript.hx</code> 与 <code>script/hscript/InterpPro.hx</code> 只是给旧路径留的 typedef 别名）。</p>
+<hr>
+<h2 id="0-新手必读先看这-5-条">0. 新手必读（先看这 5 条）</h2>
+<ol>
+<li><strong>扩展名和位置决定一切</strong>：<code>.hx</code> / <code>.hscript</code> / <code>.hsc</code> / <code>.hxs</code> 四种扩展名等价（<code>HScriptUtil.extns</code>），文件放对目录就会被自动加载，不需要注册。唯一的例外见 §1.3 的 <code>scripts/menus/</code>。</li>
+<li><strong>回调 = 同名函数</strong>。脚本里定义 <code>function onStepHit(step:Int) {}</code> 就会被调用；没定义的回调会被静默跳过（不会报错）。</li>
+<li><strong><code>curStep</code> / <code>curBeat</code> 这类全局只在脚本加载那一刻赋值一次</strong>，播放过程中不会再更新（<code>PlayState</code> 只更新 Lua 的，HScript 那份写进了一个空数组）。要实时值请用回调参数，或读 <code>game.curStep</code>。</li>
+<li><strong><code>return 'FUNC_STOP'</code> 并不能真的「中断」其它脚本</strong>：<code>PlayState.callOnHScripts()</code> 的 <code>ignoreStops</code> 默认是 <code>true</code>，所有脚本照样会被调用，只有聚合返回值会变成 <code>FUNC_STOP</code>。只有少数调用点（如 <code>onPause</code>）会看这个返回值。</li>
+<li><strong>出错了先看屏幕左上角</strong>（<code>PlayState.addTextToDebug</code>，最多 34 行；Windows 上还会弹一个原生错误框）。脚本状态（自定义状态）里的错误走 <code>ScriptDebugOverlay</code>。</li>
+</ol>
+<hr>
+<h2 id="1-快速开始">1. 快速开始</h2>
+<h3 id="11-hscript-是什么">1.1 HScript 是什么</h3>
+<ul>
+<li>语法是 Haxe 的子集（<code>crowplexus.hscript</code> 解析器 + Iris 运行层），支持 <code>var</code>、<code>function</code>、<code>if/else</code>、<code>for</code>、<code>while</code>、<code>switch</code>、<code>try/catch</code>、<code>return</code>、<code>import</code>、以及 Haxe 的对象语法（<code>obj.field</code>、<code>obj.method()</code>、<code>new Class(...)</code>）。</li>
+<li>一行脚本可以直接访问引擎类（<code>FlxSprite</code>、<code>Paths</code>、<code>Character</code>、<code>PlayState</code>…），<strong>不需要写 <code>import</code></strong>，因为它们由 <code>FunkinHScript.setDefaultVars()</code> 预先注入为全局变量。</li>
+<li>脚本顶层代码在 <strong>构造时立即执行</strong>；之后由引擎按名字回调（见 §2）。</li>
+</ul>
+<h3 id="12-最小示例">1.2 最小示例</h3>
+<pre><code class="language-haxe">// mods/我的模组/scripts/hello.hx
+var text = new FlxText(0, 40, 0, 'Hello Parker Engine', 24);
+text.screenCenter();
+text.color = 0xFFFFFFFF;
+
+function onCreatePost()
+{
+    add(text); // 歌曲里 add() 会插到角色组附近，见 §3.6
+}
+
+function onStepHit(step:Int)
+{
+    if (step % 8 == 0)
+        text.visible = !text.visible;
+}
+
+function onDestroy()
+{
+    text.destroy();
+}
+</code></pre>
+<h3 id="13-脚本放哪里自动发现规则">1.3 脚本放哪里（自动发现规则）</h3>
+<p>所有路径都先查<strong>当前模组</strong>（<code>Paths.currentModDirectory</code>），再查<strong>全局模组</strong>，最后回落到 <code>mods/</code> 根目录（<code>Paths.modFolders()</code>）；<code>assets/preload/...</code> 是内置资源目录。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>放置位置</th>
+<th>加载者</th>
+<th>脚本 <code>scriptName</code>（过滤/暂停用）</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>mods/&lt;mod&gt;/global.hx</code>（也认 <code>.hscript</code>/<code>.hsc</code>/<code>.hxs</code>）</td>
+<td><code>Main.initIris()</code></td>
+<td><code>GLOBAL</code></td>
+<td>开机时加载一次；<code>this</code> 被覆盖成 <code>Main</code>，另外给一个 <code>fnfgame</code>。只调用 <code>onCreate</code>，之后没有任何引擎回调（<code>Main.onEnterFrame()</code> 里那句 <code>scripts.executeAllFunc('onUpdatePost', ...)</code> 依赖 <code>Main.scripts</code>，而引擎从不给它赋值，所以恒定跳过；脚本要持续逻辑就自己挂 <code>FlxG.stage</code> 的 <code>enterFrame</code>，官方 <code>global.hx</code> 示例就是这么做的）</td>
+</tr>
+<tr>
+<td><code>scripts/*.hx</code>（<code>mods/&lt;mod&gt;/scripts/</code> → 全局模组 → <code>mods/scripts/</code> → <code>assets/preload/scripts/</code>，<strong>递归搜索子目录</strong>）</td>
+<td><code>PlayState.initScripts()</code></td>
+<td>文件名（不含扩展名）</td>
+<td>每首歌都会加载</td>
+</tr>
+<tr>
+<td><code>data/&lt;格式化歌名&gt;/*.hx</code>（<code>mods/&lt;mod&gt;/data/&lt;song&gt;/</code> → <code>assets/preload/data/&lt;song&gt;/</code>，<strong>递归搜索</strong>）</td>
+<td><code>PlayState.initScripts()</code></td>
+<td>文件名</td>
+<td>只在该首歌加载。歌名要过 <code>Paths.formatToSongPath()</code>（小写、空格转 <code>-</code>、去标点）</td>
+</tr>
+<tr>
+<td><code>stages/&lt;舞台名&gt;.hx</code>（先 mods 后 preload）</td>
+<td><code>PlayState.initScripts()</code></td>
+<td>固定为 <code>stage</code></td>
+<td>舞台脚本</td>
+</tr>
+<tr>
+<td><code>characters/&lt;角色名&gt;.hx</code>（只查 mods 目录）</td>
+<td><code>PlayState.initCharScript()</code></td>
+<td>角色名</td>
+<td>角色出现时加载</td>
+</tr>
+<tr>
+<td><code>custom_notetypes/&lt;音符类型&gt;.hx</code>（先 mods 后 preload）</td>
+<td><code>PlayState.loadNoteTypeScripts()</code> / <code>startHScriptsOnFolder()</code></td>
+<td>音符类型名</td>
+<td>谱面里出现该类型时加载</td>
+</tr>
+<tr>
+<td><code>custom_events/&lt;事件名&gt;.hx</code>（先 mods 后 preload）</td>
+<td><code>PlayState.startHScriptsOnFolder()</code></td>
+<td>事件名</td>
+<td>谱面里出现该事件时加载</td>
+</tr>
+<tr>
+<td><code>states/globals/&lt;状态类名&gt;.hx</code></td>
+<td><code>FNFGame.switchState()</code> → <code>OScriptState.fromFile()</code></td>
+<td>完整文件路径</td>
+<td>覆盖内置状态，见 §5</td>
+</tr>
+<tr>
+<td><code>scripts/menus/&lt;状态类名&gt;.&lt;ext&gt;</code></td>
+<td><code>MusicBeatState.setUpScript()</code></td>
+<td>文件名</td>
+<td><strong>当前版本无人调用 <code>setUpScript()</code>，未生效</strong>，见 §6</td>
+</tr>
+<tr>
+<td><code>substates/menu/&lt;名称&gt;.&lt;ext&gt;</code></td>
+<td><code>MusicBeatSubstate.setUpScript()</code></td>
+<td>文件名</td>
+<td>同上，未生效</td>
+</tr>
+</tbody>
+</table></div>
+<p>扩展名清单有两个来源，注意差异：</p>
+<ul>
+<li><code>HScriptUtil.extns = ["hx", "hscript", "hsc", "hxs"]</code> —— 上表大部分查找都用它（<code>PlayState</code>、<code>Main</code>、<code>FNFGame</code>、<code>Macro</code>）。</li>
+<li><code>HScript.exts = ['hx', 'hxs', 'hscript']</code> —— 只有 <code>HScript.getPath()</code> 用（也就是未生效的 <code>scripts/menus/</code> 查找），<strong>不含 <code>hsc</code></strong>。</li>
+</ul>
+<p><code>HScriptUtil.findEncodedScriptsInDir()</code> 会找 <code>hxenc</code> / <code>hscriptenc</code> / <code>hscenc</code> / <code>hxsenc</code>，但引擎里没有任何地方调用它——加密脚本这套目前是死代码。</p>
+<h3 id="14-命名规则">1.4 命名规则</h3>
+<ul>
+<li>脚本文件名（不含扩展名）会成为它的 <code>scriptName</code>，用于 <code>PlayState.setScriptPaused(tag, paused)</code>、<code>callOn*</code> 的 <code>exclusions</code> 数组，以及 <code>HScript.getScriptByTag()</code>。</li>
+<li>角色 / 音符类型 / 事件脚本的 <code>scriptName</code> 是<strong>角色名、类型名、事件名</strong>本身（不是文件名）。</li>
+<li>舞台脚本的 <code>scriptName</code> 恒为 <code>'stage'</code>，因此很难单独暂停某一个舞台脚本。</li>
+</ul>
+<hr>
+<h2 id="2-脚本生命周期与回调">2. 脚本生命周期与回调</h2>
+<h3 id="21-加载流程playstate-里实际发生的顺序">2.1 加载流程（<code>PlayState</code> 里实际发生的顺序）</h3>
+<pre><code>PlayState.create()
+├─ loadGlobalScripts()           // 只加载 scripts/ 下的 .lua/.lscript/.py（整段在 #if LUA_ALLOWED 里）
+├─ initScripts()                 // HScript：scripts/、data/&lt;song&gt;/、stages/&lt;stage&gt;
+│   └─ 每个脚本：new HScript(内容, 名字)  ← 脚本顶层代码在这里跑
+│                → 若解析失败（parsingException != null）直接丢弃
+│                → set('pauseScript' / 'resumeScript' / 'setScriptPaused')
+│                → script.call('onCreate')      ← 第一个回调
+│                → hscriptArray.push(script)
+│                → onAddScript()                ← 注入 curStep/boyfriend/camGame/...
+├─ generateSong() → 创建角色、modManager
+├─ setDefaultHScripts('modManager', modManager)
+├─ loadNoteTypeScripts()
+├─ ... super.create() 之前：
+│     callOnScripts('onCreatePost')
+│     callOnScripts('onLoad')
+startSong()
+├─ 需要时才加载 custom_notetypes/ 与 custom_events/ 脚本
+├─ loadSongScripts(SONG.song)    // data/&lt;song&gt;/ 下的 .lua/.lscript/.py
+└─ callOnScripts('onStartCountdown') / onCountdownTick ×N / onSongStart ...
+
+PlayState.destroy()
+└─ 每个脚本：hx.call('onDestroy') → hx.stop()
+</code></pre>
+<p>要点：</p>
+<ul>
+<li><strong><code>onCreate</code> 不是引擎统一派发的</strong>，而是 <code>initIris()</code> 在构造后手动 <code>script.call('onCreate')</code>；所以 <code>states/globals/</code> 这类自定义状态里的脚本<strong>收不到</strong> <code>onCreate</code>。</li>
+<li>脚本是<strong>逐个</strong>加载的，每加载一个就重跑一遍 <code>onAddScript()</code>：<code>curStep</code>/<code>boyfriend</code> 之类的注入值用的是「那一刻」的值。</li>
+<li>脚本在数组里的顺序 = 加载顺序 = <code>callOnHScripts()</code> 的调用顺序（先 <code>assets/preload</code>，后 mods）。</li>
+</ul>
+<h3 id="22-回调全表playstate-向-hscript-派发的">2.2 回调全表（PlayState 向 HScript 派发的）</h3>
+<p>以下全部是 <code>PlayState</code> 通过 <code>callOnScripts()</code> / <code>callOnScriptAll()</code> 真正会派发到 <code>hscriptArray</code> 上的回调。参数写法为「名字: 类型」。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>回调</th>
+<th>触发时机</th>
+<th>参数</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>onCreate</code></td>
+<td>脚本构造完成、加入数组之前</td>
+<td>无</td>
+<td>由 <code>initIris()</code> 调用</td>
+</tr>
+<tr>
+<td><code>onCreatePost</code></td>
+<td><code>PlayState.create()</code> 里 <code>super.create()</code> 之前</td>
+<td>无</td>
+<td>和 <code>onLoad</code> 紧邻</td>
+</tr>
+<tr>
+<td><code>onLoad</code></td>
+<td>紧接着 <code>onCreatePost</code></td>
+<td>无</td>
+<td>Lua 那边也会收到</td>
+</tr>
+<tr>
+<td><code>onStartCountdown</code></td>
+<td>倒计时开始之前</td>
+<td>无</td>
+<td>返回 <code>FUNC_STOP</code> 不会阻止倒计时</td>
+</tr>
+<tr>
+<td><code>preModifierRegister</code></td>
+<td><code>modManager.registerDefaultModifiers()</code> 之前</td>
+<td>无</td>
+<td>modchart 用；此时 <code>modManager</code> 已经存在</td>
+</tr>
+<tr>
+<td><code>postModifierRegister</code></td>
+<td>内置 modifier 注册完之后</td>
+<td>无</td>
+<td>脚本可以在这里注册自己的 modifier</td>
+</tr>
+<tr>
+<td><code>generateModchart</code></td>
+<td>每次 <code>onCountdownTick</code> 之后</td>
+<td>无</td>
+<td>和 <code>onCountdownTick</code> 同一个定时器里派发</td>
+</tr>
+<tr>
+<td><code>onCountdownTick</code></td>
+<td>倒计时每次 tick</td>
+<td><code>swagCounter:Int</code></td>
+<td>定时器 <code>loops = 5</code>，所以共 5 次：0,1,2,3,4</td>
+</tr>
+<tr>
+<td><code>onSongStart</code></td>
+<td>歌曲正式开始</td>
+<td>无</td>
+<td></td>
+</tr>
+<tr>
+<td><code>onUpdate</code></td>
+<td>每帧，<code>super.update()</code> 之前</td>
+<td><code>elapsed:Float</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>onUpdatePost</code></td>
+<td>每帧，<code>update()</code> 末尾</td>
+<td><code>elapsed:Float</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>onStepHit</code></td>
+<td>每个 step</td>
+<td><code>curStep:Int</code></td>
+<td>同一步只会触发一次（<code>lastStepHit</code> 去重）</td>
+</tr>
+<tr>
+<td><code>onBeatHit</code></td>
+<td>每一拍</td>
+<td><code>curBeat:Int</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>onSectionHit</code></td>
+<td>每一段</td>
+<td><code>curSection:Int</code></td>
+<td>派发前会把 HScript 的 <code>curSection</code> 全局刷新一次</td>
+</tr>
+<tr>
+<td><code>onUpdateScore</code></td>
+<td>分数文本需要刷新时</td>
+<td><code>miss:Bool</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>onSpawnNote</code></td>
+<td>音符真正进入 <code>notes</code> 时</td>
+<td><code>note:Note</code></td>
+<td>Lua 那边收到的是 4 个分散参数，HScript 收整个对象</td>
+</tr>
+<tr>
+<td><code>goodNoteHit</code></td>
+<td>玩家命中</td>
+<td><code>note:Note</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>opponentNoteHit</code></td>
+<td>对手命中</td>
+<td><code>note:Note</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>noteMiss</code></td>
+<td>玩家漏按（音符撞线）</td>
+<td><code>daNote:Note</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>noteMissPress</code></td>
+<td>玩家按错键</td>
+<td><code>direction:Int</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>popUpScore</code></td>
+<td>生成的分数/评级气泡</td>
+<td><code>rating:String, comboSpr:FlxSprite, numScore:FlxSprite</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>SkinNoteSplash</code></td>
+<td>决定水花皮肤前</td>
+<td><code>skin:String</code></td>
+<td>传的是字符串副本，改它没用；请返回新的皮肤名</td>
+</tr>
+<tr>
+<td><code>onEvent</code></td>
+<td>谱面事件触发</td>
+<td><code>eventName:String, value1:String, value2:String</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>onMoveCamera</code></td>
+<td>相机跟随目标变化</td>
+<td><code>char:Character</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>onPause</code></td>
+<td>打开暂停菜单时</td>
+<td>无</td>
+<td><code>callOnScriptAll('onPause')</code>，聚合返回值 == <code>'FUNC_STOP'</code> 时<strong>不打开</strong>暂停菜单（唯一真正好用的 Stop）</td>
+</tr>
+<tr>
+<td><code>onResume</code></td>
+<td>从暂停恢复</td>
+<td>无</td>
+<td></td>
+</tr>
+<tr>
+<td><code>onGameOver</code></td>
+<td>血量归零、触发死亡</td>
+<td>无</td>
+<td>调用点写的是 <code>ret != Stop \|\| retH != Stop</code>，单独返回 Stop 拦不住死亡</td>
+</tr>
+<tr>
+<td><code>onRecalculateRating</code></td>
+<td>重算分数/评级</td>
+<td>无</td>
+<td>同上，条件也是 <code>\|\|</code></td>
+</tr>
+<tr>
+<td><code>onEndSong</code></td>
+<td>歌曲结束（结算前）</td>
+<td>无</td>
+<td><code>ignoreStops = false</code>，但返回值没有被使用</td>
+</tr>
+<tr>
+<td><code>onDestroy</code></td>
+<td><code>PlayState.destroy()</code></td>
+<td>无</td>
+<td>之后立刻 <code>stop()</code>，脚本被销毁</td>
+</tr>
+<tr>
+<td><code>eventEarlyTrigger</code></td>
+<td>计算事件提前量</td>
+<td><code>eventName:String, value1:String, value2:String, strumTime:Float</code></td>
+<td><strong>返回值会被当成 Float 毫秒数用</strong>：返回数字即可，别返回 <code>'FUNC_STOP'</code> 之类</td>
+</tr>
+</tbody>
+</table></div>
+<p>只派发给 Lua 的常见回调（HScript / Python <strong>收不到</strong>）：<code>onKeyPress</code>、<code>onKeyRelease</code>、<code>onGhostTap</code>、<code>onCountdownStarted</code>、<code>onCustomSubstate*</code>、<code>onGameOverStart</code>、<code>onGameOverConfirm</code>、<code>onNextDialogue</code>、<code>onSkipDialogue</code>、<code>onUpdateOptions</code>、<code>onEventSet</code>。</p>
+<h3 id="23-返回值约定function_stop-function_continue-function_halt">2.3 返回值约定：<code>Function_Stop</code> / <code>Function_Continue</code> / <code>Function_Halt</code></h3>
+<pre><code class="language-haxe">// script/GlobalScript.hx
+Function_Stop     = 'FUNC_STOP';
+Function_Continue = 'FUNC_CONT';
+Function_Halt     = 'FUNC_HALT';
+</code></pre>
+<ul>
+<li>回调<strong>没有 <code>return</code></strong>、或返回 <code>null</code>、或函数压根不存在 → <code>HScript.call()</code> 一律返回 <code>Function_Continue</code>。</li>
+<li>回调返回其它值 → 这个值会作为「聚合返回值」传给调用方（<code>eventEarlyTrigger</code> 就靠这个机制）。</li>
+<li><strong><code>Function_Stop</code> 在 PlayState 里基本拦不住东西</strong>：<code>callOnHScripts(event, args, ignoreStops = true)</code> 只有在 <code>ignoreStops == false</code> 时才会 <code>break</code>，而 <code>PlayState</code> 里几乎所有调用点都用默认值。它真正的效果是让整条调用链的<strong>返回值</strong>变成 <code>'FUNC_STOP'</code>。目前只有 <code>openPauseMenu()</code> 会检查它。</li>
+<li><strong><code>Function_Halt</code> 在 PlayState 里没有任何特殊处理</strong>，它和普通返回值一样只会改变聚合返回值。特殊处理在 <code>MusicBeatState.callOnScript()</code> / <code>MusicBeatSubstate.callOnScript()</code> 里（<code>Halt</code> → 变成 <code>Function_Continue</code> 并中断），而这两条路径（菜单脚本）当前未被启用。</li>
+<li>想「跳过其它脚本」目前没有可靠手段；可以改用 <code>PlayState.setScriptPaused(tag, true)</code> 暂停自己或别的脚本（见 §3.6）。</li>
+</ul>
+<hr>
+<h2 id="3-全局-api-参考">3. 全局 API 参考</h2>
+<p>这一节把 <code>FunkinHScript.setDefaultVars()</code> 注册的<strong>全部</strong>条目、外加 Iris 的 <code>preset()</code> 额外注册的 3 个（<code>Std</code>、<code>Math</code>、<code>trace</code>）都列出来：<strong>共 72 个固定条目 + 1 个动态条目</strong>（<code>Lua_helper.callbacks</code> 转发，仅有 Lua 时存在）。</p>
+<p><code>setDefaultVars()</code> 开头会调用 <code>_script.preset()</code>，那是 Iris 自带的最小预置：<code>Std</code>、<code>StringTools</code>、<code>Math</code>、<code>trace</code>（<code>trace</code> 需要 <code>#if hscriptPos</code>，<code>Project.xml</code> 里已定义）。</p>
+<h3 id="31-语言-标准库-宿主">3.1 语言 / 标准库 / 宿主</h3>
+<h4 id="this"><code>this</code></h4>
+<ul>
+<li>当前脚本看到的「自己」，由 <code>FunkinHScript.getScriptThis()</code> 决定。<strong>规则见 §4</strong>；歌曲里由 <code>PlayState</code> 加载的脚本，<code>this</code> 就是 <code>PlayState.instance</code>。</li>
+<li>示例：<code>this.health -= 0.05;</code>（歌曲中合法）</li>
+</ul>
+<h4 id="script"><code>script</code></h4>
+<ul>
+<li><strong>类型</strong>：<code>HScript</code>（<code>script.FunkinHScript.HScript</code>）</li>
+<li>这个脚本包装器本身：<code>script.scriptName</code>（文件名/角色名/事件名）、<code>script.name</code>、<code>script.exists('foo')</code>、<code>script.executeFunc('foo', [args])</code>、<code>script.get('x')</code> / <code>script.set('x', v)</code>、<code>script.stop()</code>。</li>
+<li><code>defaultVars</code> 是<strong>静态字段</strong>，请写成 <code>HScript.defaultVars</code>（给之后创建的每个 HScript 预置变量）；<code>PlayState.setDefaultHScripts(name, value)</code> 就是往它里面写。</li>
+<li>示例：<code>if (script.exists('myFunc')) script.executeFunc('myFunc', [1, 2]);</code></li>
+</ul>
+<h4 id="stringtools"><code>StringTools</code></h4>
+<ul>
+<li><strong>类型</strong>：<code>StringTools</code> 类</li>
+<li>字符串工具（<code>replace</code>、<code>startsWith</code>、<code>trim</code>、<code>lPad</code>…）。</li>
+<li>示例：<code>var s = StringTools.replace(title, ' ', '-');</code></li>
+</ul>
+<h4 id="std"><code>Std</code></h4>
+<ul>
+<li><strong>类型</strong>：<code>Std</code> 类（来自 Iris <code>preset()</code>）</li>
+<li><code>Std.int()</code>、<code>Std.string()</code>、<code>Std.parseInt()</code>、<code>Std.random()</code> 等。</li>
+<li>示例：<code>var i = Std.int(elapsed * 60);</code></li>
+</ul>
+<h4 id="math"><code>Math</code></h4>
+<ul>
+<li><strong>类型</strong>：<code>Math</code> 类（来自 Iris <code>preset()</code>）</li>
+<li>标准数学库；另可配合已注册的 <code>FlxMath</code>。</li>
+<li>示例：<code>var a = Math.sin(Conductor.songPosition / 1000) * 20;</code></li>
+</ul>
+<h4 id="trace"><code>trace</code></h4>
+<ul>
+<li><strong>类型</strong>：函数（来自 Iris <code>preset()</code>，需要 <code>#if hscriptPos</code>，本项目已定义）</li>
+<li>会走 Iris 的日志通道：歌曲中打印到屏幕左上角的调试文本（<code>Iris.print</code>），日志级别为 <code>TRACE</code>。</li>
+<li>示例：<code>trace('step ' + step);</code></li>
+</ul>
+<h4 id="type"><code>Type</code></h4>
+<ul>
+<li><strong>类型</strong>：<code>Type</code> 类</li>
+<li>运行时类型工具。<strong>在默认 API 里缺少某个类时，这是自救的关键</strong>：<code>Type.resolveClass('flixel.ui.FlxBar')</code> + <code>Type.createInstance(cls, [args])</code>。</li>
+<li>示例：<code>var bar = Type.createInstance(Type.resolveClass('flixel.ui.FlxBar'), [0, 0, null, 200, 20]);</code></li>
+</ul>
+<h4 id="dynamic"><code>Dynamic</code></h4>
+<ul>
+<li><strong>类型</strong>：<code>Dynamic</code> 类型</li>
+<li>动态类型标记，写 <code>var x:Dynamic = null;</code> 时可用。</li>
+</ul>
+<h4 id="stringmap-intmap-objectmap"><code>StringMap</code> / <code>IntMap</code> / <code>ObjectMap</code></h4>
+<ul>
+<li><strong>类型</strong>：<code>haxe.ds.StringMap</code> / <code>haxe.ds.IntMap</code> / <code>haxe.ds.ObjectMap</code></li>
+<li>三种 Haxe 映射表。注意 HScript 里也支持 <code>{a: 1}</code> 这样的匿名结构和 <code>[]</code> 数组。</li>
+<li>示例：<code>var m = new StringMap(); m.set('a', 1);</code></li>
+</ul>
+<h4 id="main"><code>Main</code></h4>
+<ul>
+<li><strong>类型</strong>：<code>Main</code> 类</li>
+<li>程序入口类（<code>Main.fpsVar</code>、<code>Main.backPressed</code> 等静态成员）。<code>global.hx</code> 里 <code>this</code> 会被覆盖成它。</li>
+<li>示例：<code>Main.fpsVar.visible = false;</code></li>
+</ul>
+<h4 id="lib"><code>Lib</code></h4>
+<ul>
+<li><strong>类型</strong>：<code>openfl.Lib</code></li>
+<li>OpenFL 的 <code>Lib.current</code> / <code>Lib.application</code>。</li>
+<li>示例：<code>Lib.application.window.title = 'Parker Engine';</code></li>
+</ul>
+<h4 id="assets-openflassets"><code>Assets</code> / <code>OpenFlAssets</code></h4>
+<ul>
+<li><strong>类型</strong>：<code>lime.utils.Assets</code> / <code>openfl.utils.Assets</code></li>
+<li>底层资源系统。<strong>一般不该用</strong>——请走 <code>Paths</code>，否则不认模组。</li>
+</ul>
+<h3 id="32-haxeflixel-openfl">3.2 HaxeFlixel / OpenFL</h3>
+<h4 id="flxg"><code>FlxG</code></h4>
+<ul>
+<li><strong>类型</strong>：<code>flixel.FlxG</code></li>
+<li>全局入口：<code>FlxG.sound</code>、<code>FlxG.camera</code>、<code>FlxG.cameras</code>、<code>FlxG.keys</code>、<code>FlxG.mouse</code>、<code>FlxG.random</code>、<code>FlxG.save</code>、<code>FlxG.width/height</code>、<code>FlxG.watch()</code>。</li>
+<li>示例：<code>FlxG.camera.shake(0.02, 0.3);</code>（签名是 <code>shake(Intensity, Duration)</code>，注意强度在前）</li>
+</ul>
+<h4 id="flxsprite"><code>FlxSprite</code></h4>
+<ul>
+<li><strong>类型</strong>：<code>flixel.FlxSprite</code></li>
+<li>最常用的精灵类。</li>
+<li>示例：
+  <code>haxe
+  var spr = new FlxSprite(0, 0).loadGraphic(Paths.image('logo'));
+  spr.scale.set(0.5, 0.5);
+  spr.updateHitbox();
+  add(spr);</code></li>
+</ul>
+<h4 id="flxtypedgroup-flxspritegroup"><code>FlxTypedGroup</code> / <code>FlxSpriteGroup</code></h4>
+<ul>
+<li><strong>类型</strong>：<code>flixel.group.FlxGroup.FlxTypedGroup</code> / <code>flixel.group.FlxSpriteGroup</code></li>
+<li>容器。<code>FlxSpriteGroup</code> 有整体位移/缩放语义（<code>x</code>、<code>scale</code> 作用于整组）。</li>
+<li>示例：<code>var grp = new FlxSpriteGroup(); grp.add(spr); add(grp);</code></li>
+</ul>
+<h4 id="flxcamera"><code>FlxCamera</code></h4>
+<ul>
+<li><strong>类型</strong>：<code>flixel.FlxCamera</code></li>
+<li>相机类。<code>spr.cameras = [camHUD];</code> 决定精灵画在哪台相机上。</li>
+<li>示例：<code>var cam = new FlxCamera(); cam.bgColor.alpha = 0; FlxG.cameras.add(cam, false);</code></li>
+</ul>
+<h4 id="flxmath"><code>FlxMath</code></h4>
+<ul>
+<li><strong>类型</strong>：<code>flixel.math.FlxMath</code></li>
+<li>数值工具：<code>lerp(a, b, ratio)</code>、<code>bound(value, ?min, ?max)</code>、<code>inBounds</code>、<code>remapToRange</code>、<code>distanceBetween(sprA, sprB)</code>、<code>distanceToPoint</code>、<code>roundDecimal(value, precision)</code>、<code>wrap</code>、<code>signOf</code>、<code>equal</code>、<code>fastSin</code> / <code>fastCos</code>。</li>
+<li>示例：<code>cam.zoom = FlxMath.lerp(cam.zoom, 1.0, 0.05);</code></li>
+</ul>
+<h4 id="flxtimer"><code>FlxTimer</code></h4>
+<ul>
+<li><strong>类型</strong>：<code>flixel.util.FlxTimer</code></li>
+<li>定时器。</li>
+<li>示例：<code>new FlxTimer().start(0.5, function(t) { spr.alpha = 0; });</code></li>
+</ul>
+<h4 id="flxtween-flxease"><code>FlxTween</code> / <code>FlxEase</code></h4>
+<ul>
+<li><strong>类型</strong>：<code>flixel.tweens.FlxTween</code> / <code>flixel.tweens.FlxEase</code></li>
+<li>补间与缓动曲线。</li>
+<li>示例：<code>FlxTween.tween(spr, {angle: 360}, 1.0, {ease: FlxEase.quadOut, type: FlxTween.PINGPONG});</code></li>
+</ul>
+<h4 id="flxsound"><code>FlxSound</code></h4>
+<ul>
+<li><strong>类型</strong>：<code>flixel.sound.FlxSound</code></li>
+<li>音频对象。</li>
+<li>示例：<code>var snd = FlxG.sound.load(Paths.sound('scroll')); snd.play();</code></li>
+</ul>
+<h4 id="flxcolor"><code>FlxColor</code></h4>
+<ul>
+<li><strong>类型</strong>：<code>script.hscript.HScriptUtil.CustomFlxColor</code>（不是原版 <code>FlxColor</code>）</li>
+<li>这是一个<strong>静态工具类</strong>：颜色常量（<code>FlxColor.RED</code>、<code>WHITE</code>、<code>BLACK</code>…）与静态函数，函数把颜色当第一个参数。</li>
+<li>常用：<code>FlxColor.fromRGB(r,g,b,?a)</code>、<code>fromRGBFloat</code>、<code>fromString</code>、<code>fromHSL</code>、<code>fromHSB</code>、<code>fromCMYK</code>、<code>interpolate</code>、<code>gradient</code>、<code>getHSBColorWheel</code>，以及 <code>toRGBArray(color)</code>、<code>lerp(from,to,ratio)</code>、<code>toHexString(color)</code>、<code>to24Bit(color)</code>、<code>getDarkened(color)</code>、<code>getInverted(color)</code>、<code>getLightened(color)</code>、<code>getComplementHarmony(color)</code> 等。</li>
+<li>示例：<code>text.color = FlxColor.fromRGB(255, 120, 0);</code></li>
+</ul>
+<h4 id="flxruntimeshader"><code>FlxRuntimeShader</code></h4>
+<ul>
+<li><strong>类型</strong>：<code>flixel.addons.display.FlxRuntimeShader</code></li>
+<li>直接 <code>new FlxRuntimeShader(fragSource, vertSource)</code> 建 shader（<strong>要的是源码字符串，不是路径</strong>）。更省事的写法是 <code>Paths.getShader('glitch')</code>，它帮你读文件、认模组、返回 <code>null</code> 表示失败。</li>
+<li>示例：<code>spr.shader = Paths.getShader('glitch');</code></li>
+<li>另见 §3.6 的 <code>newShader()</code>（当前版本有 bug）与 §3.8 说明的 <code>ShaderFilter</code> 未注册问题。</li>
+</ul>
+<h4 id="flxflicker"><code>FlxFlicker</code></h4>
+<ul>
+<li><strong>类型</strong>：<code>flixel.effects.FlxFlicker</code></li>
+<li>闪烁效果。</li>
+<li>示例：<code>FlxFlicker.flicker(spr, 1, 0.05, true);</code></li>
+</ul>
+<h4 id="flxspriteutil"><code>FlxSpriteUtil</code></h4>
+<ul>
+<li><strong>类型</strong>：<code>flixel.util.FlxSpriteUtil</code></li>
+<li>在精灵上画线/画框/填充（<code>drawLine</code>、<code>drawRect</code>、<code>fill</code>、<code>screenWrap</code>）。</li>
+<li>示例：<code>FlxSpriteUtil.drawRect(spr, 0, 0, 100, 40, 0x88000000);</code></li>
+</ul>
+<h4 id="flxbackdrop-flxtiledsprite"><code>FlxBackdrop</code> / <code>FlxTiledSprite</code></h4>
+<ul>
+<li><strong>类型</strong>：<code>flixel.addons.display.FlxBackdrop</code> / <code>FlxTiledSprite</code></li>
+<li>滚动平铺背景。</li>
+<li>示例：<code>var bg = new FlxBackdrop(Paths.image('checker'), FlxAxes.XY, 0.2, 0.2); add(bg);</code></li>
+</ul>
+<h4 id="flxcamerafollowstyle"><code>FlxCameraFollowStyle</code></h4>
+<ul>
+<li><strong>类型</strong>：<code>flixel.FlxCamera.FlxCameraFollowStyle</code> 枚举</li>
+<li>相机跟随样式（<code>LOCKON</code>、<code>PLATFORMER</code>、<code>TOPDOWN</code>、<code>SCREEN_BY_SCREEN</code>、<code>NO_DEAD_ZONE</code>）。</li>
+<li>示例：<code>PlayState.instance.camGame.follow(PlayState.instance.camFollow, FlxCameraFollowStyle.LOCKON);</code></li>
+</ul>
+<h4 id="flxtextborderstyle"><code>FlxTextBorderStyle</code></h4>
+<ul>
+<li><strong>类型</strong>：<code>flixel.text.FlxText.FlxTextBorderStyle</code> 枚举</li>
+<li><code>NONE</code>、<code>SHADOW</code>、<code>OUTLINE</code>、<code>OUTLINE_FAST</code>。</li>
+<li>示例：<code>text.setBorderStyle(FlxTextBorderStyle.OUTLINE, 0xFF000000, 1.5);</code></li>
+</ul>
+<h4 id="flxbarfilldirection"><code>FlxBarFillDirection</code></h4>
+<ul>
+<li><strong>类型</strong>：<code>flixel.ui.FlxBar.FlxBarFillDirection</code> 枚举</li>
+<li>血条/进度条填充方向。<strong>注意 <code>FlxBar</code> 类本身没有注册</strong>，见 §3.8。</li>
+</ul>
+<h4 id="flxpoint-flxbasepoint"><code>FlxPoint</code> / <code>FlxBasePoint</code></h4>
+<ul>
+<li><strong>类型</strong>：<code>flixel.math.FlxPoint.FlxBasePoint</code>（两个名字指向同一个类）</li>
+<li>点/向量。</li>
+<li>示例：<code>var p = new FlxPoint(0, 0); p.set(50, 50);</code></li>
+</ul>
+<h4 id="flxtextalign"><code>FlxTextAlign</code></h4>
+<ul>
+<li><strong>类型</strong>：抽象（由 <code>MacroPro.buildAbstract()</code> 从 <code>FlxText.FlxTextAlign</code> 生成）</li>
+<li>取值 <code>LEFT</code>、<code>CENTER</code>、<code>RIGHT</code>、<code>JUSTIFY</code>。</li>
+<li>示例：<code>text.alignment = FlxTextAlign.CENTER;</code></li>
+</ul>
+<h4 id="flxaxes"><code>FlxAxes</code></h4>
+<ul>
+<li><strong>类型</strong>：抽象（来自 <code>flixel.util.FlxAxes</code>）</li>
+<li>取值 <code>X</code>、<code>Y</code>、<code>XY</code>。</li>
+</ul>
+<h4 id="blendmode"><code>BlendMode</code></h4>
+<ul>
+<li><strong>类型</strong>：抽象（来自 <code>openfl.display.BlendMode</code>）</li>
+<li>取值 <code>ADD</code>、<code>MULTIPLY</code>、<code>SCREEN</code>、<code>INVERT</code>、<code>SUBTRACT</code>…</li>
+<li>示例：<code>spr.blend = BlendMode.ADD;</code></li>
+</ul>
+<h4 id="flxkey"><code>FlxKey</code></h4>
+<ul>
+<li><strong>类型</strong>：抽象（来自 <code>flixel.input.keyboard.FlxKey</code>）</li>
+<li>键码枚举（<code>FlxG.keys.justPressed.A</code> 等已直接可用，这个全局用于 <code>FlxKey.fromString(txt)</code> 之类场景）。</li>
+</ul>
+<h3 id="33-引擎类">3.3 引擎类</h3>
+<h4 id="paths"><code>Paths</code></h4>
+<ul>
+<li><strong>类型</strong>：<code>backend.Paths</code></li>
+<li><strong>唯一的资源入口，永远不要硬编码 <code>assets/...</code></strong>。常用：<code>Paths.image</code>、<code>sound</code>、<code>music</code>、<code>inst</code>、<code>voices</code>、<code>font</code>、<code>video</code>、<code>getSparrowAtlas</code>、<code>getPackerAtlas</code>、<code>getJSONAtlas</code>、<code>json</code>、<code>txt</code>、<code>lua</code>、<code>getContent</code>、<code>getShader</code>、<code>modFolders</code>、<code>mods</code>、<code>exists</code>、<code>formatToSongPath</code>、<code>getPreloadPath</code>、<code>clearStoredMemory</code>、<code>clearUnusedMemory</code>。</li>
+<li>示例：<code>var spr = new FlxSprite().loadGraphic(Paths.image('characters/BOYFRIEND'));</code></li>
+</ul>
+<h4 id="conductor"><code>Conductor</code></h4>
+<ul>
+<li><strong>类型</strong>：<code>backend.songs.Conductor</code></li>
+<li>时间轴：<code>Conductor.songPosition</code>（毫秒）、<code>bpm</code>、<code>crochet</code>、<code>stepCrochet</code>、<code>changeBPM()</code>、<code>getBPMFromSeconds()</code>、<code>mapBPMChanges()</code>。</li>
+<li>示例：<code>if (Conductor.songPosition &gt; 5000) { /* ... */ }</code></li>
+</ul>
+<h4 id="song"><code>Song</code></h4>
+<ul>
+<li><strong>类型</strong>：<code>backend.songs.Song</code></li>
+<li>歌曲数据：<code>Song.loadFromJson(jsonInput:String, ?folder:String)</code> 返回 <code>SwagSong</code>（谱面对象）——第一个参数是<strong>文件名</strong>（难度后缀也在这里，如 <code>'bopeebo-hard'</code>），第二个是歌曲目录名。</li>
+<li>示例：<code>var chart = Song.loadFromJson('bopeebo-hard', 'bopeebo'); trace(chart.song);</code></li>
+</ul>
+<h4 id="clientprefs"><code>ClientPrefs</code></h4>
+<ul>
+<li><strong>类型</strong>：<code>backend.ClientPrefs</code></li>
+<li>全部已保存设置都是 <code>public static var</code>：<code>ClientPrefs.downScroll</code>、<code>middleScroll</code>、<code>opponentStrums</code>、<code>flashing</code>、<code>camZooms</code>、<code>hideHud</code>、<code>noteOffset</code>、<code>ghostTapping</code>、<code>healthBarAlpha</code>、<code>noteSplashes</code>、<code>lowQuality</code>、<code>globalAntialiasing</code>、<code>timeBarType</code>、<code>scoreZoom</code>、<code>hitsoundVolume</code>、<code>pauseMusic</code> 等。</li>
+<li>对局相关的开关（血量增减、练习模式、botplay、谱速、modchart 开关等）在 <code>gameplaySettings</code> 里，用 <strong><code>ClientPrefs.getGameplaySetting(name, defaultValue)</code></strong> 读：可用键为 <code>scrollspeed</code>、<code>scrolltype</code>、<code>songspeed</code>、<code>backbaropacity</code>、<code>healthgain</code>、<code>healthloss</code>、<code>instakill</code>、<code>practice</code>、<code>botplay</code>、<code>opponentplay</code>、<code>modchart</code>。</li>
+<li><strong><code>botPlay</code> 不是 <code>ClientPrefs</code> 的字段</strong>，它是 <code>PlayState.cpuControlled</code>（HScript 里写 <code>game.cpuControlled</code>）；<code>ClientPrefs.getGameplaySetting('botplay', false)</code> 才是那个设置项。</li>
+<li>示例：<code>if (!ClientPrefs.flashing) { /* 尊重闪光敏感设置 */ }</code></li>
+</ul>
+<h4 id="coolutil"><code>CoolUtil</code></h4>
+<ul>
+<li><strong>类型</strong>：<code>backend.CoolUtil</code></li>
+<li>工具库：<code>CoolUtil.coolTextFile</code>、<code>listFromString</code>、<code>getFileStringFromPath</code>、<code>findFilesInPath</code>、<code>showPopUp</code>、<code>boundTo</code>。</li>
+</ul>
+<h4 id="stagedata"><code>StageData</code></h4>
+<ul>
+<li><strong>类型</strong>：<code>backend.game.StageData</code></li>
+<li>舞台数据（<code>StageData.getStageFile(name)</code> 等）。</li>
+</ul>
+<h4 id="musicbeatstate"><code>MusicBeatState</code></h4>
+<ul>
+<li><strong>类型</strong>：<code>backend.MusicBeatState</code></li>
+<li>状态基类：静态 <code>MusicBeatState.switchState(next)</code>、<code>resetState()</code>、<code>getState()</code>、<code>getVariables()</code>。</li>
+<li>注意：<strong><code>states.menu.CreditsState</code> 这种包路径不是全局变量</strong>，直接 <code>new</code> 会报 <code>Unknown variable states</code>。换状态请先解析类（并注意每个状态的构造参数，例如 <code>FreeplayState</code> 需要 <code>(song, week, songCharacter, color)</code>）：
+  <code>haxe
+  var cls = Type.resolveClass('states.menu.CreditsState');
+  MusicBeatState.switchState(Type.createInstance(cls, []));</code>
+  （<code>getVariables()</code> / <code>getState()</code> 会 <code>cast FlxG.state</code> 成 <code>MusicBeatState</code>，从非 MusicBeatState 的状态里调用会失败。）</li>
+</ul>
+<h4 id="playstate"><code>PlayState</code></h4>
+<ul>
+<li><strong>类型</strong>：<code>states.game.PlayState</code></li>
+<li>游戏状态类本身。<code>PlayState.instance</code> 是当前对局实例（没有对局时为 <code>null</code>）。<strong>注意：<code>PlayState</code> 的 <code>instance</code> 是静态字段，脚本里读 <code>PlayState.instance</code> 才是安全的写法</strong>；<code>game</code> 是它在加载那一刻的快照。</li>
+</ul>
+<h4 id="gameoversubstate"><code>GameOverSubstate</code></h4>
+<ul>
+<li><strong>类型</strong>：<code>substates.game.GameOverSubstate</code></li>
+<li>死亡界面；<code>GameOverSubstate.instance</code> 在死亡时可用。</li>
+</ul>
+<h4 id="funkinlua"><code>FunkinLua</code></h4>
+<ul>
+<li><strong>类型</strong>：<code>psych.script.FunkinLua</code></li>
+<li>Lua 脚本包装器。暴露它主要是为了 <code>FunkinLua.customFunctions</code> / <code>FunkinLua.hscript</code> 之类的互操作；以及 <code>createGlobalCallback()</code> 会用它的静态表（见 §3.5）。</li>
+</ul>
+<h4 id="hscript"><code>HScript</code></h4>
+<ul>
+<li><strong>类型</strong>：<code>script.FunkinHScript.HScript</code></li>
+<li>HScript 包装器类本身，可用来在脚本里新建子脚本：<code>var s = new HScript(source, 'name');</code>，或静态的 <code>HScript.fromString(...)</code> / <code>HScript.fromFile(...)</code> / <code>HScript.getPath(...)</code> / <code>HScript.defaultVars</code> / <code>HScript.exts</code>。</li>
+</ul>
+<h3 id="34-游戏对象">3.4 游戏对象</h3>
+<h4 id="note"><code>Note</code></h4>
+<ul>
+<li><strong>类型</strong>：<code>obj.Note</code></li>
+<li><strong>构造签名</strong>：<code>new Note(strumTime:Float, noteData:Int, ?prevNote:Note, ?sustainNote:Bool = false, ?inEditor:Bool = false)</code></li>
+<li>音符对象（<code>onSpawnNote</code> / <code>goodNoteHit</code> / <code>noteMiss</code> 的参数就是它）。常用字段：<code>noteData</code>、<code>noteType</code>、<code>strumTime</code>、<code>isSustainNote</code>、<code>mustPress</code>、<code>multAlpha</code>、<code>ignoreNote</code>、<code>hitCausesMiss</code>、<code>noteYPos</code>；常用方法：<code>kill()</code>、<code>playAnim()</code>、<code>resetNote()</code>。</li>
+<li>示例：<code>if (note.noteType == 'Mine') note.hitCausesMiss = false;</code></li>
+</ul>
+<h4 id="healthicon"><code>HealthIcon</code></h4>
+<ul>
+<li><strong>类型</strong>：<code>obj.HealthIcon</code></li>
+<li><strong>构造签名</strong>：<code>new HealthIcon(char:String = 'bf', isPlayer:Bool = false)</code>（第二个参数必填）</li>
+<li>血条两侧的角色图标。</li>
+<li>示例：<code>var icon = new HealthIcon('dad', false); icon.setGraphicSize(Std.int(150 * 0.7));</code></li>
+</ul>
+<h4 id="character"><code>Character</code></h4>
+<ul>
+<li><strong>类型</strong>：<code>obj.Character</code></li>
+<li><strong>构造签名</strong>：<code>new Character(x:Float, y:Float, ?character:String = 'bf', ?isPlayer:Bool = false)</code></li>
+<li>角色对象（<code>dad</code> / <code>gf</code> 的类型是 <code>Character</code>，<code>boyfriend</code> 是它的子类 <code>Boyfriend</code>）。</li>
+<li>示例：<code>var extra = new Character(0, 0, 'gf'); add(extra);</code></li>
+</ul>
+<h4 id="notesplash"><code>NoteSplash</code></h4>
+<ul>
+<li><strong>类型</strong>：<code>obj.NoteSplash</code></li>
+<li><strong>构造签名</strong>：<code>new NoteSplash(x:Float = 0, y:Float = 0, ?note:Int = 0)</code></li>
+<li><strong>方法签名</strong>：<code>setupNoteSplash(x:Float, y:Float, note:Int = 0, ?texture:String = null, hueColor:Float = 0, satColor:Float = 0, brtColor:Float = 0)</code></li>
+<li>命中水花（<code>note</code> 是 0~3 的方向索引，不是 Note 对象）。<strong>构造函数内部会读 <code>PlayState.SONG</code></strong>，所以不要在歌曲外创建。</li>
+<li>示例：<code>var s = new NoteSplash(200, 300, 2); add(s);</code></li>
+</ul>
+<h4 id="bgsprite"><code>BGSprite</code></h4>
+<ul>
+<li><strong>类型</strong>：<code>obj.BGSprite</code></li>
+<li><strong>构造签名</strong>：<code>new BGSprite(?image:String, x:Float = 0, y:Float = 0, ?scrollX:Float = 1, ?scrollY:Float = 1, ?animArray:Array&lt;String&gt; = null, ?loop:Bool = false)</code></li>
+<li>背景精灵：给了 <code>animArray</code> 就走 <code>idle</code> / <code>danceLeft</code> / <code>danceRight</code> 帧动画，还有 <code>dance()</code> 方法。</li>
+<li>示例：<code>add(new BGSprite('stageback', -600, -200, 0.9, 0.9, ['idle', 'danceLeft', 'danceRight']));</code></li>
+</ul>
+<h4 id="strumnote"><code>StrumNote</code></h4>
+<ul>
+<li><strong>类型</strong>：<code>obj.StrumNote</code></li>
+<li><strong>构造签名</strong>：<code>new StrumNote(x:Float, y:Float, leData:Int, player:Int)</code>（<strong>先是方向 <code>leData</code>，再是 <code>player</code></strong>）</li>
+<li>接键。<code>PlayState</code> 里的 <code>playerStrums</code> / <code>opponentStrums</code> 是 <code>FlxTypedGroup&lt;StrumNote&gt;</code>。</li>
+<li>示例：<code>playerStrums.members[0].x += 10;</code></li>
+</ul>
+<h4 id="alphabet"><code>Alphabet</code></h4>
+<ul>
+<li><strong>类型</strong>：<code>obj.Alphabet</code>（继承 <code>FlxSpriteGroup</code>）</li>
+<li><strong>构造签名</strong>：<code>new Alphabet(x:Float, y:Float, text:String = "", ?bold:Bool = true)</code></li>
+<li>菜单风格的逐字母文本。改文字用 <code>alphabet.text = '...'</code>；<code>useFlxText</code> 为 <code>true</code> 时退化成单个 <code>flxText</code>。</li>
+<li>示例：<code>var a = new Alphabet(0, 0, 'HELLO', true); add(a, true);</code></li>
+</ul>
+<h4 id="attachedsprite"><code>AttachedSprite</code></h4>
+<ul>
+<li><strong>类型</strong>：<code>obj.AttachedSprite</code></li>
+<li><strong>构造签名</strong>：<code>new AttachedSprite(?file:String = null, ?anim:String = null, ?library:String = null, ?loop:Bool = false)</code></li>
+<li>跟随宿主的位置/角度/透明度：把宿主赋给 <code>sprTracker</code>，再用 <code>xAdd</code> / <code>yAdd</code> / <code>angleAdd</code> / <code>alphaMult</code> / <code>copyAngle</code> / <code>copyAlpha</code> / <code>copyVisible</code> 调。<strong>没有 <code>add()</code> 这类挂载方法</strong>，直接 <code>sprTracker = host;</code> + 手动 <code>add(tag)</code>。</li>
+<li>示例：
+  <code>haxe
+  var tag = new AttachedSprite('icons/note', null);
+  tag.sprTracker = PlayState.instance.healthBar;
+  tag.yAdd = 40;
+  add(tag, true);</code></li>
+</ul>
+<h4 id="attachedtext"><code>AttachedText</code></h4>
+<ul>
+<li><strong>类型</strong>：<code>obj.AttachedText</code>（继承 <code>Alphabet</code>）</li>
+<li><strong>构造签名</strong>：<code>new AttachedText(text:String = "", ?offsetX:Float = 0, ?offsetY:Float = 0, ?bold = false, ?scale:Float = 1)</code></li>
+<li>跟随宿主的文字；用法同上（<code>sprTracker</code> + <code>offsetX</code> / <code>offsetY</code> / <code>copyVisible</code> / <code>copyAlpha</code>）。</li>
+<li>示例：<code>var lbl = new AttachedText('combo', 0, 40, true, 1); lbl.sprTracker = PlayState.instance.healthBar; add(lbl, true);</code></li>
+</ul>
+<h4 id="gameoversubstate_1"><code>GameOverSubstate</code></h4>
+<ul>
+<li><strong>类型</strong>：<code>substates.game.GameOverSubstate</code></li>
+<li>死亡界面。死亡时 <code>GameOverSubstate.instance</code> 可用；<code>getInstance()</code> 已经帮你处理了这个分支。</li>
+<li>示例：<code>if (PlayState.instance.isDead) trace('dead screen');</code></li>
+</ul>
+<blockquote>
+<p><strong><code>Boyfriend</code> 不在默认 API 里</strong>：它只在未生效的 <code>HScriptUtil.setDefaultVars()</code> 中注册（§3.8）。要用请写 <code>PlayState.instance.boyfriend</code> 或 <code>this.boyfriend</code>（字段类型就是 <code>Boyfriend</code>）。同理 <code>BackgroundDancer</code>、<code>Section</code>、<code>WeekData</code>、<code>Highscore</code> 也在那批未生效的名字里。</p>
+</blockquote>
+<h3 id="35-只有歌曲里flxgstate-is-playstate-且-playstateinstance-null才注册的">3.5 只有歌曲里（<code>FlxG.state is PlayState</code> 且 <code>PlayState.instance != null</code>）才注册的</h3>
+<p><code>setDefaultVars()</code> 里这一批被 <code>if ((FlxG.state is PlayState) &amp;&amp; PlayState.instance != null)</code> 包着——也就是说，<strong>只有在对局状态下创建的脚本才拿得到</strong>（<code>global.hx</code>、菜单脚本、<code>states/globals/</code> 脚本都没有）。</p>
+<h4 id="game"><code>game</code></h4>
+<ul>
+<li><strong>类型</strong>：<code>PlayState</code></li>
+<li>当前对局实例。等价于 <code>PlayState.instance</code>，但它是加载那一刻取的值。</li>
+<li>示例：<code>game.healthBar.createFilledBar(0xFF00FF00, 0xFFFF0000);</code></li>
+</ul>
+<h4 id="global"><code>global</code></h4>
+<ul>
+<li><strong>类型</strong>：<code>Map&lt;String, Dynamic&gt;</code>，就是 <code>PlayState.variables</code></li>
+<li>跨脚本共享变量的字典。任何脚本都能往里塞东西，别的脚本（包括 Lua）也能通过 <code>setGlobalFunc</code>/<code>callGlobalFunc</code> 读到。</li>
+<li>示例：<code>global.set('myCounter', 0); var n = global.get('myCounter');</code></li>
+</ul>
+<h4 id="getinstance"><code>getInstance</code></h4>
+<ul>
+<li><strong>类型</strong>：函数 <code>() -&gt; FlxState</code></li>
+<li><strong>签名</strong>：<code>getInstance():FlxState</code></li>
+<li>死亡时返回 <code>GameOverSubstate.instance</code>，否则返回 <code>PlayState.instance</code>。写兼容死亡界面的脚本时用它代替 <code>PlayState.instance</code>。</li>
+<li>示例：<code>getInstance().add(spr);</code></li>
+</ul>
+<h4 id="setglobalfunc"><code>setGlobalFunc</code></h4>
+<ul>
+<li><strong>签名</strong>：<code>setGlobalFunc(name:String, func:Dynamic):Void</code></li>
+<li>把函数塞进共享变量表（等价于 <code>global.set(name, func)</code>），Lua 脚本也能通过自定义回调拿到。</li>
+<li>示例：<code>setGlobalFunc('myShake', function(power:Float) { PlayState.instance.camGame.shake(power, 0.1); });</code></li>
+</ul>
+<h4 id="callglobalfunc"><code>callGlobalFunc</code></h4>
+<ul>
+<li><strong>签名</strong>：<code>callGlobalFunc(name:String, ?args:Dynamic):Dynamic</code></li>
+<li>调用共享变量表里的函数；名字不存在返回 <code>null</code>。注意源码里是 <code>state.variables.get(name)(args)</code>——<strong>多参数请打包成数组或匿名结构传</strong>。</li>
+<li>示例：<code>callGlobalFunc('myShake', 0.02);</code></li>
+</ul>
+<h4 id="createglobalcallbackif-lua_allowed"><code>createGlobalCallback</code>（<code>#if LUA_ALLOWED</code>）</h4>
+<ul>
+<li><strong>签名</strong>：<code>createGlobalCallback(name:String, func:Dynamic):Void</code></li>
+<li>把自己实现的函数注册给<strong>所有 Lua 脚本</strong>（<code>Lua_helper.add_callback</code>），同时记进 <code>FunkinLua.customFunctions</code>，之后 Lua 侧可以直接按名字调用。</li>
+<li>示例：<code>createGlobalCallback('hscriptShake', function(p:Float) { game.camGame.shake(p, 0.1); });</code></li>
+</ul>
+<h4 id="lua_helpercallbacks-里的每一个名字if-lua_allowed"><code>Lua_helper.callbacks</code> 里的每一个名字（<code>#if LUA_ALLOWED</code>）</h4>
+<ul>
+<li><strong>动态条目</strong>：初始化时会把 Lua 侧已注册的全局回调逐个 <code>set</code> 进 HScript 环境，所以 HScript 里通常也能直接叫出 Lua 常用的那些函数名。</li>
+</ul>
+<h3 id="36-函数与特殊全局">3.6 函数与特殊全局</h3>
+<h4 id="add"><code>add</code></h4>
+<ul>
+<li><strong>签名（默认注册）</strong>：<code>add(obj:FlxBasic):Void</code>，绑定到 <code>FlxG.state.add</code></li>
+<li><strong>签名（PlayState 里被覆盖成）</strong>：<code>add(obj:FlxBasic, ?front:Bool = false):Void</code></li>
+<li><code>front == true</code> → 直接加到状态末尾（画在最上层）；</li>
+<li><code>front == false</code> → 插到 <code>dadGroup</code> / <code>boyfriendGroup</code> / <code>gfGroup</code> <strong>之前</strong>，也就是风格上「在角色背后」。死亡时会插到死亡界面男友之前。</li>
+<li>因为 <code>onAddScript()</code> 是在脚本创建之后跑的，<strong>只要脚本在 <code>PlayState</code> 里加载，就会拿到覆盖版</strong>。</li>
+<li><strong>注意时序</strong>：脚本体（顶层代码）执行时用的还是默认版 <code>add</code>（= <code>FlxG.state.add</code>，歌曲里就是 <code>PlayState.add</code>，直接追加到末尾）；<code>onAddScript()</code> 跑完之后才变成智能插入版。所以顶层代码与回调里的 <code>add</code> 行为可能不同。</li>
+<li>示例：
+  <code>haxe
+  add(bg);            // 角色后面
+  add(hud, true);     // 最上层</code></li>
+</ul>
+<h4 id="remove"><code>remove</code></h4>
+<ul>
+<li><strong>签名</strong>：<code>remove(obj:FlxBasic):Void</code></li>
+<li>状态成员移除。注意它<strong>不会</strong>被 <code>onAddScript()</code> 覆盖（只有 <code>add</code> 会被覆盖），所以它一直是 <code>setDefaultVars()</code> 里绑定的 <code>FlxG.state.remove</code> —— 也就是脚本创建时那个状态的 <code>remove</code>。歌曲里通常就是 <code>PlayState</code> 的，但状态切换脚本里会指向旧状态；要稳妥就写 <code>game.remove(obj)</code>。</li>
+</ul>
+<h4 id="insert"><code>insert</code></h4>
+<ul>
+<li><strong>签名</strong>：<code>insert(position:Int, obj:FlxBasic):Void</code></li>
+<li>按索引插入到状态的 <code>members</code> 里。</li>
+</ul>
+<h4 id="members"><code>members</code></h4>
+<ul>
+<li><strong>类型</strong>：<code>Array&lt;FlxBasic&gt;</code></li>
+<li>当前状态的成员数组（<code>FlxG.state.members</code>）。可以用 <code>members.indexOf(obj)</code> 反查层级。</li>
+</ul>
+<h4 id="foreground"><code>foreground</code></h4>
+<ul>
+<li><strong>类型</strong>：<code>FlxTypedGroup&lt;FlxBasic&gt;</code></li>
+<li>每个 HScript 各自拥有的「前景组」，引擎会把它注册成全局，但<strong>不会自动 add 到场景</strong>——想让里面的东西显示，脚本自己要 <code>add(foreground, true)</code>。</li>
+<li>示例：
+  <code>haxe
+  add(foreground, true);
+  foreground.add(floatingText);</code></li>
+</ul>
+<h4 id="newshader"><code>newShader</code></h4>
+<ul>
+<li><strong>签名</strong>：<code>newShader(?fragFile:String, ?vertFile:String):FlxRuntimeShader</code></li>
+<li>参数是<strong>文件名</strong>（不带 <code>.frag</code>/<code>.vert</code>），走 <code>Paths.modsShaderFragment()</code> / <code>Paths.modsShaderVertex()</code> 找 <code>shaders/&lt;名字&gt;.frag|.vert</code>。</li>
+<li><strong>坑（源码现状）</strong>：函数体里编译出来的 <code>runtime</code> 变量没有被返回——无论成败都执行 <code>return new FlxRuntimeShader();</code>，也就是说<strong>当前版本 <code>newShader()</code> 拿到的永远是空的 shader</strong>。想要真正生效的 shader，请改用引擎里现成的正确实现 <strong><code>Paths.getShader(fragFile, vertFile, ?version)</code></strong>（它同样走模组感知的 <code>shaders/</code> 查找，失败时返回 <code>null</code>，并 <code>trace</code> 编译错误）。</li>
+<li>示例：
+  <code>haxe
+  var sh = Paths.getShader('glitch');   // shaders/glitch.frag（+ 可选 .vert）
+  if (sh != null)
+      spr.shader = new ShaderFilter(sh); // 注意 ShaderFilter 不在默认 API 里，见 §3.8</code>
+  （只想要 shader 对象本身就直接 <code>spr.shader = Paths.getShader('glitch');</code>）</li>
+</ul>
+<h4 id="pausescript-resumescript-setscriptpaused"><code>pauseScript</code> / <code>resumeScript</code> / <code>setScriptPaused</code></h4>
+<ul>
+<li><strong>签名</strong>（由 <code>PlayState.initIris()</code> 注入到每个 HScript 上）：</li>
+<li><code>pauseScript():Bool</code> —— 暂停自己</li>
+<li><code>resumeScript():Bool</code> —— 恢复自己</li>
+<li><code>setScriptPaused(tag:String, paused:Bool):Bool</code> —— 按 <code>scriptName</code>（或纯文件名）暂停任意脚本</li>
+<li>被暂停的脚本<strong>仍然留在数组里、状态不丢</strong>，但引擎不会再给它派发任何回调（<code>GlobalScript.isScriptPaused()</code> 会在 <code>callOnHScripts()</code> 里 <code>continue</code>）。</li>
+<li>示例：
+  <code>haxe
+  if (onHold) pauseScript(); else resumeScript();
+  setScriptPaused('some_other_script', true);</code></li>
+</ul>
+<h4 id="state只有-oscriptstate-的脚本有"><code>state</code>（只有 <code>OScriptState</code> 的脚本有）</h4>
+<ul>
+<li><strong>类型</strong>：<code>OScriptState</code></li>
+<li>被覆盖的那个脚本化状态本身，见 §5。</li>
+</ul>
+<h3 id="37-playstate-注入的运行时变量onaddscript-onaddsscript">3.7 PlayState 注入的运行时变量（<code>onAddScript()</code> / <code>onAddSScript()</code>）</h3>
+<p>这些不是 <code>setDefaultVars()</code> 注册的，而是每次加载脚本后由 <code>PlayState.onAddScript()</code> 覆盖式写入（<code>setOnHScripts</code>）。<strong>共 25 条</strong>，其中 <code>onAddSScript()</code>（LScript / Python）有同样的前 21 条。</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>变量</th>
+<th>类型</th>
+<th>更新时机</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>curStep</code></td>
+<td><code>Int</code></td>
+<td><strong>仅加载那一刻</strong>（见下方警告）</td>
+</tr>
+<tr>
+<td><code>curBeat</code></td>
+<td><code>Int</code></td>
+<td><strong>仅加载那一刻</strong></td>
+</tr>
+<tr>
+<td><code>curSection</code></td>
+<td><code>Int</code></td>
+<td>加载时 + 每次 <code>sectionHit()</code></td>
+</tr>
+<tr>
+<td><code>bpm</code></td>
+<td><code>Float</code></td>
+<td>仅加载那一刻（读 <code>Conductor.bpm</code>）</td>
+</tr>
+<tr>
+<td><code>camGame</code></td>
+<td><code>FlxCamera</code></td>
+<td>加载时（引用不变）</td>
+</tr>
+<tr>
+<td><code>camHUD</code></td>
+<td><code>FlxCamera</code></td>
+<td>加载时</td>
+</tr>
+<tr>
+<td><code>camOther</code></td>
+<td><code>FlxCamera</code></td>
+<td>加载时</td>
+</tr>
+<tr>
+<td><code>camFollow</code></td>
+<td><code>FlxPoint</code></td>
+<td>加载时</td>
+</tr>
+<tr>
+<td><code>camFollowPos</code></td>
+<td><code>FlxObject</code></td>
+<td>加载时</td>
+</tr>
+<tr>
+<td><code>boyfriend</code></td>
+<td><code>Boyfriend</code></td>
+<td>加载时（<strong>换角色后引用可能过期</strong>，用 <code>game.boyfriend</code> 保险）</td>
+</tr>
+<tr>
+<td><code>dad</code></td>
+<td><code>Character</code></td>
+<td>加载时</td>
+</tr>
+<tr>
+<td><code>gf</code></td>
+<td><code>Character</code></td>
+<td>加载时</td>
+</tr>
+<tr>
+<td><code>boyfriendGroup</code> / <code>dadGroup</code> / <code>gfGroup</code></td>
+<td><code>FlxSpriteGroup</code></td>
+<td>加载时</td>
+</tr>
+<tr>
+<td><code>notes</code></td>
+<td><code>FlxTypedGroup&lt;Note&gt;</code></td>
+<td>加载时</td>
+</tr>
+<tr>
+<td><code>strumLineNotes</code></td>
+<td><code>FlxTypedGroup&lt;StrumNote&gt;</code></td>
+<td>加载时</td>
+</tr>
+<tr>
+<td><code>playerStrums</code> / <code>opponentStrums</code></td>
+<td><code>FlxTypedGroup&lt;StrumNote&gt;</code></td>
+<td>加载时</td>
+</tr>
+<tr>
+<td><code>unspawnNotes</code></td>
+<td><code>Array&lt;Note&gt;</code></td>
+<td>加载时（数组引用稳定）</td>
+</tr>
+<tr>
+<td><code>add</code></td>
+<td>函数</td>
+<td>覆盖默认 <code>add</code>，见 §3.6</td>
+</tr>
+<tr>
+<td><code>modManager</code></td>
+<td><code>ModManager</code></td>
+<td><code>PlayState.create()</code> 里 <code>setDefaultHScripts('modManager', ...)</code></td>
+</tr>
+<tr>
+<td><code>pauseScript</code> / <code>resumeScript</code> / <code>setScriptPaused</code></td>
+<td>函数</td>
+<td><code>initIris()</code> 注入</td>
+</tr>
+</tbody>
+</table></div>
+<div class="pk-callout pk-callout-warn"><div class="pk-callout-title">警告</div><div class="pk-callout-body"><p><strong>警告：<code>curStep</code> 与 <code>curBeat</code> 不会随歌曲更新。</strong> <code>PlayState.stepHit()</code> 里只有 <code>setOnLuas('curStep', curStep)</code>（Lua）和 <code>scripts.setAll('curStep', curStep)</code>（<code>scripts</code> 是一个<strong>始终为空</strong>的 <code>FunkinHScript</code> 组），HScript 数组没有被更新。所以：
+- 想在每个 step 里用实时步数，请用 <code>onStepHit(step)</code> 的参数；
+- 想读实时值，用 <code>game.curStep</code> / <code>PlayState.instance.curStep</code>（HScript 的字段访问走运行时反射，不检查 private）；
+- 或自己维护一个变量：<code>var myStep = 0; function onStepHit(s:Int) { myStep = s; }</code>。</p>
+</div></div>
+<h3 id="38-hscriptutil-里注册但当前版本不生效的-api">3.8 <code>HScriptUtil</code> 里注册、但<strong>当前版本不生效</strong>的 API</h3>
+<p><code>script/hscript/HScriptUtil.hx</code> 里有一个 <code>override function setDefaultVars()</code>，它会在 <code>FunkinHScript.setDefaultVars()</code> 的基础上<strong>再注册一大批</strong>类（<code>Std</code>、<code>Type</code>、<code>Reflect</code>、<code>Math</code>、<code>Json</code>、<code>FileSystem</code>、<code>File</code>、<code>Sys</code>、<code>Capabilities</code>、<code>ShaderFitler</code>、<code>FlxBar</code>、<code>FlxGraphic</code>、<code>FlxBasic</code>、<code>FlxObject</code>、<code>FlxText</code>、<code>FlxTextFormat</code>、<code>FlxShader</code>、<code>FlxVideo</code>、<code>FlxVideoSprite</code>、<code>PsychVideoSprite</code>、<code>ParkerVideoSprite</code>、<code>Handle</code>、<code>ModManager</code>、<code>Modifier</code>、<code>SubModifier</code>、<code>NoteModifier</code>、<code>EventTimeline</code>、各种 <code>*Event</code>、<code>WeekData</code>、<code>Highscore</code>、<code>Boyfriend</code>、<code>BackgroundDancer</code>、<code>Section</code>，以及函数 <code>addBehindGF</code> / <code>addBehindBF</code> / <code>addBehindDad</code>、<code>fromRGB</code>、<code>colorFromString</code>、<code>runLuaCode</code>、若干 <code>LEFT_TO_RIGHT</code> 之类的常量）。</p>
+<p><strong>但是：<code>HScriptUtil</code> 从来没有被实例化过。</strong> 引擎里所有用到它的地方都只碰它的<strong>静态成员</strong>（<code>HScriptUtil.extns</code>、<code>HScriptUtil.findScriptsInDir()</code>、<code>HScriptUtil.findEncodedScriptsInDir()</code>，以及 <code>FlxColor</code> 指向的 <code>HScriptUtil.CustomFlxColor</code>）；<code>PlayState.initIris()</code> 里写的是 <code>new HScript(...)</code>，解析到的是 <code>FunkinHScript.HScript</code>，它的 <code>setDefaultVars()</code> 直接调用 <code>FunkinHScript.setDefaultVars()</code>，不会走到子类的 override。</p>
+<p>结论：<strong>上面这批名字在 0.2.8 里拿不到</strong>（比如 <code>Reflect</code>、<code>Sys</code>、<code>FlxBar</code>、<code>ModManager</code>、<code>addBehindGF</code>）。要替代它们：</p>
+<ul>
+<li>用 <code>Type.resolveClass()</code> / <code>Type.createInstance()</code> 拿类（<code>Type</code> 是注册过的，见 §3.1）；</li>
+<li>或者直接 <code>import</code>（见 §3.9）；</li>
+<li><code>FlxColor</code> 的常量与工具函数是可用的（<code>CustomFlxColor</code> 被显式注册了）。</li>
+</ul>
+<h3 id="39-自救用-import-或-type-拿到任意类">3.9 自救：用 <code>import</code> 或 <code>Type</code> 拿到任意类</h3>
+<p>HScript 支持 <code>import</code> 语句，解析走 <code>Type.resolveClass()</code> / <code>Type.resolveEnum()</code>（<code>crowplexus.hscript.Tools.getClass</code>），且默认没有黑名单：</p>
+<pre><code class="language-haxe">import flixel.ui.FlxBar;
+// 也可以 import 内部类型，例如 flixel.text.FlxText.FlxTextBorderStyle
+
+// FlxBarFillDirection 是注册过的全局（实际是个 Haxe enum，见 §3.2）
+var bar = new FlxBar(0, 0, FlxBarFillDirection.LEFT_TO_RIGHT, 200, 20);
+bar.createFilledBar(0xFF000000, 0xFFFF0000);
+add(bar, true);
+</code></pre>
+<p>运行时反射的写法（<code>Type.createInstance</code> 的参数是数组；不确定的枚举参数传 <code>null</code> 用默认值）：</p>
+<pre><code class="language-haxe">var cls = Type.resolveClass('flixel.ui.FlxBar');
+var bar = Type.createInstance(cls, [0, 0, null, 200, 20]);
+add(bar, true);
+</code></pre>
+<hr>
+<h2 id="4-this-的解析规则">4. <code>this</code> 的解析规则</h2>
+<p>源码：<code>FunkinHScript.getScriptThis()</code> + <code>InterpPro</code> 构造与 <code>resolve()</code>。</p>
+<pre><code>1. 解释器的 parent（InterpPro.parent），若不为 null 就用它
+2. 否则 PlayState.instance（若不为 null）
+3. 否则 FlxG.state
+</code></pre>
+<p>而 <code>HScript</code> 的构造函数里是 <code>_script.interp = new InterpPro(FlxG.state)</code>，所以第 1 步几乎总能命中，实际含义是：</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>脚本在哪里创建</th>
+<th><code>this</code> 是谁</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>PlayState</code> 加载的游戏脚本（<code>scripts/</code>、<code>data/&lt;song&gt;/</code>、角色、音符类型、事件、舞台）</td>
+<td>就是当时的状态 —— 歌曲中即 <code>PlayState.instance</code></td>
+</tr>
+<tr>
+<td><code>Main</code> 加载的 <code>global.hx</code></td>
+<td>被 <code>Main.onAddScript()</code> 覆盖成 <code>Main</code> 类（静态成员，常见用法：<code>Main.fpsVar</code>）</td>
+</tr>
+<tr>
+<td><code>FNFGame.switchState()</code> 里创建的 <code>states/globals/*.hx</code></td>
+<td><strong>上一个状态</strong>（切换还没发生，<code>FlxG.state</code> 仍是旧状态）；这类脚本应该用 <code>state</code> 全局</td>
+</tr>
+<tr>
+<td><code>MusicBeatState.setUpScript()</code>（未生效）</td>
+<td>当时的状态</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>额外作用</strong>：<code>InterpPro</code> 还重写了 <code>resolve()</code> / <code>assign()</code> / <code>evalAssignOp()</code>，让<strong>没有声明的裸标识符</strong>去 <code>parent</code> 的字段里找：</p>
+<pre><code class="language-haxe">// 歌曲里，即使脚本没声明过 these，也能直接读到 parent（PlayState）的字段：
+camHUD.zoom = 1.2;          // 注意：camHUD 本身是注入的全局
+PlayState.instance.boyfriend.alpha = 0.5;
+</code></pre>
+<p>赋值时若该名字不在脚本变量表里、却是 parent 的字段，会直接写回 parent（这就是 <code>this.xxx = 1</code> 与 <code>xxx = 1</code> 都能生效的原因）。优先级是：<strong>局部变量 → 脚本变量/全局 → import → parent 字段</strong>。</p>
+<p><code>InterpPro</code> 还改写了 <code>fcall()</code>：函数不存在时报 Iris 错误并返回 <code>null</code>，而不是让整个虚拟机崩掉。</p>
+<hr>
+<h2 id="5-hscript-自定义状态statesglobals">5. HScript 自定义状态（<code>states/globals/</code>）</h2>
+<h3 id="51-钩子在哪">5.1 钩子在哪</h3>
+<p><code>FNFGame.switchState()</code>（<code>source/FNFGame.hx</code>）在任何 <code>MusicBeatState</code> 切换生效之前检查：</p>
+<pre><code class="language-haxe">if (_nextState is MusicBeatState &amp;&amp; state.canBeScripted) {
+    simpleName = 类名（不含包名）;
+    for (extn in HScriptUtil.extns)          // hx, hscript, hsc, hxs
+        if (Paths.exists(Paths.modFolders('states/globals/$simpleName.$extn')))
+            → _nextState = OScriptState.fromFile(path);      // HScript 胜出
+    else if (states/$simpleName.lua 存在)     → new LuaSState($simpleName);      // #if LUA_ALLOWED &amp;&amp; MODS_ALLOWED
+    else if (states/$simpleName.lscript 存在) → new LScriptSState($simpleName);
+}
+</code></pre>
+<ul>
+<li>优先级：<strong>HScript &gt; Lua &gt; LScript</strong>。</li>
+<li>覆盖对象：任何 <code>canBeScripted == true</code> 的 <code>MusicBeatState</code>。<code>MusicBeatState</code> 的构造函数是 <code>new(canBeScripted:Bool = true)</code>，<strong>只要子类没显式传 <code>false</code>（<code>super(false)</code>），它就是可覆盖的</strong>——<code>TitleState</code>、<code>MainMenuState</code>、<code>StoryMenuState</code>、<code>PlayState</code> 都没有自己的构造函数（走默认值 <code>true</code>），<code>FreeplayState</code> 虽然有自己的构造函数（<code>new(song, week, songCharacter, color)</code>）但也没传 <code>false</code>。源码里显式传 <code>false</code> 的只有 <code>LuaSState</code> 和 <code>LScriptSState</code>。想要拒绝覆盖，在类上加 <code>@:noScripting</code>（<code>Macro.addScriptingCallbacks()</code> 会生成 <code>get_canBeScripted() =&gt; false</code>）——不过该宏当前没有被任何类使用，需要自己接线。</li>
+<li><code>FNFGame.switchState()</code> 还会做两件补丁工作：第一次切换时先 <code>WeekData.loadTheFirstEnabledMod()</code>，并补做 <code>TitleState.create()</code> 里那一套启动初始化（<code>PlayerSettings.init()</code>、存档 <code>bind</code>、<code>ClientPrefs.loadPrefs()</code>、<code>Paths.pushGlobalMods()</code>、Android 的 <code>MobileData.init()</code>）。<strong>这是为了让第一个被脚本覆盖的状态里 <code>PlayerSettings.player1</code> 不是 null</strong>。</li>
+</ul>
+<h3 id="52-oscriptstate-提供的全局">5.2 <code>OScriptState</code> 提供的全局</h3>
+<p><code>OScriptState.loadScript()</code> 在脚本（顶层代码已执行完）之后，依次注入：</p>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>全局</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>state</code></td>
+<td>这个 <code>OScriptState</code> 自己</td>
+</tr>
+<tr>
+<td><code>add</code> / <code>remove</code> / <code>insert</code> / <code>members</code></td>
+<td>该状态的 <code>add</code> / <code>remove</code> / <code>insert</code> 方法与 <code>members</code> 数组</td>
+</tr>
+<tr>
+<td><code>addTouchPad</code> / <code>addPadCamera</code></td>
+<td>仅 <code>#if android</code></td>
+</tr>
+<tr>
+<td><code>pauseScript</code> / <code>resumeScript</code></td>
+<td>暂停/恢复这个脚本</td>
+</tr>
+</tbody>
+</table></div>
+<p>另外它会先调用一次 <code>customMenu()</code>：</p>
+<pre><code class="language-haxe">customMenu = hscript.call('customMenu', []);   // 返回值存在 OScriptState.customMenu 上
+</code></pre>
+<p><code>customMenu</code> 的语义（原意）是「这个脚本是否完全自绘菜单」，调用方 <code>isHardcodedState()</code> 读它——<strong>但 <code>isHardcodedState()</code> 全项目没有任何调用者</strong>。</p>
+<h3 id="53-现状重要读源码得出的结论">5.3 现状（重要，读源码得出的结论）</h3>
+<p><code>OScriptState</code> <strong>只做两件事</strong>：执行脚本体、调用 <code>customMenu</code>。它<strong>没有</strong> <code>update</code> / <code>stepHit</code> / <code>beatHit</code> / <code>destroy</code> 的脚本派发，也<strong>没有</strong>调用 <code>onCreate</code>。真正派发 <code>onCreate</code> / <code>onUpdate</code> / <code>onStepHit</code> 的代码在 <code>MusicBeatState.setUpScript()</code> 里，而<strong>当前源码中没有任何状态调用 <code>setUpScript()</code></strong>。</p>
+<p>同时注意时序：<strong>脚本体是在 <code>hscript.set('state'/'add'/'remove'/'insert'/'members', ...)</code> 之前执行的</strong>（脚本体在 <code>new HScript(...)</code> 里跑），而 <code>customMenu</code> 也在这些绑定之前被调用。所以：</p>
+<ul>
+<li>脚本体执行时，<code>add()</code> 还是 <code>setDefaultVars()</code> 里绑定到<strong>旧状态</strong>的 <code>FlxG.state.add</code>；</li>
+<li><code>state</code> / 该状态自己的 <code>add</code> 只有在绑定时才存在，而那时脚本已经跑完、<code>customMenu</code> 也已调用完毕；</li>
+<li>脚本能用的其他东西：<code>PlayState.instance</code>（如果切换发生在对局中则非 null）、<code>FlxG</code>、以及任何已注册的引擎类。</li>
+</ul>
+<p>因此 <code>states/globals/&lt;StateName&gt;.hx</code> 在 0.2.8 里应当被当作<strong>实验性/半成品</strong>：钩子是真的（会被加载、会替换状态），但「状态里持续跑脚本回调」这件事没有接线。想真的用它，需要脚本自己在顶层代码里接管（例如对 <code>FlxG.stage</code> 挂 <code>enterFrame</code> 监听、或把逻辑塞进 <code>customMenu</code>），并接受 <code>add</code> 指向旧状态的事实。</p>
+<hr>
+<h2 id="6-其他脚本化位置">6. 其他脚本化位置</h2>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>机制</th>
+<th>位置</th>
+<th>现状</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>菜单状态脚本</td>
+<td><code>MusicBeatState.setUpScript(s)</code> → <code>HScript.getPath('scripts/menus/' + s)</code>（扩展名只有 <code>hx/hxs/hscript</code>）</td>
+<td>实现完整（<code>onCreate</code>、<code>onUpdate</code>、<code>onStepHit</code>、<code>onDestroy</code> 都有派发），但<strong>没有任何状态调用它</strong></td>
+</tr>
+<tr>
+<td>子状态脚本</td>
+<td><code>MusicBeatSubstate.setUpScript(s)</code> → <code>substates/menu/&lt;s&gt;.&lt;ext&gt;</code>，额外注入 <code>add</code>/<code>close</code>/<code>this</code></td>
+<td>同上，<strong>无人调用</strong></td>
+</tr>
+<tr>
+<td>Lua 状态脚本</td>
+<td><code>states/&lt;StateName&gt;.lua</code> → <code>LuaSState</code></td>
+<td>已接线，且是三个里回调最全的（<code>onCreate</code>/<code>onCreatePost</code>/<code>onUpdate</code>/<code>onUpdateOptions</code>/<code>onUpdatePost</code>/<code>onBeatHit</code>/<code>onStepHit</code>/<code>onEventSet</code>/<code>onDestroy</code>/<code>onDestroyPost</code>）</td>
+</tr>
+<tr>
+<td>LScript 状态脚本</td>
+<td><code>states/&lt;StateName&gt;.lscript</code> → <code>LScriptSState</code></td>
+<td>已接线（<code>onLoad</code>/<code>onCreatePost</code>/<code>onUpdate</code>/<code>onUpdatePost</code>/<code>onBeatHit</code>/<code>onStepHit</code>/<code>onDestroy</code>…）</td>
+</tr>
+</tbody>
+</table></div>
+<hr>
+<h2 id="7-错误查看与调试">7. 错误查看与调试</h2>
+<h3 id="71-对局中">7.1 对局中</h3>
+<ul>
+<li>Iris 的日志（<code>trace</code>、<code>Iris.warn</code>、<code>Iris.error</code>）被 <code>HScript.InitLogger()</code> 重定向到 <code>PlayState.addTextToDebug()</code>：<strong>屏幕左上角</strong>，白/黄/红三色，<strong>最多 34 行</strong>，每行 6 秒后淡出。</li>
+<li><code>HScript.error()</code> 还会弹一个阻断式对话框：Windows 上是 <code>CPPInterface.messageBox()</code>，其他平台是 <code>CoolUtil.showPopUp()</code>；<strong>同一个脚本只会弹一次</strong>（内部 <code>alreadyShownError</code>），并且会附上出错行号（<code>getCurLine()</code> 读 <code>interp.posInfos().lineNumber</code>）。</li>
+<li>解析错误（语法错）会在 <code>tryExecute()</code> 里被抓住，写进 <code>parsingException</code>，并且 <code>PlayState.initIris()</code> 会<strong>直接丢弃</strong>这个脚本（<code>stop()</code> 后不加入数组）。屏幕上会看到 <code>[脚本名]: PARSING ERROR: ...</code>。</li>
+<li><code>addTextToDebug()</code> 整体在 <code>#if LUA_ALLOWED</code> 里——如果构建没有开 <code>LUA_ALLOWED</code>，这套屏幕日志不存在（而 HScript 的日志代码是按原样调用它的）。</li>
+</ul>
+<h3 id="72-脚本状态里没有-playstate-时">7.2 脚本状态里（没有 PlayState 时）</h3>
+<ul>
+<li><code>script/ScriptDebugOverlay.hx</code> 是给 <code>LuaSState</code> / <code>LScriptSState</code> / <code>OScriptState</code> 用的共屏覆盖层：<code>ScriptDebugOverlay.attach(state)</code> 在各状态 <code>create()</code> 里挂载，<code>report(text, color)</code> 是统一入口。</li>
+<li>规则：<strong>有 PlayState 就转给 <code>PlayState.addTextToDebug()</code></strong>；没有就画在自己的覆盖层上（同样最多 34 行、6 秒淡出）。</li>
+<li>覆盖层用自己的 <code>FlxCamera</code>，并且每帧把自己重新排到 <code>FlxG.cameras.list</code> 的最后（<code>keepOnTop()</code>），保证压在所有精灵、子状态和模组相机之上。</li>
+<li>在覆盖层还不存在时（构造期间）报的消息会先排队，等 <code>attach()</code> 时一次性刷出。</li>
+<li><code>OScriptState</code> 会在建好脚本后调用 <code>ScriptDebugOverlay.hookScriptLog()</code>，把 Iris 的 <code>warn/error/print</code> 接到覆盖层——否则 Iris 的错误处理会去访问不存在的 <code>PlayState.instance</code> 而二次崩溃。</li>
+</ul>
+<h3 id="73-调试技巧">7.3 调试技巧</h3>
+<ul>
+<li>用 <code>trace()</code> 而不是 <code>FlxG.log</code>，能看到屏幕。</li>
+<li><code>script.debugPrint()</code> → <strong>不存在</strong>（<code>Script</code> 基类里叫 <code>scriptTrace()</code>，且 <code>HScript</code> 没有覆写它）。</li>
+<li>想看解析结果：<code>HScript.parsingException</code>。</li>
+<li>脚本中途停掉自己：<code>script.stop()</code>。</li>
+</ul>
+<hr>
+<h2 id="8-引擎特性速查与脚本相关">8. 引擎特性速查（与脚本相关）</h2>
+<div class="mdui-table-fluid pk-table-wrap"><table class="mdui-table mdui-table-hoverable">
+<thead>
+<tr>
+<th>特性</th>
+<th>文件</th>
+<th>状态</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>HScript 引擎本体（<code>HScript</code>/<code>Script</code>/<code>IFunkinScript</code>/<code>ScriptType</code>/<code>InterpPro</code>）</td>
+<td><code>script/FunkinHScript.hx</code></td>
+<td>在用</td>
+</tr>
+<tr>
+<td>旧路径别名（<code>script.hscript.HScript</code> 等 typedef）</td>
+<td><code>script/hscript/HScript.hx</code>、<code>InterpPro.hx</code></td>
+<td>在用（只是别名）</td>
+</tr>
+<tr>
+<td>全局 API 的补充列表</td>
+<td><code>script/hscript/HScriptUtil.hx</code></td>
+<td><strong>只有静态成员在用</strong>，<code>setDefaultVars()</code> override 未生效（§3.8）</td>
+</tr>
+<tr>
+<td>脚本返回值常量（<code>FUNC_STOP</code>/<code>FUNC_CONT</code>/<code>FUNC_HALT</code>）、脚本暂停注册表</td>
+<td><code>script/GlobalScript.hx</code></td>
+<td>在用（<code>Function_Stop</code>/<code>Continue</code> 还注册给了 Python）</td>
+</tr>
+<tr>
+<td>脚本化状态替换</td>
+<td><code>FNFGame.switchState()</code> + <code>script/hscript/OScriptState.hx</code></td>
+<td>钩子在用，回调派发未接线（§5.3）</td>
+</tr>
+<tr>
+<td>脚本错误覆盖层</td>
+<td><code>script/ScriptDebugOverlay.hx</code></td>
+<td>在用（Lua/LScript/OScriptState）</td>
+</tr>
+<tr>
+<td>双向变量绑定 <code>Interact</code></td>
+<td><code>script/Interact.hx</code></td>
+<td><strong>未接线</strong>：<code>Interact</code> 全项目没有任何引用，且它引用的 <code>HScript._interp</code> / <code>HScript.variables</code> 在当前 <code>FunkinHScript.HScript</code> 上已不存在（字段改名为 <code>_script</code>），文件属于历史遗留</td>
+</tr>
+<tr>
+<td><code>Macro.addScriptingCallbacks()</code> 构建宏</td>
+<td><code>script/Macro.hx</code></td>
+<td><strong>未使用</strong>：没有任何类带 <code>@:build(script.Macro...)</code>；宏内部还会去扫描 <code>mods/&lt;folder&gt;/global/&lt;ClassName&gt;.&lt;ext&gt;</code>（<code>folder</code> 默认 <code>'states'</code>）并 <code>new FunkinHScript()</code>，而 <code>FunkinHScript.initScript()</code> 读了文件内容却没有真的创建脚本，整条路径不完整</td>
+</tr>
+<tr>
+<td><code>MacroState.buildScriptedState()</code></td>
+<td><code>script/hscript/MacroState.hx</code></td>
+<td><strong>未使用</strong>（源码注释就写着 <code>NOT DONE</code>），类名在源码里也拼成了 <code>MarcoState</code></td>
+</tr>
+<tr>
+<td><code>HScriptModifier</code>（用 HScript 写 modchart modifier）</td>
+<td><code>modchart/HScriptModifier.hx</code></td>
+<td><strong>未接线</strong>：无任何引用，且它调用的 <code>script.exitsVar()</code> / <code>FunkinHScript.addScript()</code> 在当前代码里不存在。脚本自定义 modifier 目前请走 <code>preModifierRegister</code> / <code>postModifierRegister</code> 回调 + <code>modManager</code>（<code>modManager</code> 是注册过的全局）</td>
+</tr>
+<tr>
+<td>加密脚本（<code>hxenc</code> 等）</td>
+<td><code>HScriptUtil.findEncodedScriptsInDir()</code></td>
+<td>无调用者</td>
+</tr>
+</tbody>
+</table></div>
+<hr>
+<h2 id="9-常见坑清单">9. 常见坑清单</h2>
+<ol>
+<li><strong><code>curStep</code> / <code>curBeat</code> 全局是「加载时快照」</strong>，不是实时值（§3.7）。用回调参数或 <code>game.curStep</code>。</li>
+<li><strong><code>return 'FUNC_STOP'</code> 几乎拦不住东西</strong>（§2.3）：默认 <code>ignoreStops = true</code>，其它脚本照跑。真正会看它的是 <code>onPause</code>。</li>
+<li><strong>别在 <code>eventEarlyTrigger</code> 里返回非数字</strong>：返回值会被 <code>cast</code> 成 Float 当作提前毫秒数。</li>
+<li><strong>脚本数组里的顺序 = 加载顺序，且加载顺序是「先内置后模组」</strong>：想覆盖别人的行为，靠 <code>exclusions</code> 或暂停机制，而不是靠「后加载的赢」。</li>
+<li><strong><code>this</code> 在状态覆盖脚本里是「上一个状态」</strong>（§4），<code>add</code> 也被绑到它身上。要操作被覆盖的状态，等 <code>state</code> 绑定（但你收不到回调，见 §5.3）。</li>
+<li><strong><code>foreground</code> 不会自动上屏</strong>：要自己 <code>add(foreground, true)</code>。</li>
+<li><strong><code>newShader()</code> 当前返回空 shader</strong>（§3.6 的坑），请改用 <code>Paths.getShader('名字')</code>（它帮你在 <code>shaders/</code> 里按模组顺序找 <code>.frag</code>/<code>.vert</code> 并编译，失败返回 <code>null</code>）。</li>
+<li><strong><code>HScriptUtil</code> 那一大批「应该有的」类其实没注册</strong>（§3.8）：<code>Reflect</code>、<code>Sys</code>、<code>FlxBar</code>、<code>ModManager</code>、<code>addBehindGF</code> 等都得靠 <code>import</code> 或 <code>Type.resolveClass()</code> 绕过去。</li>
+<li><strong><code>hsc</code> 扩展名有一个例外</strong>：<code>HScript.getPath()</code>（菜单脚本查找）只认 <code>hx/hxs/hscript</code>。</li>
+<li><strong><code>scripts/</code> 与 <code>data/&lt;song&gt;/</code> 是递归搜索的</strong>，子目录里的 <code>.hx</code> 也会被加载，<code>scriptName</code> 只取文件名。</li>
+<li><strong>全局脚本 <code>scripts/</code> 里的 <code>.py</code> 需要 <code>LUA_ALLOWED</code></strong>：<code>PlayState.loadGlobalScripts()</code> 整个函数体都在 <code>#if LUA_ALLOWED</code> 内（HScript 不受影响，它走 <code>initScripts()</code>）。</li>
+<li><strong>脚本暂停是「停派发」，不是「停自己已经起飞的定时器/补间」</strong>：<code>pauseScript()</code> 只让引擎不再调用它。</li>
+<li><strong>覆盖「第一个状态」时，引擎已经替你补过启动初始化</strong>（<code>FNFGame.ensureBootInit()</code>：<code>PlayerSettings.init()</code>、存档 <code>bind</code>、<code>ClientPrefs.loadPrefs()</code>、<code>Paths.pushGlobalMods()</code>、Android <code>MobileData.init()</code>）。不要假设其它「开机一定会跑」的东西也跑过了——<code>TitleState.create()</code> 里的其余初始化不会替你执行。</li>
+<li><strong><code>FlxColor</code> 不是原版 <code>FlxColor</code></strong>：它是 <code>CustomFlxColor</code>，颜色是函数的第一个参数（<code>FlxColor.toHexString(color)</code>），常量写法 <code>FlxColor.RED</code> 正常。</li>
+<li><strong>写脚本请遵守引擎的目录约定</strong>（与 <code>Paths</code> 一致）：不要把 <code>.hx</code> 塞进 <code>characters/</code> 以外的地方指望它被角色加载，各目录的加载者是写死的（§1.3）。</li>
+</ol></article>
+<nav class="pk-pager" aria-label="翻页">
+	<a class="mdui-btn mdui-btn-raised mdui-ripple pk-pager-btn pk-pager-prev" href="/docs/hscript-haxe/"><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M14.7 5.3 8 12l6.7 6.7 1.4-1.4L10.8 12l5.3-5.3z"/></svg><span class="pk-pager-text"><span class="pk-pager-label">上一页</span><span class="pk-pager-title">Lua 调用 Haxe</span></span></a>
+	<a class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme pk-pager-btn pk-pager-next" href="/docs/python/"><span class="pk-pager-text"><span class="pk-pager-label">下一页</span><span class="pk-pager-title">Python 脚本</span></span><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M9.3 5.3 7.9 6.7 13.2 12l-5.3 5.3 1.4 1.4L16 12z"/></svg></a>
+</nav>
+</div>
+</main>
+<footer class="pk-footer">
+	<div class="mdui-container">
+		<div class="pk-footer-inner">
+			<span>Parker Engine v0.2.8 · 中文文档</span>
+			<span class="pk-footer-links">
+				<a href="https://github.com/FNF-Pk-Dev/FNF_Parker-Engine-new" target="_blank" rel="noopener">GitHub 仓库</a>
+				<a href="https://github.com/FNF-Pk-Dev/FNF_Parker-Engine-new/releases" target="_blank" rel="noopener">下载</a>
+				<a href="/docs/">文档门户</a>
+			</span>
+		</div>
+		<div class="pk-footer-note">
+			基于 <a href="https://github.com/ShadowMario/FNF-PsychEngine" target="_blank" rel="noopener">Psych Engine</a> 分支开发 · 本站静态托管于 GitHub Pages
+		</div>
+	</div>
+</footer>
+<script src="/assets/mdui/js/mdui.min.js"></script>
+<script src="/assets/site.js"></script>
+</body>
+</html>

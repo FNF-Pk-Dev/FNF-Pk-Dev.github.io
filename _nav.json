@@ -1,0 +1,132 @@
+{
+	"title": "Parker Engine 中文文档",
+	"groups": [
+		{
+			"title": "快速开始",
+			"items": [
+				{
+					"title": "文档总览",
+					"index": true,
+					"badge": "总览",
+					"desc": "全部文档的门户页：按脚本语言与功能分组索引，从这里进入任意页面。"
+				},
+				{
+					"title": "Lua 编码基础",
+					"slug": "lua-tutorial",
+					"src": "lua-tutorial.md",
+					"badge": "Lua",
+					"desc": "从零开始的 Lua 语法教程，以及 Psych / Parker 引擎中与标准 Lua 不同的那些地方。"
+				}
+			]
+		},
+		{
+			"title": "Lua 脚本",
+			"items": [
+				{
+					"title": "回调模板",
+					"slug": "callbacks",
+					"src": "callbacks.md",
+					"badge": "回调",
+					"desc": "onCreate / onBeatHit / goodNoteHit 等回调的触发时机、参数与返回值约定。"
+				},
+				{
+					"title": "Psych 原版函数全解",
+					"slug": "lua-psych",
+					"src": "lua-psych.md",
+					"badge": "Lua",
+					"desc": "Parker Engine 中 Psych 原版 Lua 运行时注册的全部全局函数（含已弃用项）。"
+				},
+				{
+					"title": "ES 扩展（Parker 独有）",
+					"slug": "lua-es-extensions",
+					"src": "lua-es-extensions.md",
+					"badge": "ES",
+					"desc": "「Engine Custom ES」方言：Parker 在 Psych API 之上额外提供的扩展函数与全局变量。"
+				},
+				{
+					"title": "this 代理",
+					"slug": "lua-this-proxy",
+					"src": "lua-this-proxy.md",
+					"badge": "Lua",
+					"desc": "Lua 的 this 代理（LuaProxy）：让 this.camGame.zoom = 1.2 这类写法真正作用于游戏状态。"
+				},
+				{
+					"title": "ES ModChart 特效",
+					"slug": "modchart-functions",
+					"src": "modchart-functions.md",
+					"badge": "特效",
+					"desc": "ES 方言里的箭头特效（ModChat）函数，用于在脚本中直接驱动音符动画效果。"
+				},
+				{
+					"title": "Lua 调用 Haxe",
+					"slug": "hscript-haxe",
+					"src": "hscript-haxe.md",
+					"badge": "Haxe",
+					"desc": "在 Lua 脚本里反射 Haxe 类与静态字段：getPropertyFromClass、callMethod 等。"
+				}
+			]
+		},
+		{
+			"title": "HScript",
+			"items": [
+				{
+					"title": "HScript 完整文档",
+					"slug": "hscript",
+					"src": "hscript.md",
+					"badge": "HScript",
+					"desc": "Parker 的 HScript 引擎、暴露的 API 表面与脚本回调，以及它与源码的对应关系。"
+				}
+			]
+		},
+		{
+			"title": "Python",
+			"items": [
+				{
+					"title": "Python 脚本",
+					"slug": "python",
+					"src": "python.md",
+					"badge": "Python",
+					"desc": "通过 pyscript 在 Parker 中运行 .py 脚本：加载方式、可用 API 与回调约定。"
+				}
+			]
+		},
+		{
+			"title": "LScript",
+			"items": [
+				{
+					"title": "LScript (Luau)",
+					"slug": "lscript",
+					"src": "lscript.md",
+					"badge": "Luau",
+					"desc": "内置 Luau 运行时：.lscript 脚本的加载、回调、代理表与 states/<名称>.lscript 覆盖。"
+				}
+			]
+		},
+		{
+			"title": "Modchart",
+			"items": [
+				{
+					"title": "Modchart 修饰器系统",
+					"slug": "modchart",
+					"src": "modchart.md",
+					"badge": "Modchart",
+					"desc": "修饰器栈、事件时间轴与内置特效：ModManager、NoteModifier、EventTimeline 全解。"
+				}
+			]
+		}
+	],
+	"links": [
+		{
+			"title": "下载 / Releases",
+			"href": "https://github.com/FNF-Pk-Dev/FNF_Parker-Engine-new/releases"
+		},
+		{
+			"title": "GitHub 仓库",
+			"href": "https://github.com/FNF-Pk-Dev/FNF_Parker-Engine-new"
+		},
+		{
+			"title": "返回首页",
+			"href": "/"
+		}
+	]
+}
